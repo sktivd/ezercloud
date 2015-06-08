@@ -1,0 +1,89 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Protocol:</strong>
+  <%= @diagnosis.protocol_id %>
+</p>
+
+<p>
+  <strong>Version:</strong>
+  <%= @diagnosis.version %>
+</p>
+
+<p>
+  <strong>Manufacturer:</strong>
+  <%= @diagnosis.manufacturer_id %>
+</p>
+
+<p>
+  <strong>Equipment:</strong>
+  <%= @diagnosis.equipment_id %>
+</p>
+
+<p>
+  <strong>Serial number:</strong>
+  <%= @diagnosis.serial_number %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @diagnosis.year %>
+</p>
+
+<p>
+  <strong>Month:</strong>
+  <%= @diagnosis.month %>
+</p>
+
+<p>
+  <strong>Day:</strong>
+  <%= @diagnosis.day %>
+</p>
+
+<p>
+  <strong>Hour:</strong>
+  <%= @diagnosis.hour %>
+</p>
+
+<p>
+  <strong>Minute:</strong>
+  <%= @diagnosis.minute %>
+</p>
+
+<p>
+  <strong>Second:</strong>
+  <%= @diagnosis.second %>
+</p>
+
+<p>
+  <strong>Time zone:</strong>
+  <%= @diagnosis.time_zone %>
+</p>
+
+<p>
+  <strong>Elapsed time:</strong>
+  <%= @diagnosis.elapsed_time %>
+</p>
+
+<p>
+  <strong>Ip address:</strong>
+  <%= @diagnosis.ip_address %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @diagnosis.latitude %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @diagnosis.longitude %>
+</p>
+
+<p>
+  <strong>Data:</strong>
+  <%= @diagnosis.data %>
+</p>
+
+<%= link_to 'Edit', edit_diagnosis_path(@diagnosis) %> |
+<%= link_to 'Back', diagnoses_path %>
