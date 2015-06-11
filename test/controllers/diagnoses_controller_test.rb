@@ -18,7 +18,7 @@ class DiagnosesControllerTest < ActionController::TestCase
 
   test "should create diagnosis" do
     assert_difference('Diagnosis.count') do
-      post :create, diagnosis: { data: @diagnosis.data, day: @diagnosis.day, elapsed_time: @diagnosis.elapsed_time, equipment_id: @diagnosis.equipment_id, hour: @diagnosis.hour, ip_address: @diagnosis.ip_address, latitude: @diagnosis.latitude, longitude: @diagnosis.longitude, manufacturer_id: @diagnosis.manufacturer_id, minute: @diagnosis.minute, month: @diagnosis.month, protocol_id: @diagnosis.protocol_id, second: @diagnosis.second, serial_number: @diagnosis.serial_number, time_zone: @diagnosis.time_zone, version: @diagnosis.version, year: @diagnosis.year }
+      post :create, diagnosis: { authorized_key: @diagnosis.authorized_key, data: @diagnosis.data, elapsed_time: @diagnosis.elapsed_time, equipment: @diagnosis.equipment, ip_address: @diagnosis.ip_address, latitude: @diagnosis.latitude, longitude: @diagnosis.longitude, measured_at: @diagnosis.measured_at, protocol: @diagnosis.protocol, version: @diagnosis.version }
     end
 
     assert_redirected_to diagnosis_path(assigns(:diagnosis))
@@ -35,7 +35,7 @@ class DiagnosesControllerTest < ActionController::TestCase
   end
 
   test "should update diagnosis" do
-    patch :update, id: @diagnosis, diagnosis: { data: @diagnosis.data, day: @diagnosis.day, elapsed_time: @diagnosis.elapsed_time, equipment_id: @diagnosis.equipment_id, hour: @diagnosis.hour, ip_address: @diagnosis.ip_address, latitude: @diagnosis.latitude, longitude: @diagnosis.longitude, manufacturer_id: @diagnosis.manufacturer_id, minute: @diagnosis.minute, month: @diagnosis.month, protocol_id: @diagnosis.protocol_id, second: @diagnosis.second, serial_number: @diagnosis.serial_number, time_zone: @diagnosis.time_zone, version: @diagnosis.version, year: @diagnosis.year }
+    patch :update, id: @diagnosis, diagnosis: { authorized_key: @diagnosis.authorized_key, data: @diagnosis.data, elapsed_time: @diagnosis.elapsed_time, equipment: @diagnosis.equipment, ip_address: @diagnosis.ip_address, latitude: @diagnosis.latitude, longitude: @diagnosis.longitude, measured_at: @diagnosis.measured_at, protocol: @diagnosis.protocol, version: @diagnosis.version }
     assert_redirected_to diagnosis_path(assigns(:diagnosis))
   end
 

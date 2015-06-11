@@ -1,5 +1,5 @@
 class DiagnosesController < ApplicationController
-  protect_from_forgery 
+  protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
 
   before_action :set_diagnosis, only: [:show, :edit, :update, :destroy]
@@ -28,9 +28,15 @@ class DiagnosesController < ApplicationController
   # POST /diagnoses.json
   def create
     @diagnosis = Diagnosis.new(diagnosis_params)
+    if @diagnosis[:measured_at].nil?
+      @diagnosis.errors[:measured_at] << "invalid datetime"
+    elsif @diagnosis[:measured_at].year < Diagnosis::MIN_YEAR or @diagnosis[:measured_at].year  > Diagnosis::MAX_YEAR
+      @diagnosis.errors[:year] << "is out of allowed period [" + Diagnosis::MIN_YEAR.to_s + ", " + Diagnosis::MAX_YEAR.to_s + "]"
+      @diagnosis[:measured_at] = nil
+    end
 
     respond_to do |format|
-      if @diagnosis.save
+      if @diagnosis[:measured_at] and @diagnosis.save
         format.html { redirect_to @diagnosis, notice: 'Diagnosis was successfully created.' }
         format.json { render :show, status: :created, location: @diagnosis }
       else
@@ -69,14 +75,20 @@ class DiagnosesController < ApplicationController
     def set_diagnosis
       @diagnosis = Diagnosis.find(params[:id])
     end
+    
+    def measured_time
+      DateTime.new(* Diagnosis::DATETIME_FIELDS.map { |field| params[field] })
+    rescue
+      nil
+    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
-      params.require(:diagnosis).permit(:protocol_id, :version, :manufacturer_id, :equipment_id, :serial_number, :year, :month, :day, :hour, :minute, :second, :time_zone, :elapsed_time, :ip_address, :latitude, :longitude, :data)
+      params[:diagnosis][:measured_at] = measured_time
+      params.require(:diagnosis).permit(:protocol, :version, :authorized_key, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :data)
     end
-    
     
     def json_request?
       request.format.json?
-    end
+    end 
 end

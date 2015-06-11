@@ -7,16 +7,9 @@
     <tr>
       <th>Protocol</th>
       <th>Version</th>
-      <th>Manufacturer</th>
+      <th>Authorized key</th>
       <th>Equipment</th>
-      <th>Serial number</th>
-      <th>Year</th>
-      <th>Month</th>
-      <th>Day</th>
-      <th>Hour</th>
-      <th>Minute</th>
-      <th>Second</th>
-      <th>Time zone</th>
+      <th>Measured at</th>
       <th>Elapsed time</th>
       <th>Ip address</th>
       <th>Latitude</th>
@@ -29,18 +22,11 @@
   <tbody>
     <% @diagnoses.each do |diagnosis| %>
       <tr>
-        <td><%= diagnosis.protocol_id %></td>
+        <td><%= diagnosis.protocol %></td>
         <td><%= diagnosis.version %></td>
-        <td><%= diagnosis.manufacturer_id %></td>
-        <td><%= diagnosis.equipment_id %></td>
-        <td><%= diagnosis.serial_number %></td>
-        <td><%= diagnosis.year %></td>
-        <td><%= diagnosis.month %></td>
-        <td><%= diagnosis.day %></td>
-        <td><%= diagnosis.hour %></td>
-        <td><%= diagnosis.minute %></td>
-        <td><%= diagnosis.second %></td>
-        <td><%= diagnosis.time_zone %></td>
+        <td><%= diagnosis.authorized_key %></td>
+        <td><%= diagnosis.equipment %></td>
+        <td><%= diagnosis.measured_at %></td>
         <td><%= diagnosis.elapsed_time %></td>
         <td><%= diagnosis.ip_address %></td>
         <td><%= diagnosis.latitude %></td>

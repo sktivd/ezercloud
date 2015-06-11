@@ -1,58 +1,25 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-test:
-  protocol_id: MyString
+one:
+  protocol: MyString
   version: 1
-  manufacturer_id: MyString
-  equipment_id: MyString
-  serial_number: MyString
-  year: 1
-  month: 1
-  day: 1
-  hour: 1
-  minute: 1
-  second: 1
-  time_zone: MyString
-  elapsed_time: 9.99
+  authorized_key: MyString
+  equipment: MyString
+  measured_at: MyString
+  elapsed_time: 1.5
   ip_address: MyString
   latitude: 1.5
   longitude: 1.5
-  data: { "version" => 0, "type" => 0 }
+  data: MyText
 
-external:
-  protocol_id: MyString
+two:
+  protocol: MyString
   version: 1
-  manufacturer_id: MyString
-  equipment_id: MyString
-  serial_number: MyString
-  year: 1
-  month: 1
-  day: 1
-  hour: 1
-  minute: 1
-  second: 1
-  time_zone: MyString
-  elapsed_time: 9.99
+  authorized_key: MyString
+  equipment: MyString
+  measured_at: MyString
+  elapsed_time: 1.5
   ip_address: MyString
   latitude: 1.5
   longitude: 1.5
-  data: { "version" => 0, "type" => 1 }
-
-internal:
-  protocol_id: MyString
-  version: 1
-  manufacturer_id: MyString
-  equipment_id: MyString
-  serial_number: MyString
-  year: 1
-  month: 1
-  day: 1
-  hour: 1
-  minute: 1
-  second: 1
-  time_zone: MyString
-  elapsed_time: 9.99
-  ip_address: MyString
-  latitude: 1.5
-  longitude: 1.5
-  data: { "version" => 0, "type" => 2 }
+  data: MyText

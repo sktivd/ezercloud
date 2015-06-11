@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Equipment:</strong>
+  <%= @equipment.equipment %>
+</p>
+
+<p>
+  <strong>Manufacturer:</strong>
+  <%= @equipment.manufacturer %>
+</p>
+
+<p>
+  <strong>Klass:</strong>
+  <%= @equipment.klass %>
+</p>
+
+<%= link_to 'Edit', edit_equipment_path(@equipment) %> |
+<%= link_to 'Back', equipment_index_path %>

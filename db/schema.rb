@@ -11,28 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150608122130) do
+ActiveRecord::Schema.define(version: 20150611114312) do
 
   create_table "diagnoses", force: :cascade do |t|
-    t.string   "protocol_id"
+    t.string   "protocol"
     t.integer  "version"
-    t.string   "manufacturer_id"
-    t.string   "equipment_id"
-    t.string   "serial_number"
-    t.integer  "year"
-    t.integer  "month"
-    t.integer  "day"
-    t.integer  "hour"
-    t.integer  "minute"
-    t.integer  "second"
-    t.string   "time_zone"
-    t.decimal  "elapsed_time"
+    t.string   "authorized_key"
+    t.string   "equipment"
+    t.datetime "measured_at"
+    t.float    "elapsed_time"
     t.string   "ip_address"
     t.float    "latitude"
     t.float    "longitude"
     t.text     "data"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  create_table "equipment", force: :cascade do |t|
+    t.string   "equipment"
+    t.string   "manufacturer"
+    t.string   "klass"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
 end

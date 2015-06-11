@@ -12,52 +12,48 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :protocol_id %><br>
-    <%= f.text_field :protocol_id %>
+    <%= f.label :protocol %><br>
+    <%= f.text_field :protocol %>
   </div>
   <div class="field">
     <%= f.label :version %><br>
-    <%= f.number_field :version %>
+    <%= f.number_field :version, in: 1..100 %>
   </div>
   <div class="field">
-    <%= f.label :manufacturer_id %><br>
-    <%= f.text_field :manufacturer_id %>
+    <%= f.label :authorized_key %><br>
+    <%= f.text_field :authorized_key %>
   </div>
   <div class="field">
-    <%= f.label :equipment_id %><br>
-    <%= f.text_field :equipment_id %>
-  </div>
-  <div class="field">
-    <%= f.label :serial_number %><br>
-    <%= f.text_field :serial_number %>
+    <%= f.label :equipment %><br>
+    <%= f.text_field :equipment %>
   </div>
   <div class="field">
     <%= f.label :year %><br>
-    <%= f.number_field :year %>
+    <%= f.number_field :year, in: 2015..2029 %>
   </div>
   <div class="field">
     <%= f.label :month %><br>
-    <%= f.number_field :month %>
+    <%= f.number_field :month, in: 1..12 %>
   </div>
   <div class="field">
     <%= f.label :day %><br>
-    <%= f.number_field :day %>
+    <%= f.number_field :year, in: 1..31 %>
   </div>
   <div class="field">
     <%= f.label :hour %><br>
-    <%= f.number_field :hour %>
+    <%= f.number_field :year, in: 0..23 %>
   </div>
   <div class="field">
     <%= f.label :minute %><br>
-    <%= f.number_field :minute %>
+    <%= f.number_field :year, in: 0..59 %>
   </div>
   <div class="field">
     <%= f.label :second %><br>
-    <%= f.number_field :second %>
+    <%= f.number_field :year, in: 0..60 %>
   </div>
   <div class="field">
     <%= f.label :time_zone %><br>
-    <%= f.text_field :time_zone %>
+    <%= f.text_field :year %>
   </div>
   <div class="field">
     <%= f.label :elapsed_time %><br>
