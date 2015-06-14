@@ -1,1 +1,1 @@
-json.extract! @diagnosis, :id, :protocol, :version, :authorized_key, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :data, :created_at, :updated_at
+json.extract! @diagnosis, :order_number, :equipment, :measured_at, :ip_address, :latitude, :longitude, :created_at

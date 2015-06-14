@@ -1,4 +1,4 @@
 json.array!(@diagnoses) do |diagnosis|
-  json.extract! diagnosis, :id, :protocol, :version, :authorized_key, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :data
-  json.url diagnosis_url(diagnosis, format: :json)
+  json.extract! diagnosis, :order_number, :equipment, :measured_at, :ip_address, :latitude, :longitude, :created_at
+#  json.url diagnosis_url(diagnosis, format: :json)
 end

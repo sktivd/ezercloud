@@ -35,16 +35,26 @@ class DiagnosesController < ApplicationController
       @diagnosis[:measured_at] = nil
     else
       @equipment = new_equipment(params[:equipment], params[:data])
-      @equipment.diagnosis = @diagnosis
+      if @equipment
+        @equipment.diagnosis = @diagnosis 
+      else
+        @diagnosis.errors[:equipment] << "is not generated."
+      end
     end
 
     respond_to do |format|
-      if @diagnosis[:measured_at] and @equipment.save and @diagnosis.save
-        format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
-        format.json { render :show, status: :created, location: @diagnosis }
+      if @equipment and @diagnosis[:measured_at] and @diagnosis.save 
+        if @equipment.save 
+          format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
+          format.json { render :show, status: :created, location: @diagnosis }
+        else
+          Diagnosis.find(@diagnosis.id).delete
+          format.html { render :new }
+          format.json { render json: @diagnosis.errors , status: :unprocessable_entity }          
+        end
       else
         format.html { render :new }
-        format.json { render json: @diagnosis.errors, status: :unprocessable_entity }
+        format.json { render json: @diagnosis.errors , status: :unprocessable_entity }
       end
     end
   end
@@ -81,19 +91,22 @@ class DiagnosesController < ApplicationController
     
     def measured_time
       DateTime.new(* Diagnosis::DATETIME_FIELDS.map { |field| params[field] })
+    rescue
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
-      params[:diagnosis][:measured_at] = measured_time
-      params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :sex, :age_band, :order_number, :data)
+      if params[:diagnosis]
+        params[:diagnosis][:measured_at] = measured_time 
+        params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :sex, :age_band, :order_number, :data)
+      end
     end
     
     def new_equipment(name, data)
       equipment = Equipment.find_by equipment: name
       if equipment
         @equipment = Object.const_get(equipment[:klass]).new
-        @equipment.from_json data
+        @equipment.from_json data if data
         @equipment
       end
     end
