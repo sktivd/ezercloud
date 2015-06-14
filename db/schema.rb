@@ -11,22 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150611114312) do
+ActiveRecord::Schema.define(version: 20150612075751) do
 
   create_table "diagnoses", force: :cascade do |t|
     t.string   "protocol"
     t.integer  "version"
-    t.string   "authorized_key"
     t.string   "equipment"
     t.datetime "measured_at"
     t.float    "elapsed_time"
     t.string   "ip_address"
     t.float    "latitude"
     t.float    "longitude"
-    t.text     "data"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "sex",              default: -1
+    t.integer  "age_band",         default: -1
+    t.string   "order_number"
+    t.integer  "diagnosable_id"
+    t.string   "diagnosable_type"
   end
+
+  add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id"
 
   create_table "equipment", force: :cascade do |t|
     t.string   "equipment"
@@ -34,6 +39,45 @@ ActiveRecord::Schema.define(version: 20150611114312) do
     t.string   "klass"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "frends", force: :cascade do |t|
+    t.integer  "version"
+    t.string   "manufacturer"
+    t.string   "serial_number"
+    t.integer  "type"
+    t.boolean  "processed"
+    t.string   "error_code"
+    t.integer  "device_id"
+    t.integer  "device_ln"
+    t.integer  "test0_id"
+    t.integer  "test1_id"
+    t.integer  "test2_id"
+    t.float    "test0_result"
+    t.float    "test1_result"
+    t.float    "test2_result"
+    t.integer  "test0_integral"
+    t.integer  "test1_integral"
+    t.integer  "test2_integral"
+    t.integer  "control_integral"
+    t.string   "double"
+    t.integer  "test0_center_point"
+    t.integer  "test1_center_point"
+    t.integer  "test2_center_point"
+    t.integer  "control_center_point"
+    t.float    "average_background"
+    t.integer  "measured_points"
+    t.text     "point_intensities"
+    t.string   "external_qc_service_id"
+    t.string   "external_qc_catalog"
+    t.string   "external_qc_ln"
+    t.decimal  "external_qc_level"
+    t.boolean  "internal_qc_laser_power_test"
+    t.boolean  "internal_qc_laseralignment_test"
+    t.boolean  "internal_qc_calcaulated_ratio_test"
+    t.boolean  "internal_qc_test"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
 end

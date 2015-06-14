@@ -1,0 +1,93 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Frends</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>Manufacturer</th>
+      <th>Serial number</th>
+      <th>Type</th>
+      <th>Processed</th>
+      <th>Error code</th>
+      <th>Device</th>
+      <th>Device ln</th>
+      <th>Test0</th>
+      <th>Test1</th>
+      <th>Test2</th>
+      <th>Test0 result</th>
+      <th>Test1 result</th>
+      <th>Test2 result</th>
+      <th>Test0 integral</th>
+      <th>Test1 integral</th>
+      <th>Test2 integral</th>
+      <th>Control integral</th>
+      <th>Double</th>
+      <th>Test0 center point</th>
+      <th>Test1 center point</th>
+      <th>Test2 center point</th>
+      <th>Control center point</th>
+      <th>Average background</th>
+      <th>Measured points</th>
+      <th>Point intensities</th>
+      <th>External qc service</th>
+      <th>External qc catalog</th>
+      <th>External qc ln</th>
+      <th>External qc level</th>
+      <th>Internal qc laser power test</th>
+      <th>Internal qc laseralignment test</th>
+      <th>Internal qc calcaulated ratio test</th>
+      <th>Internal qc test</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @frends.each do |frend| %>
+      <tr>
+        <td><%= frend.version %></td>
+        <td><%= frend.manufacturer %></td>
+        <td><%= frend.serial_number %></td>
+        <td><%= frend.type %></td>
+        <td><%= frend.processed %></td>
+        <td><%= frend.error_code %></td>
+        <td><%= frend.device_id %></td>
+        <td><%= frend.device_ln %></td>
+        <td><%= frend.test0_id %></td>
+        <td><%= frend.test1_id %></td>
+        <td><%= frend.test2_id %></td>
+        <td><%= frend.test0_result %></td>
+        <td><%= frend.test1_result %></td>
+        <td><%= frend.test2_result %></td>
+        <td><%= frend.test0_integral %></td>
+        <td><%= frend.test1_integral %></td>
+        <td><%= frend.test2_integral %></td>
+        <td><%= frend.control_integral %></td>
+        <td><%= frend.double %></td>
+        <td><%= frend.test0_center_point %></td>
+        <td><%= frend.test1_center_point %></td>
+        <td><%= frend.test2_center_point %></td>
+        <td><%= frend.control_center_point %></td>
+        <td><%= frend.average_background %></td>
+        <td><%= frend.measured_points %></td>
+        <td><%= frend.point_intensities %></td>
+        <td><%= frend.external_qc_service_id %></td>
+        <td><%= frend.external_qc_catalog %></td>
+        <td><%= frend.external_qc_ln %></td>
+        <td><%= frend.external_qc_level %></td>
+        <td><%= frend.internal_qc_laser_power_test %></td>
+        <td><%= frend.internal_qc_laseralignment_test %></td>
+        <td><%= frend.internal_qc_calcaulated_ratio_test %></td>
+        <td><%= frend.internal_qc_test %></td>
+        <td><%= link_to 'Show', frend %></td>
+        <td><%= link_to 'Edit', edit_frend_path(frend) %></td>
+        <td><%= link_to 'Destroy', frend, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Frend', new_frend_path %>

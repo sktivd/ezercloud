@@ -1,0 +1,153 @@
+<%= form_for(@frend) do |f| %>
+  <% if @frend.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@frend.errors.count, "error") %> prohibited this frend from being saved:</h2>
+
+      <ul>
+      <% @frend.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :version %><br>
+    <%= f.number_field :version %>
+  </div>
+  <div class="field">
+    <%= f.label :manufacturer %><br>
+    <%= f.text_field :manufacturer %>
+  </div>
+  <div class="field">
+    <%= f.label :serial_number %><br>
+    <%= f.text_field :serial_number %>
+  </div>
+  <div class="field">
+    <%= f.label :type %><br>
+    <%= f.number_field :type %>
+  </div>
+  <div class="field">
+    <%= f.label :processed %><br>
+    <%= f.check_box :processed %>
+  </div>
+  <div class="field">
+    <%= f.label :error_code %><br>
+    <%= f.text_field :error_code %>
+  </div>
+  <div class="field">
+    <%= f.label :device_id %><br>
+    <%= f.number_field :device_id %>
+  </div>
+  <div class="field">
+    <%= f.label :device_ln %><br>
+    <%= f.number_field :device_ln %>
+  </div>
+  <div class="field">
+    <%= f.label :test0_id %><br>
+    <%= f.number_field :test0_id %>
+  </div>
+  <div class="field">
+    <%= f.label :test1_id %><br>
+    <%= f.number_field :test1_id %>
+  </div>
+  <div class="field">
+    <%= f.label :test2_id %><br>
+    <%= f.number_field :test2_id %>
+  </div>
+  <div class="field">
+    <%= f.label :test0_result %><br>
+    <%= f.text_field :test0_result %>
+  </div>
+  <div class="field">
+    <%= f.label :test1_result %><br>
+    <%= f.text_field :test1_result %>
+  </div>
+  <div class="field">
+    <%= f.label :test2_result %><br>
+    <%= f.text_field :test2_result %>
+  </div>
+  <div class="field">
+    <%= f.label :test0_integral %><br>
+    <%= f.number_field :test0_integral %>
+  </div>
+  <div class="field">
+    <%= f.label :test1_integral %><br>
+    <%= f.number_field :test1_integral %>
+  </div>
+  <div class="field">
+    <%= f.label :test2_integral %><br>
+    <%= f.number_field :test2_integral %>
+  </div>
+  <div class="field">
+    <%= f.label :control_integral %><br>
+    <%= f.number_field :control_integral %>
+  </div>
+  <div class="field">
+    <%= f.label :double %><br>
+    <%= f.text_field :double %>
+  </div>
+  <div class="field">
+    <%= f.label :test0_center_point %><br>
+    <%= f.number_field :test0_center_point %>
+  </div>
+  <div class="field">
+    <%= f.label :test1_center_point %><br>
+    <%= f.number_field :test1_center_point %>
+  </div>
+  <div class="field">
+    <%= f.label :test2_center_point %><br>
+    <%= f.number_field :test2_center_point %>
+  </div>
+  <div class="field">
+    <%= f.label :control_center_point %><br>
+    <%= f.number_field :control_center_point %>
+  </div>
+  <div class="field">
+    <%= f.label :average_background %><br>
+    <%= f.text_field :average_background %>
+  </div>
+  <div class="field">
+    <%= f.label :measured_points %><br>
+    <%= f.number_field :measured_points %>
+  </div>
+  <div class="field">
+    <%= f.label :point_intensities %><br>
+    <%= f.text_area :point_intensities %>
+  </div>
+  <div class="field">
+    <%= f.label :external_qc_service_id %><br>
+    <%= f.text_field :external_qc_service_id %>
+  </div>
+  <div class="field">
+    <%= f.label :external_qc_catalog %><br>
+    <%= f.text_field :external_qc_catalog %>
+  </div>
+  <div class="field">
+    <%= f.label :external_qc_ln %><br>
+    <%= f.text_field :external_qc_ln %>
+  </div>
+  <div class="field">
+    <%= f.label :external_qc_level %><br>
+    <%= f.text_field :external_qc_level %>
+  </div>
+  <div class="field">
+    <%= f.label :internal_qc_laser_power_test %><br>
+    <%= f.check_box :internal_qc_laser_power_test %>
+  </div>
+  <div class="field">
+    <%= f.label :internal_qc_laseralignment_test %><br>
+    <%= f.check_box :internal_qc_laseralignment_test %>
+  </div>
+  <div class="field">
+    <%= f.label :internal_qc_calcaulated_ratio_test %><br>
+    <%= f.check_box :internal_qc_calcaulated_ratio_test %>
+  </div>
+  <div class="field">
+    <%= f.label :internal_qc_test %><br>
+    <%= f.check_box :internal_qc_test %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

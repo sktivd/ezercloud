@@ -5,16 +5,13 @@
 <table>
   <thead>
     <tr>
-      <th>Protocol</th>
-      <th>Version</th>
-      <th>Authorized key</th>
       <th>Equipment</th>
-      <th>Measured at</th>
-      <th>Elapsed time</th>
+      <th>Order Number</th>
+      <th>Measured</th>
       <th>Ip address</th>
       <th>Latitude</th>
       <th>Longitude</th>
-      <th>Data</th>
+      <th>Transmitted</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -22,24 +19,20 @@
   <tbody>
     <% @diagnoses.each do |diagnosis| %>
       <tr>
-        <td><%= diagnosis.protocol %></td>
-        <td><%= diagnosis.version %></td>
-        <td><%= diagnosis.authorized_key %></td>
         <td><%= diagnosis.equipment %></td>
+        <td><%= diagnosis.order_number %></td>
         <td><%= diagnosis.measured_at %></td>
-        <td><%= diagnosis.elapsed_time %></td>
         <td><%= diagnosis.ip_address %></td>
         <td><%= diagnosis.latitude %></td>
         <td><%= diagnosis.longitude %></td>
-        <td><%= diagnosis.data %></td>
+        <td><%= diagnosis.created_at %></td>
+<% if false %>
         <td><%= link_to 'Show', diagnosis %></td>
-        <td><%= link_to 'Edit', edit_diagnosis_path(diagnosis) %></td>
         <td><%= link_to 'Destroy', diagnosis, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+<% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New Diagnosis', new_diagnosis_path %>

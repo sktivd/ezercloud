@@ -1,18 +1,18 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Protocol:</strong>
-  <%= @diagnosis.protocol %>
+  <strong>Order Number:</strong>
+  <%= @diagnosis.order_number %>
 </p>
 
 <p>
-  <strong>Version:</strong>
-  <%= @diagnosis.version %>
+  <strong>Sex:</strong>
+  <%= @diagnosis.sex %>
 </p>
 
 <p>
-  <strong>Authorized key:</strong>
-  <%= @diagnosis.authorized_key %>
+  <strong>Age:</strong>
+  <%= @diagnosis.age_band %>
 </p>
 
 <p>
@@ -20,35 +20,31 @@
   <%= @diagnosis.equipment %>
 </p>
 
-<p>
-  <strong>Measured at:</strong>
-  <%= @diagnosis.measured_at %>
-</p>
-
+<% if @diagnosis.elapsed_time %>
 <p>
   <strong>Elapsed time:</strong>
   <%= @diagnosis.elapsed_time %>
 </p>
+<% end %>
 
 <p>
   <strong>Ip address:</strong>
   <%= @diagnosis.ip_address %>
 </p>
 
+<% if @diagnosis.latitude %>
 <p>
   <strong>Latitude:</strong>
   <%= @diagnosis.latitude %>
 </p>
+<% end %>
 
+<% if @diagnosis.longitude %>
 <p>
   <strong>Longitude:</strong>
   <%= @diagnosis.longitude %>
 </p>
-
-<p>
-  <strong>Data:</strong>
-  <%= @diagnosis.data %>
-</p>
+<% end %>
 
 <%= link_to 'Edit', edit_diagnosis_path(@diagnosis) %> |
 <%= link_to 'Back', diagnoses_path %>

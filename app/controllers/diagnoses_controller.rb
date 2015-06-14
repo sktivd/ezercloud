@@ -24,20 +24,23 @@ class DiagnosesController < ApplicationController
   def edit
   end
 
-  # POST /diagnoses
+  # JSON only
   # POST /diagnoses.json
-  def create
+  def create    
     @diagnosis = Diagnosis.new(diagnosis_params)
     if @diagnosis[:measured_at].nil?
       @diagnosis.errors[:measured_at] << "invalid datetime"
     elsif @diagnosis[:measured_at].year < Diagnosis::MIN_YEAR or @diagnosis[:measured_at].year  > Diagnosis::MAX_YEAR
       @diagnosis.errors[:year] << "is out of allowed period [" + Diagnosis::MIN_YEAR.to_s + ", " + Diagnosis::MAX_YEAR.to_s + "]"
       @diagnosis[:measured_at] = nil
+    else
+      @equipment = new_equipment(params[:equipment], params[:data])
+      @equipment.diagnosis = @diagnosis
     end
 
     respond_to do |format|
-      if @diagnosis[:measured_at] and @diagnosis.save
-        format.html { redirect_to @diagnosis, notice: 'Diagnosis was successfully created.' }
+      if @diagnosis[:measured_at] and @equipment.save and @diagnosis.save
+        format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
         format.json { render :show, status: :created, location: @diagnosis }
       else
         format.html { render :new }
@@ -78,14 +81,21 @@ class DiagnosesController < ApplicationController
     
     def measured_time
       DateTime.new(* Diagnosis::DATETIME_FIELDS.map { |field| params[field] })
-    rescue
-      nil
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
       params[:diagnosis][:measured_at] = measured_time
-      params.require(:diagnosis).permit(:protocol, :version, :authorized_key, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :data)
+      params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :sex, :age_band, :order_number, :data)
+    end
+    
+    def new_equipment(name, data)
+      equipment = Equipment.find_by equipment: name
+      if equipment
+        @equipment = Object.const_get(equipment[:klass]).new
+        @equipment.from_json data
+        @equipment
+      end
     end
     
     def json_request?
