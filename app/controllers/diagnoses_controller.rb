@@ -50,7 +50,7 @@ class DiagnosesController < ApplicationController
         else
           Diagnosis.find(@diagnosis.id).delete
           format.html { render :new }
-          format.json { render json: @diagnosis.errors , status: :unprocessable_entity }          
+          format.json { render json: {:equipment => @equipment.errors, :diagnosis => @diagnosis.errors} , status: :unprocessable_entity }          
         end
       else
         format.html { render :new }

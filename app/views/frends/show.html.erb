@@ -1,11 +1,6 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Version:</strong>
-  <%= @frend.version %>
-</p>
-
-<p>
   <strong>Manufacturer:</strong>
   <%= @frend.manufacturer %>
 </p>
@@ -17,7 +12,7 @@
 
 <p>
   <strong>Type:</strong>
-  <%= @frend.type %>
+  <%= @frend.test_type %>
 </p>
 
 <p>
@@ -71,56 +66,6 @@
 </p>
 
 <p>
-  <strong>Test0 integral:</strong>
-  <%= @frend.test0_integral %>
-</p>
-
-<p>
-  <strong>Test1 integral:</strong>
-  <%= @frend.test1_integral %>
-</p>
-
-<p>
-  <strong>Test2 integral:</strong>
-  <%= @frend.test2_integral %>
-</p>
-
-<p>
-  <strong>Control integral:</strong>
-  <%= @frend.control_integral %>
-</p>
-
-<p>
-  <strong>Double:</strong>
-  <%= @frend.double %>
-</p>
-
-<p>
-  <strong>Test0 center point:</strong>
-  <%= @frend.test0_center_point %>
-</p>
-
-<p>
-  <strong>Test1 center point:</strong>
-  <%= @frend.test1_center_point %>
-</p>
-
-<p>
-  <strong>Test2 center point:</strong>
-  <%= @frend.test2_center_point %>
-</p>
-
-<p>
-  <strong>Control center point:</strong>
-  <%= @frend.control_center_point %>
-</p>
-
-<p>
-  <strong>Average background:</strong>
-  <%= @frend.average_background %>
-</p>
-
-<p>
   <strong>Measured points:</strong>
   <%= @frend.measured_points %>
 </p>
@@ -130,6 +75,7 @@
   <%= @frend.point_intensities %>
 </p>
 
+<% if @frend.test_type == 1 %>
 <p>
   <strong>External qc service:</strong>
   <%= @frend.external_qc_service_id %>
@@ -149,7 +95,9 @@
   <strong>External qc level:</strong>
   <%= @frend.external_qc_level %>
 </p>
+<% end %>
 
+<% if @frend.test_type == 2 %>
 <p>
   <strong>Internal qc laser power test:</strong>
   <%= @frend.internal_qc_laser_power_test %>
@@ -169,6 +117,7 @@
   <strong>Internal qc test:</strong>
   <%= @frend.internal_qc_test %>
 </p>
+<% end %>
 
 <%= link_to 'Edit', edit_frend_path(@frend) %> |
 <%= link_to 'Back', frends_path %>

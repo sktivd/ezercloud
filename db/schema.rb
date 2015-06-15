@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150612075751) do
+ActiveRecord::Schema.define(version: 20150615065053) do
 
   create_table "diagnoses", force: :cascade do |t|
     t.string   "protocol"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20150612075751) do
     t.integer  "version"
     t.string   "manufacturer"
     t.string   "serial_number"
-    t.integer  "type"
+    t.integer  "test_type"
     t.boolean  "processed"
     t.string   "error_code"
     t.integer  "device_id"
