@@ -4,7 +4,7 @@ class CreateFrends < ActiveRecord::Migration
       t.integer :version
       t.string :manufacturer
       t.string :serial_number
-      t.integer :type
+      t.integer :test_type
       t.boolean :processed
       t.string :error_code
       t.integer :device_id
@@ -19,7 +19,6 @@ class CreateFrends < ActiveRecord::Migration
       t.integer :test1_integral
       t.integer :test2_integral
       t.integer :control_integral
-      t.string :double
       t.integer :test0_center_point
       t.integer :test1_center_point
       t.integer :test2_center_point

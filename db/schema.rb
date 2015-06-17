@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615065053) do
+ActiveRecord::Schema.define(version: 20150617122117) do
 
   create_table "diagnoses", force: :cascade do |t|
     t.string   "protocol"
@@ -41,6 +41,21 @@ ActiveRecord::Schema.define(version: 20150615065053) do
     t.datetime "updated_at",   null: false
   end
 
+  create_table "external_quality_controls", force: :cascade do |t|
+    t.string   "equipment"
+    t.integer  "device_id"
+    t.integer  "test_id"
+    t.string   "sample_type"
+    t.string   "reagent"
+    t.string   "lot_number"
+    t.datetime "expired_at"
+    t.string   "unit"
+    t.float    "mean"
+    t.float    "sd"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "frends", force: :cascade do |t|
     t.integer  "version"
     t.string   "manufacturer"
@@ -60,7 +75,6 @@ ActiveRecord::Schema.define(version: 20150615065053) do
     t.integer  "test1_integral"
     t.integer  "test2_integral"
     t.integer  "control_integral"
-    t.string   "double"
     t.integer  "test0_center_point"
     t.integer  "test1_center_point"
     t.integer  "test2_center_point"

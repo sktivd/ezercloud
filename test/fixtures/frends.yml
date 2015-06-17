@@ -4,7 +4,7 @@ one:
   version: 1
   manufacturer: MyString
   serial_number: MyString
-  type: 1
+  test_type: 1
   processed: false
   error_code: MyString
   device_id: 1
@@ -40,7 +40,7 @@ two:
   version: 1
   manufacturer: MyString
   serial_number: MyString
-  type: 1
+  test_type: 1
   processed: false
   error_code: MyString
   device_id: 1

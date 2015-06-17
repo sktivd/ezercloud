@@ -28,33 +28,26 @@ class DiagnosesController < ApplicationController
   # POST /diagnoses.json
   def create    
     @diagnosis = Diagnosis.new(diagnosis_params)
-    if @diagnosis[:measured_at].nil?
-      @diagnosis.errors[:measured_at] << "invalid datetime"
-    elsif @diagnosis[:measured_at].year < Diagnosis::MIN_YEAR or @diagnosis[:measured_at].year  > Diagnosis::MAX_YEAR
-      @diagnosis.errors[:year] << "is out of allowed period [" + Diagnosis::MIN_YEAR.to_s + ", " + Diagnosis::MAX_YEAR.to_s + "]"
-      @diagnosis[:measured_at] = nil
+    @equipment = new_equipment(params[:equipment], params[:data])
+    if @equipment
+      @equipment.diagnosis = @diagnosis 
     else
-      @equipment = new_equipment(params[:equipment], params[:data])
-      if @equipment
-        @equipment.diagnosis = @diagnosis 
-      else
-        @diagnosis.errors[:equipment] << "is not generated."
-      end
+      @diagnosis.errors[:equipment] << "is not generated."
     end
 
     respond_to do |format|
-      if @equipment and @diagnosis[:measured_at] and @diagnosis.save 
+      if @equipment and @diagnosis.save 
         if @equipment.save 
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
           format.json { render :show, status: :created, location: @diagnosis }
         else
-          Diagnosis.find(@diagnosis.id).delete
+          @diagnosis.delete
           format.html { render :new }
-          format.json { render json: {:equipment => @equipment.errors, :diagnosis => @diagnosis.errors} , status: :unprocessable_entity }          
+          format.json { render json: {:equipment => @equipment.errors, :diagnosis => @diagnosis.errors}, status: :unprocessable_entity }          
         end
       else
         format.html { render :new }
-        format.json { render json: @diagnosis.errors , status: :unprocessable_entity }
+        format.json { render json: @diagnosis.errors, status: :unprocessable_entity }
       end
     end
   end

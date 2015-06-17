@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing External Quality Controls</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Equipment</th>
+      <th>Device</th>
+      <th>Test</th>
+      <th>Sample type</th>
+      <th>Reagent</th>
+      <th>Lot number</th>
+      <th>Expired at</th>
+      <th>Unit</th>
+      <th>Mean</th>
+      <th>Sd</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @external_quality_controls.each do |external_quality_control| %>
+      <tr>
+        <td><%= external_quality_control.equipment %></td>
+        <td><%= external_quality_control.device_id %></td>
+        <td><%= external_quality_control.test_id %></td>
+        <td><%= external_quality_control.sample_type %></td>
+        <td><%= external_quality_control.reagent %></td>
+        <td><%= external_quality_control.lot_number %></td>
+        <td><%= external_quality_control.expired_at %></td>
+        <td><%= external_quality_control.unit %></td>
+        <td><%= external_quality_control.mean %></td>
+        <td><%= external_quality_control.sd %></td>
+        <td><%= link_to 'Show', external_quality_control %></td>
+        <td><%= link_to 'Edit', edit_external_quality_control_path(external_quality_control) %></td>
+        <td><%= link_to 'Destroy', external_quality_control, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New External quality control', new_external_quality_control_path %>
