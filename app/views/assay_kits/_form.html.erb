@@ -1,0 +1,8 @@
+<%= simple_form_for(@assay_kit) do |f| %>
+  <%= f.input :equipment%>
+  <%= f.input :manufacturer%>
+  <%= f.input :device_id%>
+  <%= f.input :reagents,    as: :text_array %>
+  <%= f.input :references,  as: :integer_array %>
+  <%= f.button :submit %>
+<% end %>

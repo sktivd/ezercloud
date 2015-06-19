@@ -5,7 +5,7 @@ class CreateDiagnoses < ActiveRecord::Migration
       t.integer :version
       t.string :authorized_key
       t.string :equipment
-      t.string :measured_at
+      t.datetime :measured_at
       t.float :elapsed_time
       t.string :ip_address
       t.float :latitude

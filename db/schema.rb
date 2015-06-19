@@ -11,7 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617122117) do
+ActiveRecord::Schema.define(version: 20150618081336) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "assay_kits", force: :cascade do |t|
+    t.string   "equipment"
+    t.string   "manufacturer"
+    t.integer  "device_id"
+    t.integer  "number_of_tests"
+    t.string   "reagents",        default: [""],              array: true
+    t.integer  "references",      default: [0],               array: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
 
   create_table "diagnoses", force: :cascade do |t|
     t.string   "protocol"
@@ -31,7 +45,7 @@ ActiveRecord::Schema.define(version: 20150617122117) do
     t.string   "diagnosable_type"
   end
 
-  add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id"
+  add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id", using: :btree
 
   create_table "equipment", force: :cascade do |t|
     t.string   "equipment"

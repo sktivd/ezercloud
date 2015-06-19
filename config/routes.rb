@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :assay_kits
   resources :external_quality_controls
   resources :frends
   resources :diagnoses
