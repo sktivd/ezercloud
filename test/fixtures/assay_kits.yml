@@ -3,15 +3,9 @@
 one:
   equipment: MyString
   manufacturer: MyString
-  device_id: 1
-  number_of_tests: 1
-  reagent: MyString
-  test_id: 1
+  kit_id: 1
 
 two:
   equipment: MyString
   manufacturer: MyString
-  device_id: 1
-  number_of_tests: 1
-  reagent: MyString
-  test_id: 1
+  kit_id: 1

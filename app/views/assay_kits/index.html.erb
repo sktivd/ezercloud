@@ -7,10 +7,7 @@
     <tr>
       <th>Equipment</th>
       <th>Manufacturer</th>
-      <th>Device</th>
-      <th>Number of tests</th>
-      <th>Reagents</th>
-      <th>Reference numbers</th>
+      <th>Kit</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -20,10 +17,7 @@
       <tr>
         <td><%= assay_kit.equipment %></td>
         <td><%= assay_kit.manufacturer %></td>
-        <td><%= assay_kit.device_id %></td>
-        <td><%= assay_kit.number_of_tests %></td>
-        <td><%= assay_kit.reagents %></td>
-        <td><%= assay_kit.references %></td>
+        <td><%= assay_kit.kit_id %></td>
         <td><%= link_to 'Show', assay_kit %></td>
         <td><%= link_to 'Edit', edit_assay_kit_path(assay_kit) %></td>
         <td><%= link_to 'Destroy', assay_kit, method: :delete, data: { confirm: 'Are you sure?' } %></td>

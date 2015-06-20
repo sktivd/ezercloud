@@ -13,7 +13,10 @@
  *= require_tree .
  *= require_self
  */
+@import "bootstrap-sprockets";
+@import "bootstrap";
 
+/*
 .simple_form label {
   float: left;
   width: 120px;
@@ -55,3 +58,4 @@
   display: block;
   font-style: italic;
 }
+*/

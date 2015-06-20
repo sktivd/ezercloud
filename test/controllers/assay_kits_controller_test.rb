@@ -18,7 +18,7 @@ class AssayKitsControllerTest < ActionController::TestCase
 
   test "should create assay_kit" do
     assert_difference('AssayKit.count') do
-      post :create, assay_kit: { device_id: @assay_kit.device_id, equipment: @assay_kit.equipment, manufacturer: @assay_kit.manufacturer, number_of_tests: @assay_kit.number_of_tests, reagent: @assay_kit.reagent, test_id: @assay_kit.test_id }
+      post :create, assay_kit: { equipment: @assay_kit.equipment, kit_id: @assay_kit.kit_id, manufacturer: @assay_kit.manufacturer }
     end
 
     assert_redirected_to assay_kit_path(assigns(:assay_kit))
@@ -35,7 +35,7 @@ class AssayKitsControllerTest < ActionController::TestCase
   end
 
   test "should update assay_kit" do
-    patch :update, id: @assay_kit, assay_kit: { device_id: @assay_kit.device_id, equipment: @assay_kit.equipment, manufacturer: @assay_kit.manufacturer, number_of_tests: @assay_kit.number_of_tests, reagent: @assay_kit.reagent, test_id: @assay_kit.test_id }
+    patch :update, id: @assay_kit, assay_kit: { equipment: @assay_kit.equipment, kit_id: @assay_kit.kit_id, manufacturer: @assay_kit.manufacturer }
     assert_redirected_to assay_kit_path(assigns(:assay_kit))
   end
 

@@ -1,8 +1,16 @@
-<%= simple_form_for(@assay_kit) do |f| %>
-  <%= f.input :equipment%>
-  <%= f.input :manufacturer%>
-  <%= f.input :device_id%>
-  <%= f.input :reagents,    as: :text_array %>
-  <%= f.input :references,  as: :integer_array %>
-  <%= f.button :submit %>
+<%= simple_form_for @assay_kit do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :equipment %>
+    <%= f.input :manufacturer %>
+    <%= f.input :kit_id %>
+    <%= f.simple_fields_for :reagents, wrapper: :inline_form, html: { class: 'form-inline' } do |builder| %>
+      <%= render partial: 'reagent_fields', locals: { f: builder } %>
+    <% end %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
 <% end %>
