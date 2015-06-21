@@ -5,11 +5,12 @@
     <%= f.input :equipment %>
     <%= f.input :manufacturer %>
     <%= f.input :kit_id %>
-    <%= f.simple_fields_for :reagents, wrapper: :inline_form, html: { class: 'form-inline' } do |builder| %>
+    <%= f.label :reagents, label: "Reagents" %>
+    <%= f.simple_fields_for :reagents, wrapper: :inline_form do |builder| %>
       <%= render partial: 'reagent_fields', locals: { f: builder } %>
     <% end %>
   </div>
-
+  <br />
   <div class="form-actions">
     <%= f.button :submit %>
   </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150618081336) do
+ActiveRecord::Schema.define(version: 20150621034749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,12 +19,10 @@ ActiveRecord::Schema.define(version: 20150618081336) do
   create_table "assay_kits", force: :cascade do |t|
     t.string   "equipment"
     t.string   "manufacturer"
-    t.integer  "device_id"
-    t.integer  "number_of_tests"
-    t.string   "reagents",        default: [""],              array: true
-    t.integer  "references",      default: [0],               array: true
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "kit_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "device"
   end
 
   create_table "diagnoses", force: :cascade do |t|
@@ -108,4 +106,15 @@ ActiveRecord::Schema.define(version: 20150618081336) do
     t.datetime "updated_at",                         null: false
   end
 
+  create_table "reagents", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "number"
+    t.integer  "assay_kit_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "reagents", ["assay_kit_id"], name: "index_reagents_on_assay_kit_id", using: :btree
+
+  add_foreign_key "reagents", "assay_kits"
 end

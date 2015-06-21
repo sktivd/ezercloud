@@ -1,2 +1,5 @@
-<%= f.input :name, placeholder: "Reagent" %>
-<%= f.input :number, placeholder: "Allocation number" %>
+<div class='form-inline'>
+  <%= f.input :name, placeholder: "Reagent" %>
+  <%= f.input :number, placeholder: "Allocation number" %>
+  <%= f.input :_destroy, as: :boolean, inline_label: 'Remove', :class => 'btn btn-mini btn-danger' %>
+</div>
