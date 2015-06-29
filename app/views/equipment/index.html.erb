@@ -1,3 +1,7 @@
+<% content_for :breadcrumb do %>
+  <li class="active">Equipment</li>
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Equipment</h1>
@@ -8,6 +12,8 @@
       <th>Equipment</th>
       <th>Manufacturer</th>
       <th>Klass</th>
+      <th>DB name</th>
+      <th>Variables for QC</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,6 +24,8 @@
         <td><%= equipment.equipment %></td>
         <td><%= equipment.manufacturer %></td>
         <td><%= equipment.klass %></td>
+        <td><%= equipment.db %></td>
+        <td><%= equipment.qc_variables %></td>
         <td><%= link_to 'Show', equipment %></td>
         <td><%= link_to 'Edit', edit_equipment_path(equipment) %></td>
         <td><%= link_to 'Destroy', equipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>

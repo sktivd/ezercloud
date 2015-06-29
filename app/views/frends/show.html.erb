@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>Measured:</strong>
+  <%= @frend.diagnosis.measured_at %>
+</p>
+
+<p>
   <strong>Manufacturer:</strong>
   <%= @frend.manufacturer %>
 </p>
@@ -36,33 +41,13 @@
 </p>
 
 <p>
-  <strong>Test0:</strong>
-  <%= @frend.test0_id %>
+  <strong>Tests:</strong>
+  <%= join_tests(@frend) %>
 </p>
 
 <p>
-  <strong>Test1:</strong>
-  <%= @frend.test1_id %>
-</p>
-
-<p>
-  <strong>Test2:</strong>
-  <%= @frend.test2_id %>
-</p>
-
-<p>
-  <strong>Test0 result:</strong>
-  <%= @frend.test0_result %>
-</p>
-
-<p>
-  <strong>Test1 result:</strong>
-  <%= @frend.test1_result %>
-</p>
-
-<p>
-  <strong>Test2 result:</strong>
-  <%= @frend.test2_result %>
+  <strong>Results:</strong>
+  <%= join_results(@frend) %>
 </p>
 
 <p>
@@ -78,22 +63,12 @@
 <% if @frend.test_type == 1 %>
 <p>
   <strong>External qc service:</strong>
-  <%= @frend.external_qc_service_id %>
-</p>
-
-<p>
-  <strong>External qc catalog:</strong>
-  <%= @frend.external_qc_catalog %>
+  <%= @frend.external_qc_service %>
 </p>
 
 <p>
   <strong>External qc ln:</strong>
   <%= @frend.external_qc_ln %>
-</p>
-
-<p>
-  <strong>External qc level:</strong>
-  <%= @frend.external_qc_level %>
 </p>
 <% end %>
 

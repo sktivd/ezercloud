@@ -1,0 +1,46 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Assay Kits", assay_kits_path %></li>
+  <li class="active">Quality Control materials</li>
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Quality Control Materials</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Service</th>
+      <th>Lot number</th>
+      <th>Expire</th>
+      <th>Equipment</th>
+      <th>Reagent name</th>
+      <th>Reagent number</th>
+      <th>Mean</th>
+      <th>Sd</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @quality_control_materials.each do |quality_control_material| %>
+      <tr>
+        <td><%= quality_control_material.service %></td>
+        <td><%= quality_control_material.lot_number %></td>
+        <td><%= quality_control_material.expire %></td>
+        <td><%= quality_control_material.equipment %></td>
+        <td><%= quality_control_material.reagent_name %></td>
+        <td><%= quality_control_material.reagent_number %></td>
+        <td><%= quality_control_material.mean %></td>
+        <td><%= quality_control_material.sd %></td>
+        <td><%= link_to 'Show', quality_control_material %></td>
+        <td><%= link_to 'Edit', edit_quality_control_material_path(quality_control_material) %></td>
+        <td><%= link_to 'Destroy', quality_control_material, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Quality control material', new_quality_control_material_path %>

@@ -5,7 +5,7 @@
     <%= f.input :equipment %>
     <%= f.input :manufacturer %>
     <%= f.input :device %>
-    <%= f.input :kit_id %>
+    <%= f.input :kit %>
     <%= f.label :reagents, label: "Reagents" %>
     <%= f.simple_fields_for :reagents, wrapper: :inline_form do |builder| %>
       <%= render partial: 'reagent_fields', locals: { f: builder } %>

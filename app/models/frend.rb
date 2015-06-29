@@ -5,5 +5,15 @@ class Frend < ActiveRecord::Base
   
   validates :serial_number, :test_type, :processed, :device_id, :device_ln, presence: true
   validates :version,       numericality: { equal_to: VERSION, message: "should be matched to server's version" }  
+  validates :external_qc_service, :external_qc_ln, presence: true, if: :external_qc?
+  validates :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calcaulated_ratio_test, :internal_qc_test, presence: true, if: :internal_qc? 
+  
+  def external_qc?
+    test_type == 1
+  end
+
+  def internal_qc?
+    test_type == 2
+  end
   
 end

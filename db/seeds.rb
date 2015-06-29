@@ -6,14 +6,25 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Equipment.create!(equipment: 'FREND', manufacturer: "NanoEnTek", klass: "Frend")
-AssayKit.create!(id: 1, equipment: 'FREND', manufacturer: "NanoEnTek", device: "PSA plus", kit_id: 30)
-Reagent.create!(name: 'PSA (Total)', number: 30, assay_kit_id: 1)
-AssayKit.create!(id: 2, equipment: 'FREND', manufacturer: "NanoEnTek", device: "TSH", kit_id: 40)
-Reagent.create!(name: 'TSH', number: 40, assay_kit_id: 2)
-AssayKit.create!(id: 3, equipment: 'FREND', manufacturer: "NanoEnTek", device: "BNP", kit_id: 19)
-Reagent.create!(name: 'BNP', number: 19, assay_kit_id: 3)
-AssayKit.create!(id: 4, equipment: 'FREND', manufacturer: "NanoEnTek", device: "Cardiac Triple", kit_id: 15)
-Reagent.create!(name: 'Myoglobin', number: 14, assay_kit_id: 4)
-Reagent.create!(name: 'Troponin I', number: 12, assay_kit_id: 4)
-Reagent.create!(name: 'CK-MB', number: 13, assay_kit_id: 4)
+e = Equipment.create(equipment: 'FREND', manufacturer: 'NanoEnTek', klass: 'Frend', db: 'frends', qc_variables: 'device_id,test0_id,test1_id,test2_id,test0_result,test1_result,test2_result,external_qc_service,external_qc_ln')
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: "NanoEnTek", device: "PSA plus", kit: 30)
+r = a.reagents.create(name: 'PSA (Total)', number: 30)
+q = r.quality_control_materials.create(service: 'Bio-Rad', lot_number: '40881', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', reagent_name: 'PSA (Total)', reagent_number: 30, mean: 0.270, sd: (0.270 - 0.190) / 3)
+q = r.quality_control_materials.create(service: 'Bio-Rad', lot_number: '40882', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', reagent_name: 'PSA (Total)', reagent_number: 30, mean: 3.95, sd: (3.95 - 3.37) / 3)
+q = r.quality_control_materials.create(service: 'Bio-Rad', lot_number: '40883', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', reagent_name: 'PSA (Total)', reagent_number: 30, mean: 25, sd: 0)
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "TSH", kit: 40)
+r = a.reagents.create(name: 'TSH', number: 40)
+q = r.quality_control_materials.create(service: 'Bio-Rad', lot_number: '40881', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', reagent_name: 'TSH', reagent_number: 40, mean: 0.630, sd: (0.630 - 0.440) / 3)
+q = r.quality_control_materials.create(service: 'Bio-Rad', lot_number: '40882', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', reagent_name: 'TSH', reagent_number: 40, mean: 0.630, sd: (5.99 - 5.08) / 3)
+q = r.quality_control_materials.create(service: 'Bio-Rad', lot_number: '40883', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', reagent_name: 'TSH', reagent_number: 40, mean: 25, sd: 0)
+
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "BNP", kit: 19)
+r = a.reagents.create(name: 'BNP', number: 19)
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: 'Cardiac Triple', kit: 15)
+r = a.reagents.create(name: 'Myoglobin', number: 14)
+r = a.reagents.create(name: 'Troponin I', number: 12)
+r = a.reagents.create(name: 'CK-MB', number: 13)

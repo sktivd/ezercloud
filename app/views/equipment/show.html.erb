@@ -14,6 +14,14 @@
   <strong>Klass:</strong>
   <%= @equipment.klass %>
 </p>
+<p>
+  <strong>DB:</strong>
+  <%= @equipment.db %>
+</p>
+<p>
+  <strong>Variables for QC:</strong>
+  <%= @equipment.qc_variables %>
+</p>
 
 <%= link_to 'Edit', edit_equipment_path(@equipment) %> |
 <%= link_to 'Back', equipment_index_path %>

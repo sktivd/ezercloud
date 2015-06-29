@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
+  resources :quality_control_materials
   resources :assay_kits
-  resources :external_quality_controls
   resources :frends
   resources :diagnoses
   resources :equipment
@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
+  root 'diagnoses#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

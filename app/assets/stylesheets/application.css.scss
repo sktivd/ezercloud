@@ -16,46 +16,32 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-/*
-.simple_form label {
-  float: left;
-  width: 120px;
-  text-align: right;
-  margin: 2px 10px;
+body {
+  padding-top: 60px;
 }
 
-.simple_form div.input {
-  margin-bottom: 10px;
+.footer {
+  padding: 70px 0;
+  margin-top: 70px;
+  border-top: 1px solid #e5e5e5;
+  background-color: #f5f5f5;
 }
 
-.simple_form div.boolean, .simple_form input[type='submit'] {
-  margin-left: 142px;
+.footer p {
+  margin-bottom: 0;
+  color: #777;
 }
 
-.simple_form div.boolean label, .simple_form label.collection_radio {
-  float: none;
-  margin: 0;
+.footer-links {
+  margin: 10px 0;
+  padding: 0;
 }
 
-.simple_form label.collection_radio {
-  margin-right: 10px;
-  margin-left: 2px;
+.footer-links li {
+  display: inline;
+  padding: 0 2px;
 }
 
-.simple_form .error {
-  clear: left;
-  margin-left: 120px;
-  font-size: 12px;
-  color: #D00;
-  display: block;
+.footer-links li:first-child {
+  padding-left: 0;
 }
-
-.simple_form .hint {
-  clear: left;
-  margin-left: 120px;
-  font-size: 12px;
-  color: #555;
-  display: block;
-  font-style: italic;
-}
-*/

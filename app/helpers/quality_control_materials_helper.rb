@@ -1,0 +1,2 @@
+module QualityControlMaterialsHelper
+end

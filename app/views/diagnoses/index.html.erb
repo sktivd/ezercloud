@@ -1,3 +1,13 @@
+<% if false %> 
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Diagnosis", diagnosis_path %></li>
+  <li class="active">Examples</li>
+<% end %>
+<% end %>
+<% content_for :breadcrumb do %>
+  <li class="active">Diagnosis</li>
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Diagnoses</h1>

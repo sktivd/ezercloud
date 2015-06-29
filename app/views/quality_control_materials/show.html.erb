@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Service:</strong>
+  <%= @quality_control_material.service %>
+</p>
+
+<p>
+  <strong>Lot number:</strong>
+  <%= @quality_control_material.lot_number %>
+</p>
+
+<p>
+  <strong>Expire:</strong>
+  <%= @quality_control_material.expire %>
+</p>
+
+<p>
+  <strong>Equipment:</strong>
+  <%= @quality_control_material.equipment %>
+</p>
+
+<p>
+  <strong>Reagent name:</strong>
+  <%= @quality_control_material.reagent_name %>
+</p>
+
+<p>
+  <strong>Reagent number:</strong>
+  <%= @quality_control_material.reagent_number %>
+</p>
+
+<p>
+  <strong>Mean:</strong>
+  <%= @quality_control_material.mean %>
+</p>
+
+<p>
+  <strong>Sd:</strong>
+  <%= @quality_control_material.sd %>
+</p>
+
+<p>
+  <strong>Reagent:</strong>
+  <%= @quality_control_material.reagent %>
+</p>
+
+<%= link_to 'Edit', edit_quality_control_material_path(@quality_control_material) %> |
+<%= link_to 'Back', quality_control_materials_path %>

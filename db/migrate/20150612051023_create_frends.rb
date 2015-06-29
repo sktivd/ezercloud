@@ -26,10 +26,8 @@ class CreateFrends < ActiveRecord::Migration
       t.float :average_background
       t.integer :measured_points
       t.text :point_intensities
-      t.string :external_qc_service_id
-      t.string :external_qc_catalog
+      t.string :external_qc_service
       t.string :external_qc_ln
-      t.decimal :external_qc_level
       t.boolean :internal_qc_laser_power_test
       t.boolean :internal_qc_laseralignment_test
       t.boolean :internal_qc_calcaulated_ratio_test

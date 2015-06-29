@@ -1,3 +1,8 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Diagnosis", diagnoses_path %></li>
+  <li class="active">FREND</li>
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Frends</h1>
@@ -5,19 +10,17 @@
 <table>
   <thead>
     <tr>
+      <th>Measured</th>
+      <th>IP address</th>
       <th>Manufacturer</th>
       <th>Serial number</th>
       <th>Type</th>
       <th>Processed</th>
       <th>Error code</th>
       <th>Device</th>
-      <th>Device ln</th>
-      <th>Test0</th>
-      <th>Test1</th>
-      <th>Test2</th>
-      <th>Test0 result</th>
-      <th>Test1 result</th>
-      <th>Test2 result</th>
+      <th>Tests</th>
+      <th>Results</th>
+      <th>QC material</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -25,19 +28,17 @@
   <tbody>
     <% @frends.each do |frend| %>
       <tr>
+        <td><%= frend.diagnosis.measured_at %></td>
+        <td><%= frend.diagnosis.ip_address %></td>
         <td><%= frend.manufacturer %></td>
         <td><%= frend.serial_number %></td>
         <td><%= frend.test_type %></td>
         <td><%= frend.processed %></td>
         <td><%= frend.error_code %></td>
-        <td><%= frend.device_id %></td>
-        <td><%= frend.device_ln %></td>
-        <td><%= frend.test0_id %></td>
-        <td><%= frend.test1_id %></td>
-        <td><%= frend.test2_id %></td>
-        <td><%= frend.test0_result %></td>
-        <td><%= frend.test1_result %></td>
-        <td><%= frend.test2_result %></td>
+        <td><%= frend.device_id.to_s + ":" + frend.device_ln.to_s %></td>
+        <td><%= join_tests(frend) %></td>
+        <td><%= join_results(frend) %></td>
+        <td><%= frend.external_qc_service + " \#" + frend.external_qc_ln %></td>
         <td><%= link_to 'Show', frend %></td>
         <td><%= link_to 'Edit', edit_frend_path(frend) %></td>
         <td><%= link_to 'Destroy', frend, method: :delete, data: { confirm: 'Are you sure?' } %></td>

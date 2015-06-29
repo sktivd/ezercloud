@@ -4,6 +4,8 @@ class CreateEquipment < ActiveRecord::Migration
       t.string :equipment
       t.string :manufacturer
       t.string :klass
+      t.string :db
+      t.text   :qc_variables
 
       t.timestamps null: false
     end

@@ -1,3 +1,7 @@
+<% content_for :breadcrumb do %>
+  <li class="active">Assay Kits</li>
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Assay Kits</h1>
@@ -17,7 +21,7 @@
       <tr>
         <td><%= assay_kit.equipment %></td>
         <td><%= assay_kit.manufacturer %></td>
-        <td><%= assay_kit.kit_id %></td>
+        <td><%= assay_kit.kit %></td>
         <td><%= link_to 'Show', assay_kit %></td>
         <td><%= link_to 'Edit', edit_assay_kit_path(assay_kit) %></td>
         <td><%= link_to 'Destroy', assay_kit, method: :delete, data: { confirm: 'Are you sure?' } %></td>

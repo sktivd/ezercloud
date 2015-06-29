@@ -1,6 +1,9 @@
 class DiagnosesController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
+  after_filter do
+    puts @error_msg
+  end
 
   before_action :set_diagnosis, only: [:show, :edit, :update, :destroy]
 
@@ -26,9 +29,9 @@ class DiagnosesController < ApplicationController
 
   # JSON only
   # POST /diagnoses.json
-  def create    
+  def create
     @diagnosis = Diagnosis.new(diagnosis_params)
-    @equipment = new_equipment(params[:equipment], params[:data])
+    @equipment = new_equipment(params[:equipment], params[:data].to_json)
     if @equipment
       @equipment.diagnosis = @diagnosis 
     else
@@ -91,7 +94,7 @@ class DiagnosesController < ApplicationController
     def diagnosis_params
       if params[:diagnosis]
         params[:diagnosis][:measured_at] = measured_time 
-        params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :sex, :age_band, :order_number, :data)
+        params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :sex, :age_band, :order_number)
       end
     end
     

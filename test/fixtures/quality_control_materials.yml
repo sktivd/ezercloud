@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  service: MyString
+  lot_number: MyString
+  expire: 2015-06-28
+  equipment: MyString
+  reagent_name: MyString
+  reagent_number: 1
+  mean: 1.5
+  sd: 1.5
+  reagent_id: 
+
+two:
+  service: MyString
+  lot_number: MyString
+  expire: 2015-06-28
+  equipment: MyString
+  reagent_name: MyString
+  reagent_number: 1
+  mean: 1.5
+  sd: 1.5
+  reagent_id: 

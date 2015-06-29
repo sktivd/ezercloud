@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150621034749) do
+ActiveRecord::Schema.define(version: 20150628031030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20150621034749) do
   create_table "assay_kits", force: :cascade do |t|
     t.string   "equipment"
     t.string   "manufacturer"
-    t.integer  "kit_id"
+    t.integer  "kit"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "device"
@@ -49,23 +49,10 @@ ActiveRecord::Schema.define(version: 20150621034749) do
     t.string   "equipment"
     t.string   "manufacturer"
     t.string   "klass"
+    t.string   "db"
+    t.text     "qc_variables"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-  end
-
-  create_table "external_quality_controls", force: :cascade do |t|
-    t.string   "equipment"
-    t.integer  "device_id"
-    t.integer  "test_id"
-    t.string   "sample_type"
-    t.string   "reagent"
-    t.string   "lot_number"
-    t.datetime "expired_at"
-    t.string   "unit"
-    t.float    "mean"
-    t.float    "sd"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
   end
 
   create_table "frends", force: :cascade do |t|
@@ -94,10 +81,8 @@ ActiveRecord::Schema.define(version: 20150621034749) do
     t.float    "average_background"
     t.integer  "measured_points"
     t.text     "point_intensities"
-    t.string   "external_qc_service_id"
-    t.string   "external_qc_catalog"
+    t.string   "external_qc_service"
     t.string   "external_qc_ln"
-    t.decimal  "external_qc_level"
     t.boolean  "internal_qc_laser_power_test"
     t.boolean  "internal_qc_laseralignment_test"
     t.boolean  "internal_qc_calcaulated_ratio_test"
@@ -105,6 +90,23 @@ ActiveRecord::Schema.define(version: 20150621034749) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
   end
+
+  create_table "quality_control_materials", force: :cascade do |t|
+    t.string   "service"
+    t.string   "lot_number"
+    t.date     "expire"
+    t.string   "equipment"
+    t.string   "manufacturer"
+    t.string   "reagent_name"
+    t.integer  "reagent_number"
+    t.float    "mean"
+    t.float    "sd"
+    t.integer  "reagent_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "quality_control_materials", ["reagent_id"], name: "index_quality_control_materials_on_reagent_id", using: :btree
 
   create_table "reagents", force: :cascade do |t|
     t.string   "name"
@@ -116,5 +118,6 @@ ActiveRecord::Schema.define(version: 20150621034749) do
 
   add_index "reagents", ["assay_kit_id"], name: "index_reagents_on_assay_kit_id", using: :btree
 
+  add_foreign_key "quality_control_materials", "reagents"
   add_foreign_key "reagents", "assay_kits"
 end

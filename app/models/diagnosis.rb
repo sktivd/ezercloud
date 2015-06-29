@@ -5,7 +5,7 @@ class Diagnosis < ActiveRecord::Base
   
   VERSION = 1
   DATETIME_FIELDS = [:year, :month, :day, :hour, :minute, :second, :time_zone]
-  MIN_YEAR = 2015
+  MIN_YEAR = 2014
   MAX_YEAR = 2030
   
   validates :protocol, :equipment, :measured_at, presence: true
