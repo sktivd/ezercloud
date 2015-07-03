@@ -4,7 +4,8 @@ class Diagnosis < ActiveRecord::Base
   attr_accessor :authorized_key, :year, :month, :day, :hour, :minute, :second, :time_zone, :data
   
   VERSION = 1
-  DATETIME_FIELDS = [:year, :month, :day, :hour, :minute, :second, :time_zone]
+  DATETIME_FIELDS = [:year, :month, :day, :hour, :minute, :second]
+  TIMEZONE_FIELD  = :time_zone
   MIN_YEAR = 2014
   MAX_YEAR = 2030
   

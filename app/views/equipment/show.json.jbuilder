@@ -1,1 +1,1 @@
-json.extract! @equipment, :id, :equipment, :manufacturer, :klass, :db, :qc_variables, :created_at, :updated_at
+json.extract! @equipment, :id, :equipment, :manufacturer, :klass, :db, :variable_kit, :variables_test_ids, :variables_test_values, :variable_qc_service, :variable_qc_lotnumber, :created_at, :updated_at

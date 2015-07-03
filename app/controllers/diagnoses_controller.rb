@@ -86,7 +86,7 @@ class DiagnosesController < ApplicationController
     end
     
     def measured_time
-      DateTime.new(* Diagnosis::DATETIME_FIELDS.map { |field| params[field] })
+      DateTime.new(* Diagnosis::DATETIME_FIELDS.map { |field| params[field].to_i }, params[Diagnosis::TIMEZONE_FIELD])
     rescue
     end
 

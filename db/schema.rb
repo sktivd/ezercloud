@@ -50,9 +50,13 @@ ActiveRecord::Schema.define(version: 20150628031030) do
     t.string   "manufacturer"
     t.string   "klass"
     t.string   "db"
-    t.text     "qc_variables"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string   "variable_kit"
+    t.text     "variables_test_ids"
+    t.text     "variables_test_values"
+    t.string   "variable_qc_service"
+    t.string   "variable_qc_lotnumber"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   create_table "frends", force: :cascade do |t|
@@ -99,6 +103,7 @@ ActiveRecord::Schema.define(version: 20150628031030) do
     t.string   "manufacturer"
     t.string   "reagent_name"
     t.integer  "reagent_number"
+    t.string   "unit"
     t.float    "mean"
     t.float    "sd"
     t.integer  "reagent_id"

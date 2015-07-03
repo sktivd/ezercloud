@@ -38,7 +38,7 @@
         <td><%= frend.device_id.to_s + ":" + frend.device_ln.to_s %></td>
         <td><%= join_tests(frend) %></td>
         <td><%= join_results(frend) %></td>
-        <td><%= frend.external_qc_service + " \#" + frend.external_qc_ln %></td>
+        <td><%= frend.external_qc_service + " \#" + frend.external_qc_ln if frend.external_qc_service %></td>
         <td><%= link_to 'Show', frend %></td>
         <td><%= link_to 'Edit', edit_frend_path(frend) %></td>
         <td><%= link_to 'Destroy', frend, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -19,8 +19,24 @@
   <%= @equipment.db %>
 </p>
 <p>
-  <strong>Variables for QC:</strong>
-  <%= @equipment.qc_variables %>
+  <strong>Variable for Kit:</strong>
+  <%= @equipment.variable_kit %>
+</p>
+<p>
+  <strong>Variables for Marker ID:</strong>
+  <%= @equipment.variables_test_ids %>
+</p>
+<p>
+  <strong>Variables for Marker values:</strong>
+  <%= @equipment.variables_test_values %>
+</p>
+<p>
+  <strong>Variable for QC service:</strong>
+  <%= @equipment.variable_qc_service %>
+</p>
+<p>
+  <strong>Variable for QC Lot number:</strong>
+  <%= @equipment.variable_qc_lotnumber %>
 </p>
 
 <%= link_to 'Edit', edit_equipment_path(@equipment) %> |

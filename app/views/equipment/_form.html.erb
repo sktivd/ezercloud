@@ -28,8 +28,24 @@
     <%= f.text_field :db %>
   </div>
   <div class="field">
-    <%= f.label :qc_variables %><br>
-    <%= f.text_area :qc_variables %>
+    <%= f.label :variable_kit %><br>
+    <%= f.text_field :variable_kit %>
+  </div>
+  <div class="field">
+    <%= f.label :variables_test_ids %><br>
+    <%= f.text_area :variables_test_ids %>
+  </div>
+  <div class="field">
+    <%= f.label :variables_test_values %><br>
+    <%= f.text_area :variables_test_values %>
+  </div>
+  <div class="field">
+    <%= f.label :variable_qc_service %><br>
+    <%= f.text_field :variable_qc_service %>
+  </div>
+  <div class="field">
+    <%= f.label :variable_qc_lotnumber %><br>
+    <%= f.text_field :variable_qc_lotnumber %>
   </div>
   <div class="actions">
     <%= f.submit %>

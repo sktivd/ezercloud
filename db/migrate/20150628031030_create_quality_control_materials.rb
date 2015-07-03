@@ -8,6 +8,7 @@ class CreateQualityControlMaterials < ActiveRecord::Migration
       t.string :manufacturer
       t.string :reagent_name
       t.integer :reagent_number
+      t.string :unit
       t.float :mean
       t.float :sd
       t.belongs_to :reagent, index: true, foreign_key: true
