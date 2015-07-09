@@ -37,7 +37,7 @@
 
 <p>
   <strong>Device ln:</strong>
-  <%= @frend.device_ln %>
+  <%= @frend.device_lot %>
 </p>
 
 <p>
@@ -62,34 +62,34 @@
 
 <% if @frend.test_type == 1 %>
 <p>
-  <strong>External qc service:</strong>
-  <%= @frend.external_qc_service %>
+  <strong>External QC service brand:</strong>
+  <%= @frend.qc_service %>
 </p>
 
 <p>
-  <strong>External qc ln:</strong>
-  <%= @frend.external_qc_ln %>
+  <strong>External QC lot number:</strong>
+  <%= @frend.qc_lot %>
 </p>
 <% end %>
 
 <% if @frend.test_type == 2 %>
 <p>
-  <strong>Internal qc laser power test:</strong>
+  <strong>Internal QC laser power test:</strong>
   <%= @frend.internal_qc_laser_power_test %>
 </p>
 
 <p>
-  <strong>Internal qc laseralignment test:</strong>
+  <strong>Internal QC laseralignment test:</strong>
   <%= @frend.internal_qc_laseralignment_test %>
 </p>
 
 <p>
-  <strong>Internal qc calcaulated ratio test:</strong>
+  <strong>Internal QC calcaulated ratio test:</strong>
   <%= @frend.internal_qc_calcaulated_ratio_test %>
 </p>
 
 <p>
-  <strong>Internal qc test:</strong>
+  <strong>Internal QC test result:</strong>
   <%= @frend.internal_qc_test %>
 </p>
 <% end %>

@@ -2,17 +2,17 @@ module FrendsHelper
 
   def join_tests(frend)
     test = []
-    test << frend.test0_id if frend.test0_id
-    test << frend.test1_id if frend.test1_id
-    test << frend.test2_id if frend.test2_id
+    test << frend.test_id0 if frend.test_id0
+    test << frend.test_id1 if frend.test_id1
+    test << frend.test_id2 if frend.test_id2
     test.join(':')
   end
   
   def join_results(frend)
     result = []
-    result << frend.test0_result if frend.test0_result
-    result << frend.test1_result if frend.test1_result
-    result << frend.test2_result if frend.test2_result
+    result << frend.test_result0 if frend.test_result0
+    result << frend.test_result1 if frend.test_result1
+    result << frend.test_result2 if frend.test_result2
     result.join(':')
   end
   

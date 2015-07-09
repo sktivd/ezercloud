@@ -69,6 +69,6 @@ class FrendsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def frend_params
-      params.require(:frend).permit(:version, :manufacturer, :serial_number, :test_type, :processed, :error_code, :device_id, :device_ln, :test0_id, :test1_id, :test2_id, :test0_result, :test1_result, :test2_result, :test0_integral, :test1_integral, :test2_integral, :control_integral, :double, :test0_center_point, :test1_center_point, :test2_center_point, :control_center_point, :average_background, :measured_points, :point_intensities, :external_qc_service_id, :external_qc_catalog, :external_qc_ln, :external_qc_level, :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calcaulated_ratio_test, :internal_qc_test)
+      params.require(:frend).permit(:version, :manufacturer, :serial_number, :test_type, :processed, :error_code, :device_id, :device_lot, :test_id0, :test_id1, :test_id2, :test_result0, :test_result1, :test_result2, :test_integral0, :test_integral1, :test_integral2, :control_integral, :test_center_point0, :test_center_point1, :test_center_point2, :control_center_point, :average_background, :measured_points, :point_intensities, :qc_service, :qc_lot, :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calcaulated_ratio_test, :internal_qc_test)
     end
 end

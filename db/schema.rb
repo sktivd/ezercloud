@@ -19,10 +19,10 @@ ActiveRecord::Schema.define(version: 20150628031030) do
   create_table "assay_kits", force: :cascade do |t|
     t.string   "equipment"
     t.string   "manufacturer"
+    t.string   "device"
     t.integer  "kit"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.string   "device"
   end
 
   create_table "diagnoses", force: :cascade do |t|
@@ -34,13 +34,14 @@ ActiveRecord::Schema.define(version: 20150628031030) do
     t.string   "ip_address"
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.string   "technician"
     t.integer  "sex",              default: -1
     t.integer  "age_band",         default: -1
     t.string   "order_number"
     t.integer  "diagnosable_id"
     t.string   "diagnosable_type"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id", using: :btree
@@ -50,13 +51,10 @@ ActiveRecord::Schema.define(version: 20150628031030) do
     t.string   "manufacturer"
     t.string   "klass"
     t.string   "db"
-    t.string   "variable_kit"
-    t.text     "variables_test_ids"
-    t.text     "variables_test_values"
-    t.string   "variable_qc_service"
-    t.string   "variable_qc_lotnumber"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "tests"
+    t.string   "prefix"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "frends", force: :cascade do |t|
@@ -64,35 +62,35 @@ ActiveRecord::Schema.define(version: 20150628031030) do
     t.string   "manufacturer"
     t.string   "serial_number"
     t.integer  "test_type"
-    t.boolean  "processed"
+    t.boolean  "processed",                          default: false, null: false
     t.string   "error_code"
     t.integer  "device_id"
-    t.integer  "device_ln"
-    t.integer  "test0_id"
-    t.integer  "test1_id"
-    t.integer  "test2_id"
-    t.float    "test0_result"
-    t.float    "test1_result"
-    t.float    "test2_result"
-    t.integer  "test0_integral"
-    t.integer  "test1_integral"
-    t.integer  "test2_integral"
+    t.integer  "device_lot"
+    t.integer  "test_id0"
+    t.integer  "test_id1"
+    t.integer  "test_id2"
+    t.float    "test_result0"
+    t.float    "test_result1"
+    t.float    "test_result2"
+    t.integer  "test_integral0"
+    t.integer  "test_integral1"
+    t.integer  "test_integral2"
     t.integer  "control_integral"
-    t.integer  "test0_center_point"
-    t.integer  "test1_center_point"
-    t.integer  "test2_center_point"
+    t.integer  "test_center_point0"
+    t.integer  "test_center_point1"
+    t.integer  "test_center_point2"
     t.integer  "control_center_point"
     t.float    "average_background"
     t.integer  "measured_points"
     t.text     "point_intensities"
-    t.string   "external_qc_service"
-    t.string   "external_qc_ln"
+    t.string   "qc_service"
+    t.string   "qc_lot"
     t.boolean  "internal_qc_laser_power_test"
     t.boolean  "internal_qc_laseralignment_test"
     t.boolean  "internal_qc_calcaulated_ratio_test"
     t.boolean  "internal_qc_test"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
   end
 
   create_table "quality_control_materials", force: :cascade do |t|
@@ -116,6 +114,8 @@ ActiveRecord::Schema.define(version: 20150628031030) do
   create_table "reagents", force: :cascade do |t|
     t.string   "name"
     t.integer  "number"
+    t.string   "unit"
+    t.string   "break_points"
     t.integer  "assay_kit_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false

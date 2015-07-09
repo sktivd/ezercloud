@@ -13,11 +13,8 @@
       <th>Manufacturer</th>
       <th>Klass</th>
       <th>DB name</th>
-      <th>Variable for Kit/th>
-      <th>Variables for Marker ID</th>
-      <th>Variables for Marker values</th>
-      <th>Variable for QC service</th>
-      <th>Variable for QC Lot number</th>
+      <th>Number of Tests</th>
+      <th>Variable Prefix</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -29,11 +26,8 @@
         <td><%= equipment.manufacturer %></td>
         <td><%= equipment.klass %></td>
         <td><%= equipment.db %></td>
-        <td><%= equipment.variable_kit %></td>
-        <td><%= equipment.variables_test_ids %></td>
-        <td><%= equipment.variables_test_values %></td>
-        <td><%= equipment.variable_qc_service %></td>
-        <td><%= equipment.variable_qc_lotnumber %></td>
+        <td><%= equipment.tests %></td>
+        <td><%= equipment.prefix %></td>
         <td><%= link_to 'Show', equipment %></td>
         <td><%= link_to 'Edit', edit_equipment_path(equipment) %></td>
         <td><%= link_to 'Destroy', equipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>

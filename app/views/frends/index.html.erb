@@ -35,10 +35,10 @@
         <td><%= frend.test_type %></td>
         <td><%= frend.processed %></td>
         <td><%= frend.error_code %></td>
-        <td><%= frend.device_id.to_s + ":" + frend.device_ln.to_s %></td>
+        <td><%= frend.device_id.to_s + ":" + frend.device_lot.to_s %></td>
         <td><%= join_tests(frend) %></td>
         <td><%= join_results(frend) %></td>
-        <td><%= frend.external_qc_service + " \#" + frend.external_qc_ln if frend.external_qc_service %></td>
+        <td><%= frend.qc_service + " \#" + frend.qc_lot if frend.qc_service %></td>
         <td><%= link_to 'Show', frend %></td>
         <td><%= link_to 'Edit', edit_frend_path(frend) %></td>
         <td><%= link_to 'Destroy', frend, method: :delete, data: { confirm: 'Are you sure?' } %></td>

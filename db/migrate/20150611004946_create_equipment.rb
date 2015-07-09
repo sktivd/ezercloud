@@ -5,12 +5,9 @@ class CreateEquipment < ActiveRecord::Migration
       t.string :manufacturer
       t.string :klass
       t.string :db
-      t.string :variable_kit
-      t.text   :variables_test_ids
-      t.text   :variables_test_values
-      t.string :variable_qc_service
-      t.string :variable_qc_lotnumber      
-
+      t.integer :tests
+      t.string :prefix
+      
       t.timestamps null: false
     end
   end
