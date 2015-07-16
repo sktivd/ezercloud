@@ -1,4 +1,9 @@
 
+diagnosis.spc <- function(y, index, lot) {
+    
+    
+}
+
 generate.period <- function(from, to) {
     z <- list()
     z$year <- format(to, "%Y")

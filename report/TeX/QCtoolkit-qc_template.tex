@@ -1,0 +1,104 @@
+%
+% QCtoolkit Report conTeXt template
+%   
+% v.1  
+\version[concept]
+
+% symbols
+\usesymbols[uni]
+
+% setup color
+\setupcolors[state=start]
+\usecolors[xwi]
+\definecolor[tablebackgroundcolor][s=0.98]
+\definecolor[titlebackgroundcolor][s=0.90]
+
+% define frame
+\defineframed[boxedtitle][height=1in, width=\hsize, autowidth=none,
+  align={flushleft, nothyphenated, verytolerant}
+  location=top,
+  frame=off,
+  backgroundoffset=1em, 
+  background=color, backgroundcolor=titlebackgroundcolor, backgroundcorner=round, backgroundradius=0.5em,
+  corner=round, radius=0.25em
+]
+\defineframed[linedheader][height=2em, aligned={flushright,nothyphenated,low},
+  frame=off, rightframe=on, location=bottom, top=\vss]
+
+% setup paper layout
+\setuppapersize[A4]
+\setuplayout[height=middle, width=middle, location=middle,
+  topspace=.2in, backspace=.75in, bottomspace=0.5in, bottom=.25in,
+  leftmargin=0.5in, rightmargin=0.5in, leftmargindistance=0.1in, rightmargindistance=0.1in,
+  header=0.25in, footer=0.25in, headerdistance=0.4in, footerdistance=0.1in]
+\setuppagenumbering[location={footer,inmargin}, style=\bfa]
+\setupheader[margin]
+\setupheadertexts[][\linedheader{\tfxx\sc QCtoolkit v0.1}]
+\setupfootertexts[Issued by: \underbar{\hphantom{abcdefghijklmnopqrstuvwxyz}}][]
+
+\setupindenting[next]
+\setuppagenumbering[location={footer,inmargin}]
+
+\setupexternalfigures[location={global,default}]
+
+% setup tables
+
+\startsetups[table:history]
+\setupTABLE[frame=off]
+\setupTABLE[column][1][align={middle,lohi}, width=.1\hsize]     % Date
+\setupTABLE[column][2][align={middle,lohi}, width=.1\hsize]     % Time
+\setupTABLE[column][3][align={middle,lohi}, width=.1\hsize]     % QC service
+\setupTABLE[column][4][align={middle,lohi}, width=.1\hsize]     % QC lot
+\setupTABLE[column][5][align={middle,lohi}, width=.15\hsize]    % 3SD range
+\setupTABLE[column][6][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.15\hsize]   % value
+\setupTABLE[column][7][align={middle,lohi}, width=.15\hsize]     % QC status
+\setupTABLE[column][8][align={middle,lohi}, width=.15\hsize]     % Technician
+\setupTABLE[row][even][background=color, backgroundcolor=tablebackgroundcolor]
+\setupTABLE[header][each][bottomframe=on, framecolor=darkgray, rulethickness=0.3mm, align={middle,lohi}]
+\setupTABLE[footer][each][topframe=on, framecolor=darkgray]
+\stopsetups
+
+\startsetups[table:summaryframe]
+\setupTABLE[frame=on, width=\hsize, offset=none]
+\stopsetups
+
+\startsetups[table:summary]
+\setupTABLE[frame=off, offset=1pt]
+\setupTABLE[row][even][background=color, backgroundcolor=tablebackgroundcolor]
+\setupTABLE[column][1][background=screen, align={middle,lohi}, width=.09\hsize]    % description
+\setupTABLE[column][2][align={middle,lohi}, width=.12\hsize]    % key
+\setupTABLE[column][3][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.12\hsize]    % value
+\setupTABLE[column][4][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.12\hsize]    % peer lab value
+\setupTABLE[column][5][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.12\hsize]    % whole lab value
+\setupTABLE[row][last][style=\bf]
+\stopsetups
+
+\starttext
+
+\boxedtitle{\ss
+  {\tfc\bf @MARKER}
+  \blank[medium]
+  {\tfa\bf @THISMONTH Report}
+  \blank[big]
+  QC measurement values on @MANUFACTURER @EQUIPMENT system (@SERIALNUMBERS) are shown below.
+}
+
+% setup framedtext
+\setupframedtexts[frame=off, leftframe=on, framecolor=darkgray, rulethickness=5pt, width=local]
+
+\input @TABLEOFMONTH
+
+\page[yes]
+
+\boxedtitle{\ss
+  {\tfc\bf @MARKER}
+  \blank[medium]
+  {\tfa\bf @THISYEAR Inter-laboratory Report}
+  \blank[big]
+  \blank[2*big]
+  Test values and external QC on @MANUFACTURER @EQUIPMENT system (@SERIALNUMBERS) are shown below.
+}
+
+\input @TABLEOFYEAR
+
+\stoptext
