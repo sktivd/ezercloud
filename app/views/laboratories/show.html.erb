@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Ip address:</strong>
+  <%= @laboratory.ip_address %>
+</p>
+
+<p>
+  <strong>Equipment:</strong>
+  <%= @laboratory.equipment %>
+</p>
+
+<p>
+  <strong>Kit:</strong>
+  <%= @laboratory.kit %>
+</p>
+
+<%= link_to 'Edit', edit_laboratory_path(@laboratory) %> |
+<%= link_to 'Back', laboratories_path %>

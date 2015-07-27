@@ -2,13 +2,15 @@ class CreateQualityControlMaterials < ActiveRecord::Migration
   def change
     create_table :quality_control_materials do |t|
       t.string :service
-      t.string :lot_number
+      t.string :lot
       t.date :expire
       t.string :equipment
       t.string :manufacturer
       t.string :reagent_name
       t.integer :reagent_number
       t.string :unit
+      t.integer :n_equipment
+      t.integer :n_measurement
       t.float :mean
       t.float :sd
       t.belongs_to :reagent, index: true, foreign_key: true

@@ -31,23 +31,23 @@
 </p>
 
 <p>
-  <strong>Device:</strong>
-  <%= @frend.device_id %>
+  <strong>Kit:</strong>
+  <%= @frend.kit %>
 </p>
 
 <p>
-  <strong>Device ln:</strong>
-  <%= @frend.device_lot %>
+  <strong>Lot number:</strong>
+  <%= @frend.lot %>
 </p>
 
 <p>
   <strong>Tests:</strong>
-  <%= join_tests(@frend) %>
+  <%= @frend.test_id %>
 </p>
 
 <p>
   <strong>Results:</strong>
-  <%= join_results(@frend) %>
+  <%= @frend.result %>
 </p>
 
 <p>
@@ -69,6 +69,11 @@
 <p>
   <strong>External QC lot number:</strong>
   <%= @frend.qc_lot %>
+</p>
+
+<p>
+  <strong>External QC expire:</strong>
+  <%= @frend.qc_expire %>
 </p>
 <% end %>
 

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :laboratories
   resources :quality_control_materials
   resources :assay_kits
   resources :frends

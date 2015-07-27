@@ -1,141 +1,32 @@
-<%= form_for(@frend) do |f| %>
-  <% if @frend.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@frend.errors.count, "error") %> prohibited this frend from being saved:</h2>
+<%= simple_form_for(@frend) do |f| %>
+  <%= f.error_notification %>
 
-      <ul>
-      <% @frend.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <div class="form-inputs">
+    <%= f.input :version %>
+    <%= f.input :manufacturer %>
+    <%= f.input :serial_number %>
+    <%= f.input :test_type %>
+    <%= f.input :processed %>
+    <%= f.input :error_code %>
+    <%= f.input :kit %>
+    <%= f.input :lot %>
+    <%= f.input :test_id %>
+    <%= f.input :test_result %>
+    <%= f.input :integrals %>
+    <%= f.input :center_points %>
+    <%= f.input :average_background %>
+    <%= f.input :measured_points %>
+    <%= f.input :point_intensities %>
+    <%= f.input :qc_service %>
+    <%= f.input :qc_lot %>
+    <%= f.input :qc_expire %>
+    <%= f.input :internal_qc_laser_power_test %>
+    <%= f.input :internal_qc_laseralignment_test %>
+    <%= f.input :internal_qc_calcaulated_ratio_test %>
+    <%= f.input :internal_qc_test %>
+  </div>
 
-  <div class="field">
-    <%= f.label :version %><br>
-    <%= f.number_field :version %>
-  </div>
-  <div class="field">
-    <%= f.label :manufacturer %><br>
-    <%= f.text_field :manufacturer %>
-  </div>
-  <div class="field">
-    <%= f.label :serial_number %><br>
-    <%= f.text_field :serial_number %>
-  </div>
-  <div class="field">
-    <%= f.label :test_type %><br>
-    <%= f.number_field :test_type %>
-  </div>
-  <div class="field">
-    <%= f.label :processed %><br>
-    <%= f.check_box :processed %>
-  </div>
-  <div class="field">
-    <%= f.label :error_code %><br>
-    <%= f.text_field :error_code %>
-  </div>
-  <div class="field">
-    <%= f.label :device_id %><br>
-    <%= f.number_field :device_id %>
-  </div>
-  <div class="field">
-    <%= f.label :device_lot %><br>
-    <%= f.number_field :device_lot %>
-  </div>
-  <div class="field">
-    <%= f.label :test_id0 %><br>
-    <%= f.number_field :test_id0 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_id1 %><br>
-    <%= f.number_field :test_id1 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_id2 %><br>
-    <%= f.number_field :test_id2 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_result0 %><br>
-    <%= f.text_field :test_result0 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_result1 %><br>
-    <%= f.text_field :test_result1 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_result2 %><br>
-    <%= f.text_field :test_result2 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_integral0 %><br>
-    <%= f.number_field :test_integral0 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_integral1 %><br>
-    <%= f.number_field :test_integral1 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_integral2 %><br>
-    <%= f.number_field :test_integral2 %>
-  </div>
-  <div class="field">
-    <%= f.label :control_integral %><br>
-    <%= f.number_field :control_integral %>
-  </div>
-  <div class="field">
-    <%= f.label :test_center_point0 %><br>
-    <%= f.number_field :test_center_point0 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_center_point1 %><br>
-    <%= f.number_field :test_center_point1 %>
-  </div>
-  <div class="field">
-    <%= f.label :test_center_point2 %><br>
-    <%= f.number_field :test_center_point2 %>
-  </div>
-  <div class="field">
-    <%= f.label :control_center_point %><br>
-    <%= f.number_field :control_center_point %>
-  </div>
-  <div class="field">
-    <%= f.label :average_background %><br>
-    <%= f.text_field :average_background %>
-  </div>
-  <div class="field">
-    <%= f.label :measured_points %><br>
-    <%= f.number_field :measured_points %>
-  </div>
-  <div class="field">
-    <%= f.label :point_intensities %><br>
-    <%= f.text_area :point_intensities %>
-  </div>
-  <div class="field">
-    <%= f.label :qc_service %><br>
-    <%= f.text_field :qc_service %>
-  </div>
-  <div class="field">
-    <%= f.label :qc_lot %><br>
-    <%= f.text_field :qc_lot %>
-  </div>
-  <div class="field">
-    <%= f.label :internal_qc_laser_power_test %><br>
-    <%= f.check_box :internal_qc_laser_power_test %>
-  </div>
-  <div class="field">
-    <%= f.label :internal_qc_laseralignment_test %><br>
-    <%= f.check_box :internal_qc_laseralignment_test %>
-  </div>
-  <div class="field">
-    <%= f.label :internal_qc_calcaulated_ratio_test %><br>
-    <%= f.check_box :internal_qc_calcaulated_ratio_test %>
-  </div>
-  <div class="field">
-    <%= f.label :internal_qc_test %><br>
-    <%= f.check_box :internal_qc_test %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.button :submit %>
   </div>
 <% end %>

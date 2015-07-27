@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150628031030) do
+ActiveRecord::Schema.define(version: 20150721154108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,27 +64,18 @@ ActiveRecord::Schema.define(version: 20150628031030) do
     t.integer  "test_type"
     t.boolean  "processed",                          default: false, null: false
     t.string   "error_code"
-    t.integer  "device_id"
-    t.integer  "device_lot"
-    t.integer  "test_id0"
-    t.integer  "test_id1"
-    t.integer  "test_id2"
-    t.float    "test_result0"
-    t.float    "test_result1"
-    t.float    "test_result2"
-    t.integer  "test_integral0"
-    t.integer  "test_integral1"
-    t.integer  "test_integral2"
-    t.integer  "control_integral"
-    t.integer  "test_center_point0"
-    t.integer  "test_center_point1"
-    t.integer  "test_center_point2"
-    t.integer  "control_center_point"
+    t.integer  "kit"
+    t.integer  "lot"
+    t.string   "test_id",                            default: "::",  null: false
+    t.string   "test_result",                        default: "::",  null: false
+    t.string   "integrals"
+    t.string   "center_points"
     t.float    "average_background"
     t.integer  "measured_points"
     t.text     "point_intensities"
     t.string   "qc_service"
     t.string   "qc_lot"
+    t.date     "qc_expire"
     t.boolean  "internal_qc_laser_power_test"
     t.boolean  "internal_qc_laseralignment_test"
     t.boolean  "internal_qc_calcaulated_ratio_test"
@@ -93,15 +84,25 @@ ActiveRecord::Schema.define(version: 20150628031030) do
     t.datetime "updated_at",                                         null: false
   end
 
+  create_table "laboratories", force: :cascade do |t|
+    t.string   "ip_address"
+    t.string   "equipment"
+    t.integer  "kit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "quality_control_materials", force: :cascade do |t|
     t.string   "service"
-    t.string   "lot_number"
+    t.string   "lot"
     t.date     "expire"
     t.string   "equipment"
     t.string   "manufacturer"
     t.string   "reagent_name"
     t.integer  "reagent_number"
     t.string   "unit"
+    t.integer  "n_equipment"
+    t.integer  "n_measurement"
     t.float    "mean"
     t.float    "sd"
     t.integer  "reagent_id"

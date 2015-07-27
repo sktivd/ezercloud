@@ -1,0 +1,13 @@
+<%= simple_form_for(@laboratory) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :ip_address %>
+    <%= f.input :equipment %>
+    <%= f.input :kit %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

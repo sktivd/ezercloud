@@ -3,9 +3,14 @@
   <li class="active">FREND</li>
 <% end %>
 
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Frends</h1>
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Measurement history of Diagnosis for <a href="http://nanoentek.com/product.php?id=4">NanoEnTek FREND</a>
+    </strong>
+  </h3>
+  <p>Here you'll see measurement history of diagnosis for NanoEnTek FREND.</p>
+</div>
 
 <table>
   <thead>
@@ -17,10 +22,11 @@
       <th>Type</th>
       <th>Processed</th>
       <th>Error code</th>
-      <th>Device</th>
+      <th>Kit</th>
       <th>Tests</th>
       <th>Results</th>
       <th>QC material</th>
+      <th>QC expire</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -35,10 +41,11 @@
         <td><%= frend.test_type %></td>
         <td><%= frend.processed %></td>
         <td><%= frend.error_code %></td>
-        <td><%= frend.device_id.to_s + ":" + frend.device_lot.to_s %></td>
-        <td><%= join_tests(frend) %></td>
-        <td><%= join_results(frend) %></td>
+        <td><%= frend.kit.to_s + ":" + frend.lot.to_s %></td>
+        <td><%= frend.test_id %></td>
+        <td><%= frend.test_result %></td>
         <td><%= frend.qc_service + " \#" + frend.qc_lot if frend.qc_service %></td>
+        <td><%= frend.qc_expire if frend.qc_service %></td>
         <td><%= link_to 'Show', frend %></td>
         <td><%= link_to 'Edit', edit_frend_path(frend) %></td>
         <td><%= link_to 'Destroy', frend, method: :delete, data: { confirm: 'Are you sure?' } %></td>

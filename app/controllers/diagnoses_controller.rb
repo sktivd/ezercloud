@@ -40,7 +40,13 @@ class DiagnosesController < ApplicationController
 
     respond_to do |format|
       if @equipment and @diagnosis.save 
-        if @equipment.save 
+        if @equipment.save
+          if @equipment.test_type = 1 and @laborary = Laboratory.find_by(ip_address: @diagnosis.ip_address, kit: @equipment.kit)
+            if @laborary
+#              @error_msg = "Laboratory"
+              @equipment.update_insert @equipment.kit, @equipment.qc_service, @equipment.qc_lot, @equipment.qc_expire
+            end
+          end
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
           format.json { render :show, status: :created, location: @diagnosis }
         else

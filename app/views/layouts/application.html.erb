@@ -19,8 +19,11 @@
           <a class="navbar-brand" href="#">QCtoolkit</a>
         </div>
         <ul class="nav navbar-nav">
-          <li><%= link_to "Diagnosis", diagnoses_path %></li>
+          <li><%= link_to "Diagnoses", diagnoses_path %></li>
+          <li><%= link_to "Assay Kits", assay_kits_path %></li>
           <li><%= link_to "QC materials", quality_control_materials_path %></li>
+          <li><%= link_to "Equipment", equipment_index_path %></li>
+          <li><%= link_to "Laboratories", laboratories_path %></li>
         </ul>
       </div>
     </div>
@@ -29,15 +32,6 @@
     <ul class="breadcrumb">
       <%= yield :breadcrumb %>
     </ul>
-    <div class='alert alert-info fade in' data-alert='alert'>
-      <h3>
-        <strong>
-          <a href="https://github.com/plataformatec/simple_form">Simple Form</a> and <a href="http://getbootstrap.com/">Bootstrap</a> sample application.
-        </strong>
-      </h3>
-      <p>Here you'll see the usage of <a href="https://github.com/plataformatec/simple_form">Simple Form</a> and the <a href="http://getbootstrap.com/">Bootstrap</a> toolkit on a Rails 4 application.</p>
-      <p>You can check the source code on <a href='https://github.com/rafaelfranca/simple_form-bootstrap'>GitHub</a>.</p>
-    </div>
 
     <% if notice %>
       <div class="alert alert-success fade in" data-alert="alert">
@@ -55,7 +49,9 @@
       <ul class="footer-links">
         <li><a href="http://nanoentek.com/product.php?id=4">FREND</a></li>
         <li class="muted">·</li>
-        <li><a href="https://qctoolkit.nanoentek.com">QCtoolkit</a></li>
+        <li><a href="https://qctoolkit.ezercloud.com">QCtoolkit</a></li>
+        <li class="muted">·</li>
+        <li><a href="https://www.ezercloud.com">EzerCloud</a></li>
       </ul>
     </div>
   </footer>

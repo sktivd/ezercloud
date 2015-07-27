@@ -3,19 +3,26 @@
   <li class="active">Quality Control materials</li>
 <% end %>
 
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Quality Control Materials</h1>
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Information for Quality Control materials
+    </strong>
+  </h3>
+  <p>Here you'll see the list of information for quality control materials.</p>
+</div>
 
 <table>
   <thead>
     <tr>
       <th>Service</th>
-      <th>Lot number</th>
+      <th>Lot</th>
       <th>Expire</th>
       <th>Equipment</th>
       <th>Reagent name</th>
       <th>Reagent number</th>
+      <th>Number of equipments</th>
+      <th>Number of measurement</th>
       <th>Mean</th>
       <th>Sd</th>
       <th colspan="3"></th>
@@ -26,11 +33,13 @@
     <% @quality_control_materials.each do |quality_control_material| %>
       <tr>
         <td><%= quality_control_material.service %></td>
-        <td><%= quality_control_material.lot_number %></td>
+        <td><%= quality_control_material.lot %></td>
         <td><%= quality_control_material.expire %></td>
         <td><%= quality_control_material.equipment %></td>
         <td><%= quality_control_material.reagent_name %></td>
         <td><%= quality_control_material.reagent_number %></td>
+        <td><%= quality_control_material.n_equipment %></td>
+        <td><%= quality_control_material.n_measurement %></td>
         <td><%= quality_control_material.mean %></td>
         <td><%= quality_control_material.sd %></td>
         <td><%= link_to 'Show', quality_control_material %></td>

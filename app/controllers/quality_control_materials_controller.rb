@@ -69,6 +69,6 @@ class QualityControlMaterialsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def quality_control_material_params
-      params.require(:quality_control_material).permit(:service, :lot_number, :expire, :equipment, :reagent_name, :reagent_number, :mean, :sd, :reagent_id)
+      params.require(:quality_control_material).permit(:service, :lot, :expire, :equipment, :reagent_name, :reagent_number, :mean, :sd, :reagent_id)
     end
 end
