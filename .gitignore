@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore lock file for Gemfile
+/Gemfile.lock
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -15,3 +18,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# PDF generated files
+/report/PDF/*

@@ -41,11 +41,8 @@ class DiagnosesController < ApplicationController
     respond_to do |format|
       if @equipment and @diagnosis.save 
         if @equipment.save
-          if @equipment.test_type = 1 and @laborary = Laboratory.find_by(ip_address: @diagnosis.ip_address, kit: @equipment.kit)
-            if @laborary
-#              @error_msg = "Laboratory"
-              @equipment.update_insert @equipment.kit, @equipment.qc_service, @equipment.qc_lot, @equipment.qc_expire
-            end
+          if @equipment.test_type = 1 and @equipment.processed and Laboratory.find_by(equipment: @diagnosis.equipment, ip_address: @diagnosis.ip_address, kit: @equipment.kit)
+            ReagentManagementWorker.perform_async name: params[:equipment], id: @equipment.id, kit: @equipment.kit, service: @equipment.qc_service, lot: @equipment.qc_lot, expire: @equipment.qc_expire
           end
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
           format.json { render :show, status: :created, location: @diagnosis }

@@ -41,6 +41,7 @@ gem 'distribution'
 
 #background worker
 gem 'sidekiq'
+gem 'sinatra', require: nil
 
 
 # For form
