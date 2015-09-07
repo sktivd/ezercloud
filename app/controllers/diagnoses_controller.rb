@@ -97,7 +97,7 @@ class DiagnosesController < ApplicationController
     def diagnosis_params
       if params[:diagnosis]
         params[:diagnosis][:measured_at] = measured_time 
-        params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
+        params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
       end
     end
     

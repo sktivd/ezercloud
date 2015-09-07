@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721154108) do
+ActiveRecord::Schema.define(version: 20150819030103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20150721154108) do
     t.datetime "measured_at"
     t.float    "elapsed_time"
     t.string   "ip_address"
+    t.string   "location"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "technician"
@@ -57,17 +58,28 @@ ActiveRecord::Schema.define(version: 20150721154108) do
     t.datetime "updated_at",   null: false
   end
 
+  create_table "error_codes", force: :cascade do |t|
+    t.string   "error_code"
+    t.string   "level"
+    t.string   "description"
+    t.integer  "equipment_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "error_codes", ["equipment_id"], name: "index_error_codes_on_equipment_id", using: :btree
+
   create_table "frends", force: :cascade do |t|
     t.integer  "version"
     t.string   "manufacturer"
     t.string   "serial_number"
     t.integer  "test_type"
-    t.boolean  "processed",                          default: false, null: false
+    t.boolean  "processed",                         default: false, null: false
     t.string   "error_code"
     t.integer  "kit"
     t.integer  "lot"
-    t.string   "test_id",                            default: "::",  null: false
-    t.string   "test_result",                        default: "::",  null: false
+    t.string   "test_id",                           default: "::",  null: false
+    t.string   "test_result",                       default: "::",  null: false
     t.string   "integrals"
     t.string   "center_points"
     t.float    "average_background"
@@ -78,10 +90,10 @@ ActiveRecord::Schema.define(version: 20150721154108) do
     t.date     "qc_expire"
     t.boolean  "internal_qc_laser_power_test"
     t.boolean  "internal_qc_laseralignment_test"
-    t.boolean  "internal_qc_calcaulated_ratio_test"
+    t.boolean  "internal_qc_calculated_ratio_test"
     t.boolean  "internal_qc_test"
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
   end
 
   create_table "laboratories", force: :cascade do |t|
@@ -124,6 +136,24 @@ ActiveRecord::Schema.define(version: 20150721154108) do
 
   add_index "reagents", ["assay_kit_id"], name: "index_reagents_on_assay_kit_id", using: :btree
 
+  create_table "specifications", force: :cascade do |t|
+    t.string   "specimen"
+    t.string   "analyte"
+    t.string   "acronym"
+    t.integer  "papers"
+    t.float    "cv_i"
+    t.float    "cv_g"
+    t.float    "imprecision"
+    t.float    "inaccuracy"
+    t.float    "allowable_total_error"
+    t.integer  "reagent_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "specifications", ["reagent_id"], name: "index_specifications_on_reagent_id", using: :btree
+
+  add_foreign_key "error_codes", "equipment"
   add_foreign_key "quality_control_materials", "reagents"
   add_foreign_key "reagents", "assay_kits"
 end

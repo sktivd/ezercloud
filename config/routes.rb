@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :specifications
+  resources :error_codes
   resources :laboratories
   resources :quality_control_materials
   resources :assay_kits

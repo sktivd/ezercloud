@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  equipment: MyString
+  error_code: MyString
+  level: MyString
+  description: MyString
+
+two:
+  equipment: MyString
+  error_code: MyString
+  level: MyString
+  description: MyString

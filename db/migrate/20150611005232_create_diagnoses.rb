@@ -7,6 +7,7 @@ class CreateDiagnoses < ActiveRecord::Migration
       t.datetime :measured_at
       t.float :elapsed_time
       t.string :ip_address
+      t.string :location
       t.float :latitude
       t.float :longitude
       t.string :technician

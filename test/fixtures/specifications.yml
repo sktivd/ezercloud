@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  initial: MyString
+  analyte: MyString
+  acronym: MyString
+  papers: 1
+  cv_i: 1.5
+  cv_g: 1.5
+  imprecision: 1.5
+  inaccuracy: 1.5
+  allowable_total_error: 1.5
+
+two:
+  initial: MyString
+  analyte: MyString
+  acronym: MyString
+  papers: 1
+  cv_i: 1.5
+  cv_g: 1.5
+  imprecision: 1.5
+  inaccuracy: 1.5
+  allowable_total_error: 1.5

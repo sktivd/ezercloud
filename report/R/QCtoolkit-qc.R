@@ -7,8 +7,8 @@ source("R/QCtoolkit-utilities.R")
 # QC target
 args <- commandArgs(TRUE)
 equipment <- args[1]
-marker <- as.integer(args[2])
-path <- args[3]
+kit <- args[2]
+path.report <- args[3]
 
 # check today
 now <- Sys.time()
@@ -20,27 +20,39 @@ period <- generate.period(one.month.ago, now)
 conn <- dbConnect(dbDriver("PostgreSQL"), host = "localhost", dbname = "skynet_development", user = "skynet")
 
 # load basic information
-qcmaterial.information <- dbGetQuery(conn, paste("SELECT assay_kits.equipment, assay_kits.manufacturer, assay_kits.device, assay_kits.kit, quality_control_materials.reagent_name, quality_control_materials.reagent_number, reagents.unit, reagents.break_points, quality_control_materials.service, quality_control_materials.lot_number, quality_control_materials.expire, quality_control_materials.mean, quality_control_materials.sd FROM assay_kits RIGHT JOIN reagents ON assay_kits.id = reagents.assay_kit_id RIGHT JOIN quality_control_materials ON reagents.id = quality_control_materials.reagent_id WHERE quality_control_materials.expire > '", format(one.month.ago, "%F"), "' AND quality_control_materials.reagent_number = ", marker, " AND quality_control_materials.equipment = '", equipment, "'", sep = ""))
+qcmaterial.information <- dbGetQuery(conn, paste("SELECT assay_kits.equipment, assay_kits.manufacturer, assay_kits.device, assay_kits.kit, quality_control_materials.reagent_name, quality_control_materials.reagent_number, reagents.unit, reagents.break_points, quality_control_materials.service, quality_control_materials.lot, quality_control_materials.expire, quality_control_materials.mean, quality_control_materials.sd, specifications.imprecision, specifications.inaccuracy, specifications.allowable_total_error FROM assay_kits RIGHT JOIN reagents ON assay_kits.id = reagents.assay_kit_id RIGHT JOIN quality_control_materials ON reagents.id = quality_control_materials.reagent_id LEFT JOIN specifications ON specifications.reagent_id = reagents.id WHERE quality_control_materials.expire > '", format(one.month.ago, "%F"), "' AND quality_control_materials.reagent_number = ", kit, " AND quality_control_materials.equipment = '", equipment, "'", sep = ""))
 # load equipment information
 equipment.information <- dbGetQuery(conn, paste("SELECT * FROM equipment WHERE equipment = '", equipment, "'", sep = ""))
+reference.information <- dbGetQuery(conn, paste("SELECT * FROM laboratories WHERE equipment = '", equipment, "' AND kit = ", qcmaterial.information$kit[1], sep = ""))
+
 if (nrow(qcmaterial.information) == 0) {
-    quit(save = "no", status = -1)                              # wrong marker ID
+    quit(save = "no", status = -1)                              # wrong kit ID
 } else if (nrow(equipment.information) != 1) {
     quit(save = "no", status = -2)                              # invalid equipment
 }
+# load reference site information
+references <- dbGetQuery(conn, paste("SELECT * FROM laboratories WHERE equipment = '", equipment, "' AND kit = ", qcmaterial.information$kit[1], sep = ""))
+
+# load error code
+equipment.errorcodes <- dbGetQuery(conn, paste("SELECT error_codes.error_code, error_codes.level, error_codes.description FROM error_codes LEFT JOIN equipment ON equipment.id = error_codes.equipment_id WHERE equipment.equipment = '", equipment, "'", sep = ""))
+rownames(equipment.errorcodes) <- equipment.errorcodes$error_code
 
 # load values
-variables.effective <- paste(equipment.information$db, c("serial_number", "test_type", "processed", "error_code", "device_id", "device_lot", paste(equipment.information$prefix, "id", 0:(equipment.information$tests - 1), sep = ""), paste(equipment.information$prefix, "result", 0:(equipment.information$tests - 1), sep = ""), "qc_service", "qc_lot"), sep = ".", collapse = ", ")
-qc.total <- dbGetQuery(conn, paste("SELECT diagnoses.measured_at, diagnoses.equipment, diagnoses.ip_address, diagnoses.technician, ", variables.effective, " FROM diagnoses INNER JOIN ", equipment.information$db, " ON diagnoses.diagnosable_id = ", equipment.information$db, ".id AND diagnoses.diagnosable_type = '", equipment.information$klass, "' WHERE diagnoses.measured_at > '", format(one.year.ago, "%F"), "' AND ", equipment.information$db, ".test_type = 1 AND ", equipment.information$db, ".device_id = ", qcmaterial.information$kit[1], sep = ""))
-if (nrow(qc.total) == 0) {
+variables.effective <- paste(equipment.information$db, c("serial_number", "test_type", "processed", "error_code", "kit", "lot", paste(equipment.information$prefix, "id", sep = ""), paste(equipment.information$prefix, "result", sep = ""), "qc_service", "qc_lot"), sep = ".", collapse = ", ")
+qc.whole <- dbGetQuery(conn, paste("SELECT diagnoses.measured_at, diagnoses.equipment, diagnoses.ip_address, diagnoses.technician, ", variables.effective, " FROM diagnoses INNER JOIN ", equipment.information$db, " ON diagnoses.diagnosable_id = ", equipment.information$db, ".id AND diagnoses.diagnosable_type = '", equipment.information$klass, "' WHERE diagnoses.measured_at > '", format(one.year.ago, "%F"), "' AND ", equipment.information$db, ".test_type = 1 AND ", equipment.information$db, ".kit = ", qcmaterial.information$kit[1], sep = ""))
+if (nrow(qc.whole) == 0) {
     quit(save = "no", status = -3)                              # no qc information
 }
 
 # FREND only
 if (equipment == "FREND") {
-    internal.effective <- paste(variables.effective, paste("frends", c("internal_qc_laser_power_test", "internal_qc_laseralignment_test", "internal_qc_calcaulated_ratio_test", "internal_qc_test"), sep = ".", collapse = ", "), sep = ", ")
-    internal.total <- dbGetQuery(conn, paste("SELECT diagnoses.measured_at, diagnoses.equipment, diagnoses.ip_address, diagnoses.technician, ", internal.effective, " FROM diagnoses INNER JOIN frends ON diagnoses.diagnosable_id = frends.id AND diagnoses.diagnosable_type = 'Frend' WHERE diagnoses.measured_at > '", format(one.month.ago, "%F"), "' AND frends.test_type = 2 AND frends.device_id = 11", sep = ""))    
+    internal.effective <- paste(variables.effective, paste("frends", c("internal_qc_laser_power_test", "internal_qc_laseralignment_test", "internal_qc_calculated_ratio_test", "internal_qc_test"), sep = ".", collapse = ", "), sep = ", ")
+    internal.whole <- dbGetQuery(conn, paste("SELECT diagnoses.measured_at, diagnoses.equipment, diagnoses.ip_address, diagnoses.technician, ", internal.effective, " FROM diagnoses INNER JOIN frends ON diagnoses.diagnosable_id = frends.id AND diagnoses.diagnosable_type = 'Frend' WHERE diagnoses.measured_at > '", format(one.month.ago, "%F"), "' AND frends.test_type = 2 AND frends.kit = 11", sep = ""))    
     rm(internal.effective)
+    #internal.whole[c(1, 4), "internal_qc_laser_power_test"] <- FALSE
+    #internal.whole[c(2, 4), "internal_qc_laseralignment_test"] <- FALSE
+    #internal.whole[c(3, 4), "internal_qc_calculated_ratio_test"] <- FALSE
+    #internal.whole[1:4, "internal_qc_test"] <- FALSE
 }
 rm(variables.effective)
 
@@ -48,69 +60,83 @@ rm(variables.effective)
 dbDisconnect(conn)
 
 # set target variable
-variables.id <- paste(equipment.information$prefix, "id", 0:(equipment.information$tests - 1), sep = "")
-variables.result <- paste(equipment.information$prefix, "result", 0:(equipment.information$tests - 1), sep = "")
-variable.target <- variables.result[which(unlist(qc.total[1, variables.id] == marker))]
-qc.total$.result <- qc.total[, variable.target]
-rm(variables.id, variables.result, variable.target)
+variables.loc <- which(strsplit(qc.whole[1, paste(equipment.information$prefix, "id", sep = "")], ":")[[1]] == kit)
+qc.whole$.result <- sapply(strsplit(paste(qc.whole[, paste(equipment.information$prefix, "result", sep = "")], "e", sep = ""), ":"), function(x) as.numeric(x[variables.loc]))
+rm(variables.loc)
 
 # add controlled range into qc information
-rownames(qcmaterial.information) <- paste(qcmaterial.information$service, qcmaterial.information$lot_number, sep = "#")
-qc.total$qc.mean <- qcmaterial.information[paste(qc.total$qc_service, qc.total$qc_lot, sep = "#"), "mean"]
-qc.total$qc.sd <- qcmaterial.information[paste(qc.total$qc_service, qc.total$qc_lot, sep = "#"), "sd"]
-qc.total$.result.std <- (qc.total$.result - qc.total$qc.mean) / qc.total$qc.sd
-qc.total$.threesd.range <- paste(qc.total$qc.mean - 3 * qc.total$qc.sd, qc.total$qc.mean + 3 * qc.total$qc.sd, sep = "-")
+rownames(qcmaterial.information) <- paste(qcmaterial.information$service, qcmaterial.information$lot, sep = "#")
+qc.whole$.qc.mean <- qcmaterial.information[paste(qc.whole$qc_service, qc.whole$qc_lot, sep = "#"), "mean"]
+qc.whole$.qc.sd <- qcmaterial.information[paste(qc.whole$qc_service, qc.whole$qc_lot, sep = "#"), "sd"]
+qc.whole$.result.std <- (qc.whole$.result - qc.whole$.qc.mean) / qc.whole$.qc.sd
+qc.whole$.threesd.range <- paste(qc.whole$.qc.mean - 3 * qc.whole$.qc.sd, qc.whole$.qc.mean + 3 * qc.whole$.qc.sd, sep = "-")
 
 # set subset tables
-qc.month <- qc.total[qc.total$measured_at > one.month.ago, ]
+qc.month <- qc.whole[qc.whole$measured_at > one.month.ago, ]
+qc.reference <- qc.whole[qc.whole$ip_address %in% reference.information$ip_address, ]
 
 # generation base ConTeXt file
-path.pdf <- file.path(path, "PDF", format(now, "%F"))
-dir.create(path.pdf)
+path.pdf <- file.path(path.report, "PDF")
 
 # base keywords
 keywords <- matrix(c(
     "@EQUIPMENT",       equipment,
     "@MANUFACTURER",    equipment.information$manufacturer,
-    "@MARKER",          qcmaterial.information$reagent_name[1],
+    "@KIT",             qcmaterial.information$reagent_name[1],
     "@THISYEAR",        period$year,
     "@THISMONTH",       period$monthyear
 ), ncol = 2, byrow = TRUE)
 write.table(apply(keywords, 1, function(x) {
     paste("s/", x[1], "/", x[2], "/g", sep = "")
-}), file = file.path(path.pdf, "keywords"), col.names = FALSE, row.names = FALSE, quote = FALSE, sep = "\n")
-keywords.file <- file.path(path.pdf, "keywords")
+}), file = file.path(path.pdf, paste("keywords",  kit, sep = "-")), col.names = FALSE, row.names = FALSE, quote = FALSE, sep = "\n")
+keywords.file <- file.path(path.pdf, paste("keywords",  kit, sep = "-"))
 
-for (i in unique(qc.month$ip_address)) {
-    qc.by_ipaddress <- qc.total[qc.total$ip_address == i, ]
-    qc.month.by_ipaddress <- qc.month[qc.month$ip_address == i, ]
-#    qc.by_ipaddress$.level <- str_sub(qc.by_ipaddress$qc_lot, -1)
-#    qc.month.by_ipaddress$.level <- str_sub(qc.month.by_ipaddress$qc_lot, -1)
+for (serial in unique(qc.month$serial_number)) {
+    qc.month.s <- qc.month[qc.month$serial_number == serial, ]
+    if (nrow(qc.month.s) > 0) {
+        qc.s <- qc.whole[qc.whole$serial_number == serial, ]
+        qc.month.r <- qc.month[qc.month$ip_address %in% reference.information$ip_address, ]
 
-    filename.prefix <- paste(i, "-", equipment, "-", marker, "-qc", sep = "")
-    serialnumbers <- paste(unique(qc.month.by_ipaddress$serial_number), collapse = ", ")
+        filename.prefix <- paste(equipment, serial, kit, format(max(qc.month.s$measured_at), "%F"), "qc", sep = "-")
 
-    # IP based keywords
-    keywords.ip <- matrix(c(
-        "@SERIALNUMBERS",   serialnumbers,
-        "@TABLEOFMONTH",  file.path(path.pdf, paste(filename.prefix, "-month.tex", sep = ""))
-    ), ncol = 2, byrow = TRUE)
-    write.table(apply(keywords.ip, 1, function(x) {
-        paste("s!", x[1], "!", x[2], "!g", sep = "")
-    }), file = file.path(path.pdf, "keywords.ip"), col.names = FALSE, row.names = FALSE, quote = FALSE, sep = "\n")
-    keywords.ip.file <- file.path(path.pdf, "keywords.ip")
+        # IP based keywords
+        keywords.serial <- matrix(c(
+            "@SERIALNUMBER",        serial,
+            "@FRENDONLYINTERNALQC", file.path(path.pdf, paste(filename.prefix, "-month-graph-internal.tex", sep = "")),
+            "@TABLEOFMONTHHISTORY", file.path(path.pdf, paste(filename.prefix, "-month-table-history.tex", sep = "")),
+            "@TABLEOFMONTHDIAGNOSIS",file.path(path.pdf, paste(filename.prefix, "-month-tablegraph-diagnosis.tex", sep = "")),
+            "@TABLEGRAPHOFYEAR",    file.path(path.pdf, paste(filename.prefix, "-year-tablegraph.tex", sep = "")),
+            "@TABLEOFYEARMONTHLY",  file.path(path.pdf, paste(filename.prefix, "-year-table-history.tex", sep = "")),
+            "@GRAPHOFYEARMONTHLY",  file.path(path.pdf, paste(filename.prefix, "-year-graph-history.tex", sep = "")),
+            "@GRAPHOFQUALITYASSURANCE", file.path(path.pdf, paste(filename.prefix, "-year-graph-quality.tex", sep = ""))
+        ), ncol = 2, byrow = TRUE)
+        write.table(apply(keywords.serial, 1, function(x) {
+            paste("s!", x[1], "!", x[2], "!g", sep = "")
+        }), file = file.path(path.pdf, paste("keywords",  serial, kit, sep = "-")), col.names = FALSE, row.names = FALSE, quote = FALSE, sep = "\n")
+        keywords.serial.file <- file.path(path.pdf, paste("keywords",  serial, kit, sep = "-"))
 
-    system(paste("sed -f ", keywords.file, " -f ", keywords.ip.file, " ", file.path(path, "TeX", "QCtoolkit-qc_template.tex"), " > ", file.path(path.pdf, paste(filename.prefix, ".tex", sep = "")), sep = ""))
+        system(paste("sed -f ", keywords.file, " -f ", keywords.serial.file, " ", file.path(path.report, "TeX", "QCtoolkit-qc_template.tex"), " > ", file.path(path.pdf, paste(filename.prefix, ".tex", sep = "")), sep = ""))
 
-    generate.thismonth.qc(qc.month.by_ipaddress, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.month)
-    
-#    qc.by_ipaddress <- qc.values[qc.values$ip_address == i, ]    
-#    if (nrow(qc.by_ipaddress) > 0) {
-#        for (j in unique(qc.values$.qcservice)) {
-#        v.by_lot <- values[values$.qcservice == i, ]
-#        qc.by_lot <- qc.values[qc.values$.qcservice == i, ]
-#            qc.by_ipaddress <- qc.by_lot[qc.by_lot$ip_address == j, ]
-#        }        
-#    }
+        if (equipment == "FREND") {
+            internal.s <- internal.whole[internal.whole$serial_number == serial, ]
+            if (nrow(internal.s) == 0) {
+                internal.s[1, "measured_at"] <- max(qc.month.s$measured_at)
+            }
+            generate.graph.thismonth.internal(internal.s, prefix = file.path(path.pdf, filename.prefix))
+        }
+
+#        generate.thismonth.qc(qc.month.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+        generate.table.thismonth.history(qc.month.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, messages = equipment.errorcodes)
+
+        generate.tablegraph.thismonth.spc(qc.month.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information)
+
+        generate.tablegraph.thisyear.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+        
+        generate.table.thisyear.history.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+
+        generate.graph.thisyear.history.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+
+        generate.graph.thisyear.quality.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+    }
 }
 

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Error code:</strong>
+  <%= @error_code.error_code %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @error_code.level %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @error_code.description %>
+</p>
+
+<%= link_to 'Edit', edit_error_code_path(@error_code) %> |
+<%= link_to 'Back', error_codes_path %>

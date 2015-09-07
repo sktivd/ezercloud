@@ -7,23 +7,30 @@
 % symbols
 \usesymbols[uni]
 
+% modules
+\usemodule[simplefonts]
+\usemodule[math]
+
 % setup color
 \setupcolors[state=start]
 \usecolors[xwi]
 \definecolor[tablebackgroundcolor][s=0.98]
 \definecolor[titlebackgroundcolor][s=0.90]
+\definecolor[graytitlecolor][s=0.50]
+
+\chardef\charalignmentmode=0
 
 % define frame
-\defineframed[boxedtitle][height=1in, width=\hsize, autowidth=none,
+\defineframed[boxedtitle][width=\hsize, autowidth=none,
   align={flushleft, nothyphenated, verytolerant}
   location=top,
   frame=off,
-  backgroundoffset=1em, 
+  backgroundoffset=.25em, 
+  offset=.5em,
   background=color, backgroundcolor=titlebackgroundcolor, backgroundcorner=round, backgroundradius=0.5em,
   corner=round, radius=0.25em
 ]
-\defineframed[linedheader][height=2em, aligned={flushright,nothyphenated,low},
-  frame=off, rightframe=on, location=bottom, top=\vss]
+\defineframed[linedheader][height=2em, align=flushright, frame=off, rightframe=on, location=bottom, top=\vss, bottom=]
 
 % setup paper layout
 \setuppapersize[A4]
@@ -33,8 +40,8 @@
   header=0.25in, footer=0.25in, headerdistance=0.4in, footerdistance=0.1in]
 \setuppagenumbering[location={footer,inmargin}, style=\bfa]
 \setupheader[margin]
-\setupheadertexts[][\linedheader{\tfxx\sc QCtoolkit v0.1}]
-\setupfootertexts[Issued by: \underbar{\hphantom{abcdefghijklmnopqrstuvwxyz}}][]
+\setupheadertexts[][\linedheader{\tfxx\sc QCtoolkit v0.2}]
+\setupfootertexts[Reviewed by: ____________   Date: ___________][]
 
 \setupindenting[next]
 \setuppagenumbering[location={footer,inmargin}]
@@ -43,19 +50,25 @@
 
 % setup tables
 
-\startsetups[table:history]
-\setupTABLE[frame=off]
-\setupTABLE[column][1][align={middle,lohi}, width=.1\hsize]     % Date
-\setupTABLE[column][2][align={middle,lohi}, width=.1\hsize]     % Time
-\setupTABLE[column][3][align={middle,lohi}, width=.1\hsize]     % QC service
-\setupTABLE[column][4][align={middle,lohi}, width=.1\hsize]     % QC lot
-\setupTABLE[column][5][align={middle,lohi}, width=.15\hsize]    % 3SD range
-\setupTABLE[column][6][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.15\hsize]   % value
-\setupTABLE[column][7][align={middle,lohi}, width=.15\hsize]     % QC status
-\setupTABLE[column][8][align={middle,lohi}, width=.15\hsize]     % Technician
-\setupTABLE[row][even][background=color, backgroundcolor=tablebackgroundcolor]
-\setupTABLE[header][each][bottomframe=on, framecolor=darkgray, rulethickness=0.3mm, align={middle,lohi}]
-\setupTABLE[footer][each][topframe=on, framecolor=darkgray]
+\startsetups[table:monthhistory]
+\setupTABLE[frame=off, offset=3pt, align={middle,low}]
+\setupTABLE[row][bottomframe=on, framecolor=tablebackgroundcolor, rulethickness=.5pt]
+\setupTABLE[column][1][width=.1\hsize]     % Date
+\setupTABLE[column][2][width=.1\hsize]     % Time
+\setupTABLE[column][3][width=.1\hsize]     % QC service
+\setupTABLE[column][4][width=.1\hsize]     % QC lot
+\setupTABLE[column][5][width=.15\hsize]    % 3SD range
+\setupTABLE[column][6][alignmentcharacter={text->.}, aligncharacter=yes,width=.15\hsize]   % value
+\setupTABLE[column][7][width=.15\hsize]    % QC status
+\setupTABLE[column][8][width=.15\hsize]    % Technician
+%\setupTABLE[row][even][background=color, backgroundcolor=tablebackgroundcolor]
+\setupTABLE[header][bottomframe=on, framecolor=tablebackgroundcolor, rulethickness=2pt, align={middle,low}]
+\stopsetups
+
+\startsetups[table:monthsummary]
+\setupTABLE[frame=off, offset=3pt, align={left,low}, style=\ss\tfxx]
+\setupTABLE[row][bottomframe=on, framecolor=tablebackgroundcolor, rulethickness=.5pt]
+\setupTABLE[header][bottomframe=on, framecolor=tablebackgroundcolor, rulethickness=2pt]
 \stopsetups
 
 \startsetups[table:summaryframe]
@@ -63,42 +76,150 @@
 \stopsetups
 
 \startsetups[table:summary]
-\setupTABLE[frame=off, offset=1pt]
+\setupTABLE[frame=off, offset=0pt]
 \setupTABLE[row][even][background=color, backgroundcolor=tablebackgroundcolor]
-\setupTABLE[column][1][background=screen, align={middle,lohi}, width=.09\hsize]    % description
+\setupTABLE[column][1][background=screen, align={middle,lohi}, width=.15\hsize]    % description
 \setupTABLE[column][2][align={middle,lohi}, width=.12\hsize]    % key
-\setupTABLE[column][3][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.12\hsize]    % value
-\setupTABLE[column][4][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.12\hsize]    % peer lab value
-\setupTABLE[column][5][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.12\hsize]    % whole lab value
+\setupTABLE[column][3][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.15\hsize]    % value
+\setupTABLE[column][4][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.15\hsize]    % peer lab value
+\setupTABLE[column][5][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}, width=.15\hsize]    % whole lab value
 \setupTABLE[row][last][style=\bf]
+\stopsetups
+
+\startsetups[table:yearframe]
+\setupTABLE[frame=off, width=broad, offset=none]
+\setupTABLE[row][frame=off, bottomframe=on, framecolor=tablebackgroundcolor, rulethichness=5pt]
+\setupTABLE[row][last][bottomframe=off]
+\stopsetups
+
+\startsetups[table:yearsdicvr]
+\setupTABLE[frame=off, offset=4pt, align={middle,low}]
+\setupTABLE[row][bottomframe=on, framecolor=tablebackgroundcolor, rulethickness=.5pt]
+%\setupTABLE[row][even][background=color, backgroundcolor=tablebackgroundcolor]
+\setupTABLE[column][1][background=none, width=.08\hsize]                                      % description
+\setupTABLE[column][2][align={right,lohi}, width=.17\hsize]                                   % key
+\setupTABLE[column][3][alignmentcharacter={text->.}, aligncharacter=yes, width=.15\hsize]     % whole
+\setupTABLE[column][4][alignmentcharacter={text->.}, aligncharacter=yes, width=.15\hsize]     % reference
+\setupTABLE[column][5][width=.03\hsize, background=none]
+\setupTABLE[row][last][background=none, rulethickness=0pt]
+\stopsetups
+
+\startsetups[table:yearsummary]
+%\setupTABLE[frame=off, align=left, width=broad]
+\setupTABLE[frame=off, width=broad, leftoffset=none, rightoffset=none]
+\setupTABLE[header][frame=off, bottomframe=on, framecolor=tablebackgroundcolor, rulethickness=5pt, align={middle,low}]
+\setupTABLE[column][alignmentcharacter={text->.}, aligncharacter=yes, align={middle,lohi}]
+\setupTABLE[column][first][align=right, aligncharacter=no, width=0.05\hsize]
+\setupTABLE[row][frame=off, bottomframe=on, framecolor=tablebackgroundcolor, rulethickness=0.4pt]
+\stopsetups
+
+\startsetups[table:titledframe]
+\setupTABLE[frame=on, framecolor=titlebackgroundcolor, align={middle,top}, rulethickness=5pt, width=broad]
+\setupTABLE[header][frame=off, leftframe=on, rightframe=on, background=color, backgroundcolor=titlebackgroundcolor]
+\setupTABLE[footer][frame=off, leftframe=on, rightframe=on, background=color, backgroundcolor=titlebackgroundcolor]
+\setupTABLE[row][last][frame=off, leftframe=on, rightframe=on, background=color, backgroundcolor=titlebackgroundcolor]
 \stopsetups
 
 \starttext
 
+\startmode[FREND]
+
 \boxedtitle{\ss
-  {\tfc\bf @MARKER}
+  {\tfc\bf @MANUFACTURER @EQUIPMENT: @KIT}
   \blank[medium]
-  {\tfa\bf @THISMONTH Report}
+  {\tfa\bf @THISMONTH Equipment checkup}
   \blank[big]
-  QC measurement values on @MANUFACTURER @EQUIPMENT system (@SERIALNUMBERS) are shown below.
+  \blank[2*big]
+  @EQUIPMENT maintenance checkup history for this month.
 }
+\blank[3*big]
 
-% setup framedtext
-\setupframedtexts[frame=off, leftframe=on, framecolor=darkgray, rulethickness=5pt, width=local]
+\input @FRENDONLYINTERNALQC
 
-\input @TABLEOFMONTH
+\page[yes]
+
+\stopmode
+
+\boxedtitle{\ss
+  {\tfc\bf @MANUFACTURER @EQUIPMENT: @KIT}
+  \blank[medium]
+  {\tfa\bf @THISMONTH Measurement history}
+  \blank[big]
+  \blank[2*big]
+  Measurement history on quality control materials for this month.
+}
+\blank[3*big]
+
+\input @TABLEOFMONTHHISTORY
 
 \page[yes]
 
 \boxedtitle{\ss
-  {\tfc\bf @MARKER}
+  {\tfc\bf @MANUFACTURER @EQUIPMENT: @KIT}
   \blank[medium]
-  {\tfa\bf @THISYEAR Inter-laboratory Report}
+  {\tfa\bf @THISMONTH Diagnosis}
   \blank[big]
   \blank[2*big]
-  Test values and external QC on @MANUFACTURER @EQUIPMENT system (@SERIALNUMBERS) are shown below.
+  Diagnosis of measurement on quality control materials for this month.
 }
+\blank[3*big]
 
-\input @TABLEOFYEAR
+\input @TABLEOFMONTHDIAGNOSIS
+
+\page[yes]
+
+\boxedtitle{\ss
+  {\tfc\bf @MANUFACTURER @EQUIPMENT: @KIT}
+  \blank[medium]
+  {\tfa\bf @THISYEAR Monthly Summary Statistics}
+  \blank[big]
+  \blank[2*big]
+  Descriptive statistics of test values on quality control materials per month for a year.
+}
+\blank[3*big]
+
+\input @TABLEOFYEARMONTHLY
+
+\page[yes]
+
+\boxedtitle{\ss
+  {\tfc\bf @MANUFACTURER @EQUIPMENT: @KIT}
+  \blank[medium]
+  {\tfa\bf @THISYEAR Monthly Summary Graph}
+  \blank[big]
+  \blank[2*big]
+  Means and CVs of test values on quality control materials per month for a year.
+}
+\blank[2*big]
+
+\input @GRAPHOFYEARMONTHLY
+
+\page[yes]
+
+\boxedtitle{\ss
+  {\tfc\bf @MANUFACTURER @EQUIPMENT: @KIT}
+  \blank[medium]
+  {\tfa\bf @THISYEAR Level of Quality Assurance}
+  \blank[big]
+  \blank[2*big]
+  Management status of Quality Assurance is measured by Charts of operational process specifications (OPSpecs Chart).
+}
+\blank[2*big]
+
+\input @GRAPHOFQUALITYASSURANCE
+
+\page[yes]
+
+\boxedtitle{\ss
+  {\tfc\bf @MANUFACTURER @EQUIPMENT: @KIT}
+  \blank[medium]
+  {\tfa\bf @THISYEAR Yearly Summary: SDI vs CVR}
+  \blank[big]
+  \blank[2*big]
+  Comparative performance of test values on quality control materials for a year.
+}
+\blank[3*big]
+
+\input @TABLEGRAPHOFYEAR
 
 \stoptext

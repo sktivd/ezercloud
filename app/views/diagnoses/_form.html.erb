@@ -1,97 +1,32 @@
-<%= form_for(@diagnosis) do |f| %>
-  <% if @diagnosis.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@diagnosis.errors.count, "error") %> prohibited this diagnosis from being saved:</h2>
+<%= simple_form_for @diagnosis do |f| %>
+  <%= f.error_notification %>
 
-      <ul>
-      <% @diagnosis.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :protocol %><br>
-    <%= f.text_field :protocol %>
+  <div class="form-inputs">
+    <%= f.input :protocol %>
+    <%= f.input :version %>
+    <%= f.input :authorized_key %>
+    <%= f.input :year, collection: 2015..2029 %>
+    <%= f.input :month, collection: 1..12 %>
+    <%= f.input :day, collection: 1..31 %>
+    <%= f.input :hour, collection: 0..23 %>
+    <%= f.input :minute, collection: 0..59 %>
+    <%= f.input :second, collection: 0..59 %>
+    <%= f.input :time_zone %>
+    <%= f.input :elapsed_time %>
+    <%= f.input :ip_address %>
+    <%= f.input :location %>
+    <%= f.input :latitude %>
+    <%= f.input :sex, collection: -1..2 %>
+    <%= f.input :age_band, collection: -1..9 %>
+    <%= f.input :order_number %>
+    <%= f.input :technician %>
+    <%= f.input :data %>
+    <%= f.input :equipment %>
+    <%= f.input :equipment %>
+    <%= f.input :equipment %>
   </div>
-  <div class="field">
-    <%= f.label :version %><br>
-    <%= f.number_field :version, in: 1..100 %>
-  </div>
-  <div class="field">
-    <%= f.label :authorized_key %><br>
-    <%= f.text_field :authorized_key %>
-  </div>
-  <div class="field">
-    <%= f.label :equipment %><br>
-    <%= f.text_field :equipment %>
-  </div>
-  <div class="field">
-    <%= f.label :year %><br>
-    <%= f.number_field :year, in: 2015..2029 %>
-  </div>
-  <div class="field">
-    <%= f.label :month %><br>
-    <%= f.number_field :month, in: 1..12 %>
-  </div>
-  <div class="field">
-    <%= f.label :day %><br>
-    <%= f.number_field :day, in: 1..31 %>
-  </div>
-  <div class="field">
-    <%= f.label :hour %><br>
-    <%= f.number_field :hour, in: 0..23 %>
-  </div>
-  <div class="field">
-    <%= f.label :minute %><br>
-    <%= f.number_field :minute, in: 0..59 %>
-  </div>
-  <div class="field">
-    <%= f.label :second %><br>
-    <%= f.number_field :second, in: 0..60 %>
-  </div>
-  <div class="field">
-    <%= f.label :time_zone %><br>
-    <%= f.text_field :time_zone %>
-  </div>
-  <div class="field">
-    <%= f.label :elapsed_time %><br>
-    <%= f.text_field :elapsed_time %>
-  </div>
-  <div class="field">
-    <%= f.label :ip_address %><br>
-    <%= f.text_field :ip_address %>
-  </div>
-  <div class="field">
-    <%= f.label :latitude %><br>
-    <%= f.text_field :latitude %>
-  </div>
-  <div class="field">
-    <%= f.label :longitude %><br>
-    <%= f.text_field :longitude %>
-  </div>
-  <div class="field">
-    <%= f.label :data %><br>
-    <%= f.text_area :data %>
-  </div>
-  <div class="field">
-    <%= f.label :sex %><br>
-    <%= f.number_field :sex, in: -1..2 %>
-  </div>
-  <div class="field">
-    <%= f.label :age_band %><br>
-    <%= f.number_field :age_band, in: -1..9 %>
-  </div>
-  <div class="field">
-    <%= f.label :order_number %><br>
-    <%= f.text_field :order_number %>
-  </div>
-  <div class="field">
-    <%= f.label :technician %><br>
-    <%= f.text_field :technician %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <br />
+  <div class="form-actions">
+    <%= f.button :submit %>
   </div>
 <% end %>

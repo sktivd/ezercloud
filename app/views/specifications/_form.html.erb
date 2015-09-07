@@ -1,0 +1,19 @@
+<%= simple_form_for(@specification) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :specimen %>
+    <%= f.input :analyte %>
+    <%= f.input :acronym %>
+    <%= f.input :papers %>
+    <%= f.input :cv_i %>
+    <%= f.input :cv_g %>
+    <%= f.input :imprecision %>
+    <%= f.input :inaccuracy %>
+    <%= f.input :allowable_total_error %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

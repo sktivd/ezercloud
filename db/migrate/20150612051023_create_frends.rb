@@ -21,7 +21,7 @@ class CreateFrends < ActiveRecord::Migration
       t.date :qc_expire
       t.boolean :internal_qc_laser_power_test
       t.boolean :internal_qc_laseralignment_test
-      t.boolean :internal_qc_calcaulated_ratio_test
+      t.boolean :internal_qc_calculated_ratio_test
       t.boolean :internal_qc_test
 
       t.timestamps null: false

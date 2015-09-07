@@ -3,6 +3,11 @@
   <li class="active">FREND</li>
 <% end %>
 
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Diagnosis", diagnosis_path %></li>
+  <li class="active">FREND</li>
+<% end %>
+
 <div class='alert alert-info fade in' data-alert='alert'>
   <h3>
     <strong>

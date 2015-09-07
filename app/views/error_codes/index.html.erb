@@ -1,0 +1,40 @@
+<% content_for :breadcrumb do %>
+  <li class="active">Error Codes</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      List of Error codes on Equipment
+    </strong>
+  </h3>
+  <p>Here you'll see list of error codes on equipment.</p>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Error code</th>
+      <th>Level</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @error_codes.each do |error_code| %>
+      <tr>
+        <td><%= error_code.error_code %></td>
+        <td><%= error_code.level %></td>
+        <td><%= error_code.description %></td>
+        <td><%= link_to 'Show', error_code %></td>
+        <td><%= link_to 'Edit', edit_error_code_path(error_code) %></td>
+        <td><%= link_to 'Destroy', error_code, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Error code', new_error_code_path %>

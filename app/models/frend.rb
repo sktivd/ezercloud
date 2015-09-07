@@ -7,7 +7,7 @@ class Frend < ActiveRecord::Base
   validates :serial_number, :test_type, :kit, :lot, presence: true
   validates :version,       numericality: { equal_to: VERSION, message: "should be matched to server's version" }  
   validates :qc_service, :qc_lot, :qc_expire, presence: true, if: :external_qc?
-  validates :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calcaulated_ratio_test, :internal_qc_test, presence: true, if: :internal_qc? 
+  validates :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calculated_ratio_test, :internal_qc_test, presence: true, if: :internal_qc? 
   
   def external_qc?
     test_type == 1
