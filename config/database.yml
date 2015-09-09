@@ -40,3 +40,9 @@ test:
 #production:
 #  <<: *default
 #  database: db/production.sqlite3
+
+production:
+  <<: *default
+  database: skynet_production
+  username: skynet
+  password: skynet_qc_ezercloud

@@ -10,9 +10,6 @@
 # Ignore lock file for Gemfile
 /Gemfile.lock
 
-# Ignore secret file
-/config/secrets.yml
-
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
