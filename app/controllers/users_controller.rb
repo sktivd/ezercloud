@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_before_action :authorize, only: [:new]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   # GET /users
@@ -14,6 +15,9 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
+    if logged_in?
+      redirect_to diagnoses_path, notice: "You are logged in currently."
+    end
     @user = User.new
   end
 
