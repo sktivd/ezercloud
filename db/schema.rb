@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819030103) do
+ActiveRecord::Schema.define(version: 20150915024409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,6 +152,16 @@ ActiveRecord::Schema.define(version: 20150819030103) do
   end
 
   add_index "specifications", ["reagent_id"], name: "index_specifications_on_reagent_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "password_digest"
+    t.string   "email"
+    t.boolean  "privilege_super",   default: false
+    t.boolean  "privilege_reagent", default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
 
   add_foreign_key "error_codes", "equipment"
   add_foreign_key "quality_control_materials", "reagents"

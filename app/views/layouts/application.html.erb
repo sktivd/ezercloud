@@ -25,6 +25,11 @@
           <li><%= link_to "Equipment", equipment_index_path %></li>
           <li><%= link_to "Laboratories", laboratories_path %></li>
         </ul>
+        <% if logged_in? %>
+          <div class= "navbar-right">
+            <%= button_to "#{@current_user.name}", {action: "destroy", controller: "sessions"}, {class: "btn btn-default navbar-btn", method: :delete} %>
+          </div>
+        <% end %>
       </div>
     </div>
   </header>

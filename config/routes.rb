@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :users
   resources :specifications
   resources :error_codes
   resources :laboratories
@@ -9,12 +10,23 @@ Rails.application.routes.draw do
   resources :frends
   resources :diagnoses
   resources :equipment
+
+#  get 'sessions/new'
+  get 'sessions/create'
+  delete 'sessions/destroy'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
   root 'diagnoses#index'
+
+  controller :sessions do
+    get     'login'   => :new
+    post    'login'   => :create
+    delete  'logout'  => :destroy
+  end
 
   # Sidekiq
   mount Sidekiq::Web, at: '/sidekiq'
