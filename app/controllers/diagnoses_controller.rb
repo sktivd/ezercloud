@@ -1,6 +1,7 @@
 class DiagnosesController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
+  skip_before_action :authorize, only: [:create]
   after_filter do
     puts @error_msg
   end
@@ -10,7 +11,7 @@ class DiagnosesController < ApplicationController
   # GET /diagnoses
   # GET /diagnoses.json
   def index
-    @diagnoses = Diagnosis.all
+    @diagnoses = Diagnosis.order(:created_at).reverse_order
   end
 
   # GET /diagnoses/1
@@ -29,7 +30,7 @@ class DiagnosesController < ApplicationController
 
   # JSON only
   # POST /diagnoses.json
-  def create
+  def create    
     @diagnosis = Diagnosis.new(diagnosis_params)
     @equipment = new_equipment(params[:equipment], params[:data].to_json)
     if @equipment
@@ -41,11 +42,11 @@ class DiagnosesController < ApplicationController
     respond_to do |format|
       if @equipment and @diagnosis.save 
         if @equipment.save
-          if @equipment.test_type = 1 and @equipment.processed and Laboratory.find_by(equipment: @diagnosis.equipment, ip_address: @diagnosis.ip_address, kit: @equipment.kit)
-            ReagentManagementWorker.perform_async name: params[:equipment], id: @equipment.id, kit: @equipment.kit, service: @equipment.qc_service, lot: @equipment.qc_lot, expire: @equipment.qc_expire
-          end
+#          if @equipment.test_type = 1 and @equipment.processed and Laboratory.find_by(equipment: @diagnosis.equipment, ip_address: @diagnosis.ip_address, kit: @equipment.kit)
+#            ReagentManagementWorker.perform_async name: params[:equipment], id: @equipment.id, kit: @equipment.kit, service: @equipment.qc_service, lot: @equipment.qc_lot, expire: @equipment.qc_expire
+#          end
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
-          format.json { render :show, status: :created, location: @diagnosis }
+          format.json { render :created, status: :created, location: @diagnosis }
         else
           @diagnosis.delete
           format.html { render :new }
@@ -95,7 +96,7 @@ class DiagnosesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
-      if params[:diagnosis]
+      if params[:diagnosis] and authenticated?
         params[:diagnosis][:measured_at] = measured_time 
         params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
       end
@@ -113,4 +114,9 @@ class DiagnosesController < ApplicationController
     def json_request?
       request.format.json?
     end 
+    
+    def authenticated?
+      authenicated_key = Diagnosis::AUTHENTICATION_KEYS[request.remote_ip.to_sym]
+      authenicated_key and authenicated_key == params[:authentication_key]
+    end
 end

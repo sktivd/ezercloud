@@ -27,7 +27,7 @@
         </ul>
         <% if logged_in? %>
           <div class= "navbar-right">
-            <%= button_to "#{@current_user.name}", {action: "destroy", controller: "sessions"}, {class: "btn btn-default navbar-btn", method: :delete} %>
+            <%= button_to "#{current_user.name}", {action: "destroy", controller: "sessions"}, {class: "btn btn-default navbar-btn", method: :delete} %>
           </div>
         <% end %>
       </div>

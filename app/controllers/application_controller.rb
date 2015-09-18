@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authorize
   
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :administrator?
   
   protected
   
@@ -21,5 +21,16 @@ class ApplicationController < ActionController::Base
     unless logged_in?
       redirect_to login_path, method: :get, notice: "Please log in"
     end
+  end
+  
+  def allow_only_to privilege
+    # super users are always allowed!
+    unless current_user.privilege_super and current_user.instance_eval("privilege_" + privilege.to_s)
+      redirect_to root_path, method: :get, notice: "Not allowed!"
+    end
+  end
+  
+  def administrator?
+    current_user and current_user.privilege_super
   end
 end

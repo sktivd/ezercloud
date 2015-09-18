@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
-  skip_before_action :authorize, only: [:new]
+  before_action only: [:index, :new] do
+    allow_only_to :super
+  end
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :match_user, only: [:show, :edit, :update, :destroy]
 
   # GET /users
   # GET /users.json
@@ -15,9 +18,6 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    if logged_in?
-      redirect_to diagnoses_path, notice: "You are logged in currently."
-    end
     @user = User.new
   end
 
@@ -73,6 +73,15 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :password, :password_confirmation, :privileges)
+      params.require(:user).permit(:name, :password, :password_confirmation, :email, :privilege_super, :privilege_reagent)
+    end
+    
+    def match_user
+#      if not administrator? and current_user.id != session[:user_id]
+      unless administrator? or current_user.id == @user.id
+        STDERR.puts "merong"
+        redirect_to diagnoses_path, notice: "Inaccessible!"
+      end
+      STDERR.puts "merong2"
     end
 end

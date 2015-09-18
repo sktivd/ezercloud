@@ -8,6 +8,8 @@
 
 # Desirable Biological Variation Database specifications: https://www.westgard.com/biodatabase1.htm
 
+u = User.create(name: "admin", password: "11112222", privilege_super: true)
+
 s = Specification.create(specimen: "Serum", analyte: "11-Desoxycortisol", papers: 2, cv_i: 21.3, cv_g: 31.5, imprecision: 10.7, inaccuracy: 9.5, allowable_total_error: 27.1)
 s = Specification.create(specimen: "Serum", analyte: "17-Hydroxyprogesterone", papers: 2, cv_i: 19.6, cv_g: 50.4, imprecision: 9.8, inaccuracy: 13.5, allowable_total_error: 29.7)
 s = Specification.create(specimen: "Urine", analyte: "4-hydroxy-3-methoximandelate", acronym: "VMA", papers: 1, cv_i: 22.2, cv_g: 47.0, imprecision: 11.1, inaccuracy: 13.0, allowable_total_error: 31.3)
