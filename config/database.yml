@@ -44,5 +44,4 @@ test:
 production:
   <<: *default
   database: skynet_production
-  username: skynet
   password: skynet_qc_ezercloud
