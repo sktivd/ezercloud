@@ -96,7 +96,7 @@ class DiagnosesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
-      if params[:diagnosis] and authenticated?
+      if params[:diagnosis] #and authenticated?
         params[:diagnosis][:measured_at] = measured_time 
         params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
       end
