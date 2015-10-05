@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     user = User.find_by(name: params[:login][:name])
     if user and user.authenticate(params[:login][:password])
       session[:user_id] = user.id
-      redirect_to diagnoses_path
+      redirect_to diagnoses_path, notice: "Logged in"
     else
       redirect_to login_path, alert: "Invalid user/password combination"
     end

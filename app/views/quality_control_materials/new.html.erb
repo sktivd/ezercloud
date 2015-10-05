@@ -1,4 +1,17 @@
-<h1>New Quality Control Material</h1>
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Assay Kits", assay_kits_path %></li>
+  <li><%= link_to "Quality Control materials", quality_control_materials_path %></li>
+  <li class="active">New QC material</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      New Quality Control Material for Target Equipment
+    </strong>
+  </h3>
+  <p>Characterisitcs based on new insert paper.</p>
+</div>
 
 <%= render 'form' %>
 

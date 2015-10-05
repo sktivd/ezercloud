@@ -1,18 +1,36 @@
 <%= simple_form_for(@quality_control_material) do |f| %>
   <%= f.error_notification %>
 
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Target Reagent: </a>
+    </div>
+    
+    <div class="navbar-form navbar-left">
+      <%= f.input :equipment, label: false, as: :select do %>
+        <%= render partial: "qcm_dropdown/dropdown", locals: {title: @quality_control_material.equipment || "Equipment", data: all_equipment, label: "equipment", value: "equipment", menu_id: "equipment"} -%>
+      <% end %>
+      <%= f.input :assay_kit, label: false, as: :select do %>
+        <%= render partial: "qcm_dropdown/dropdown", locals: {title: @quality_control_material.assay_kit_label || "AssayKit", data: @assay_kits, label: "device", value: "id", menu_id: "assay_kit"} -%>
+      <% end %>
+      <%= f.input :reagent, label: false, as: :select do %>
+        <%= render partial: "qcm_dropdown/dropdown", locals: {title: @quality_control_material.reagent_label || "Reagent", data: @reagents, label: "name", value: "id", menu_id: "reagent"} -%>
+      <% end %>
+    </div>
+  </nav>
+
   <div class="form-inputs">
-    <%= f.input :service %>
+    <%= f.input :service, collection: QualityControlMaterial::SEVICES, selected: 'Bio-Rad' %>
     <%= f.input :lot %>
     <%= f.input :expire %>
-    <%= f.input :equipment %>
-    <%= f.input :reagent_name %>
-    <%= f.input :reagent_number %>
-    <%= f.input :n_equipment %>
-    <%= f.input :n_measurement %>
-    <%= f.input :mean %>
-    <%= f.input :sd %>
-    <%= f.association :reagent %>
+    <%= f.label :lower_3sd, label: "3SD Range", id: "sd_range", required: true %>
+    <div class="form-inline" >
+      <%= f.input :lower_3sd, placeholder: 'Lower bound', label: false %>
+      <%= f.input :upper_3sd, placeholder: 'Upper bound', label: false %>
+    </div>
+    <div>
+      <p></p>
+    </div>
   </div>
 
   <div class="form-actions">

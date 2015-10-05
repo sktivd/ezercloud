@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authorize
   
-  helper_method :current_user, :logged_in?, :administrator?
+  helper_method :current_user, :logged_in?, :administrator?, :all_equipment
   
   protected
   
@@ -25,12 +25,16 @@ class ApplicationController < ActionController::Base
   
   def allow_only_to privilege
     # super users are always allowed!
-    unless current_user.privilege_super and current_user.instance_eval("privilege_" + privilege.to_s)
+    unless current_user.privilege_super or current_user.instance_eval("privilege_" + privilege.to_s)
       redirect_to root_path, method: :get, notice: "Not allowed!"
     end
   end
   
   def administrator?
     current_user and current_user.privilege_super
+  end
+  
+  def all_equipment
+    @all_equipment ||= Equipment.order(:equipment)
   end
 end

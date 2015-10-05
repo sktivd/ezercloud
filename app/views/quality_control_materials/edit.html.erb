@@ -1,3 +1,18 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Assay Kits", assay_kits_path %></li>
+  <li><%= link_to "Quality Control materials", quality_control_materials_path %></li>
+  <li class="active">the QC material</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Update for the Quality Control Material
+    </strong>
+  </h3>
+  <p></p>
+</div>
+
 <h1>Editing Quality Control Material</h1>
 
 <%= render 'form' %>

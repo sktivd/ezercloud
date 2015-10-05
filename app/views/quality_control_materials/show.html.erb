@@ -21,38 +21,18 @@
 </p>
 
 <p>
+  <strong>Assay Kit:</strong>
+  <%= @quality_control_material.reagent.assay_kit.device %>
+</p>
+
+<p>
   <strong>Reagent name:</strong>
-  <%= @quality_control_material.reagent_name %>
+  <%= @quality_control_material.reagent.name %>
 </p>
 
 <p>
-  <strong>Reagent number:</strong>
-  <%= @quality_control_material.reagent_number %>
-</p>
-
-<p>
-  <strong>Number of Equipments for Measurement:</strong>
-  <%= @quality_control_material.n_equipment %>
-</p>
-
-<p>
-  <strong>Number of Measurement:</strong>
-  <%= @quality_control_material.n_measurement %>
-</p>
-
-<p>
-  <strong>Mean:</strong>
-  <%= @quality_control_material.mean %>
-</p>
-
-<p>
-  <strong>Sd:</strong>
-  <%= @quality_control_material.sd %>
-</p>
-
-<p>
-  <strong>Reagent:</strong>
-  <%= @quality_control_material.reagent %>
+  <strong>3SD Range:</strong>
+  <%= "%.2f" % (@quality_control_material.mean - 3 * @quality_control_material.sd) %> - <%= "%.2f" % (@quality_control_material.mean + 3 * @quality_control_material.sd) %>
 </p>
 
 <%= link_to 'Edit', edit_quality_control_material_path(@quality_control_material) %> |

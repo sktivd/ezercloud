@@ -11,9 +11,10 @@ Rails.application.routes.draw do
   resources :diagnoses
   resources :equipment
 
-#  get 'sessions/new'
-  get 'sessions/create'
-  delete 'sessions/destroy'
+#  get    'sessions/new'
+  get     'sessions/create'
+  delete  'sessions/destroy'
+  post    'qcm_dropdown' => 'qcm_dropdown#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

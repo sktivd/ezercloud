@@ -1,6 +1,18 @@
-<h1>Editing User</h1>
+<h1>Editing User <%= @user.name %></h1>
 
-<%= render 'form' %>
+<%= simple_form_for(@user) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :password %>
+    <%= f.input :password_confirmation, label: 'Password confirmation' %>
+    <%= f.input :email, label: 'E-mail', placeholder: 'user@domain.com' %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
 
 <%= link_to 'Show', @user %> |
 <%= link_to 'Back', users_path %>

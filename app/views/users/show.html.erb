@@ -6,8 +6,18 @@
 </p>
 
 <p>
-  <strong>Privileges:</strong>
-  <%= @user.privileges %>
+  <strong>E-mail:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Super User:</strong>
+  <%= @user.privilege_super %>
+</p>
+
+<p>
+  <strong>Reagent Manager:</strong>
+  <%= @user.privilege_reagent %>
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |

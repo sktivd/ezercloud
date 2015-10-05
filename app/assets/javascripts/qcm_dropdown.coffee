@@ -3,10 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 #$('.dropdown-toggle').dropdown()
 
-#$('.dropdown-menu').on 'click', "li a", -> 
+#$('.dropdown-menu').on 'click', 'li a', -> 
 #    $('.btn:first-child').text($(this).text())
 #    $('.btn:first-child').val($(this).text()).append(' <span class="caret"></span>')
-
-#$('.dropdown-menu').on 'click', -> 
-#    $('#btn-title').text($(this).text())
-#    $('#btn-title').val($(this).text()).append(' <span class="caret"></span>')

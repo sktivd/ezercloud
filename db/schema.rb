@@ -110,16 +110,11 @@ ActiveRecord::Schema.define(version: 20150915024409) do
     t.date     "expire"
     t.string   "equipment"
     t.string   "manufacturer"
-    t.string   "reagent_name"
-    t.integer  "reagent_number"
-    t.string   "unit"
-    t.integer  "n_equipment"
-    t.integer  "n_measurement"
     t.float    "mean"
     t.float    "sd"
     t.integer  "reagent_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "quality_control_materials", ["reagent_id"], name: "index_quality_control_materials_on_reagent_id", using: :btree
@@ -128,7 +123,6 @@ ActiveRecord::Schema.define(version: 20150915024409) do
     t.string   "name"
     t.integer  "number"
     t.string   "unit"
-    t.string   "break_points"
     t.integer  "assay_kit_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false

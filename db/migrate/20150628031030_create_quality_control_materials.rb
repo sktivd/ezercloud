@@ -6,11 +6,6 @@ class CreateQualityControlMaterials < ActiveRecord::Migration
       t.date :expire
       t.string :equipment
       t.string :manufacturer
-      t.string :reagent_name
-      t.integer :reagent_number
-      t.string :unit
-      t.integer :n_equipment
-      t.integer :n_measurement
       t.float :mean
       t.float :sd
       t.belongs_to :reagent, index: true, foreign_key: true

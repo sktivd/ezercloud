@@ -70,6 +70,6 @@ class AssayKitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def assay_kit_params
-      params.require(:assay_kit).permit(:equipment, :manufacturer, :device, :kit, {reagents_attributes: [:id, :name, :number, :unit, :break_points, :_destroy]})
+      params.require(:assay_kit).permit(:equipment, :manufacturer, :device, :kit, {reagents_attributes: [:id, :name, :number, :unit, :_destroy]})
     end
 end

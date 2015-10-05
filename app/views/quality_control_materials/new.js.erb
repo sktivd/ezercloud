@@ -1,0 +1,3 @@
+$('#assay_kit-frame').empty().append("<%= escape_javascript(ender partial: 'dropdown', locals: {title: @quality_control_material.equipment || 'Equipment', data: @equipment, label: 'equipment', value: 'equipment', menu_id: 'equipment') -%>")
+$('#assay_kit-frame').empty().append("<%= escape_javascript(ender partial: 'dropdown', locals: {title: @quality_control_material.assay_kit_device || 'AssayKit', data: @assay_kits, label: 'device', value: 'id', menu_id: 'assay_kit') -%>")
+$('#reagent-frame').empty().append("<%= escape_javascript(ender partial: 'dropdown', locals: {title: @quality_control_material.reagent_name || 'Reagent', data: @reagents, label: 'name', value: 'id', menu_id: 'reagent') -%>")
