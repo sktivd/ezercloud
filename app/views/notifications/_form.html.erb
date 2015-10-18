@@ -1,0 +1,15 @@
+<%= simple_form_for(@notification) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :notification_type %>
+    <%= f.input :sent_at %>
+    <%= f.input :notified_at %>
+    <%= f.input :reaction_type %>
+    <%= f.input :content %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

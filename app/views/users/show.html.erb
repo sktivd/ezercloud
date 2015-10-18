@@ -20,5 +20,10 @@
   <%= @user.privilege_reagent %>
 </p>
 
+<p>
+  <strong>Notification Receiver:</strong>
+  <%= @user.privilege_notification %>
+</p>
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

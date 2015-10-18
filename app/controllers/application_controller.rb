@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   
   def authorize
     unless logged_in?
-      redirect_to login_path, method: :get, notice: "Please log in"
+      redirect_to login_path(redirect_to: params), method: :get, notice: "Please log in"
     end
   end
   

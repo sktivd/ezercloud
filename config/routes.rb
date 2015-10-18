@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :notifications
+  resources :reports
   resources :users
   resources :specifications
   resources :error_codes
@@ -12,8 +14,8 @@ Rails.application.routes.draw do
   resources :equipment
 
 #  get    'sessions/new'
-  get     'sessions/create'
-  delete  'sessions/destroy'
+#  get     'sessions/create'
+#  delete  'sessions/destroy'
   post    'qcm_dropdown' => 'qcm_dropdown#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -31,6 +33,14 @@ Rails.application.routes.draw do
 
   # Sidekiq
   mount Sidekiq::Web, at: '/sidekiq'
+
+  #  Letter Opener Web
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+  
+  # Notification response
+  get '/responses/:id', to: 'responses#contact', as: 'response'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

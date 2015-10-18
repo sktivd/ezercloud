@@ -1,0 +1,29 @@
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      New Quality Control material has been tested by <%= @data[:equipment] %>
+    </strong>
+  </h3>
+</div>
+
+<p>
+  <%= @notification.message.sub("\n", "</p><p>").html_safe %>
+</p>
+
+<p>Tested Reagent:</p>
+<ul>
+  <li>Equipment    : <%= @data[:equipment] %></li>
+  <li>Assay Kit    : <%= @data[:assay_kit] %></li>
+  <li>Reagent      : <%= @data[:reagent] %></li>
+  <li>Service Brand: <%= @data[:qc_service] %></li>
+  <li>Lot #        : <%= @data[:qc_lot] %></li>
+</ul>
+
+<p>
+<%= link_to @notification.url, @notification.url %>
+</p>
+
+<p>QCtoolkit,</p>
+<p>SK telecom</p>
+
+<p>This mail is automatically generated. Please do not reply.</p>

@@ -9,9 +9,11 @@ end
 
 class QualityControlMaterial < ActiveRecord::Base
   belongs_to :reagent  
+
   attr_accessor :assay_kit, :lower_3sd, :upper_3sd
   
-  validates :equipment, :assay_kit, :reagent, :service, :lot, :expire, presence: true
+  validates :equipment, :reagent, :service, :lot, :expire, presence: true
+  validates :lot, uniqueness: { scope: [:reagent, :service] }
   validate :expire, :already_expired?
   validates :mean, :sd, presence: true, unless: :threeSD?
   validates :mean, :sd, numericality: true, if: :mean_and_sd?

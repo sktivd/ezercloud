@@ -4,7 +4,7 @@ class FrendsController < ApplicationController
   # GET /frends
   # GET /frends.json
   def index
-    @frends = Frend.all
+    @frends = Frend.order(:created_at).reverse_order
   end
 
   # GET /frends/1
@@ -17,9 +17,9 @@ class FrendsController < ApplicationController
     @frend = Frend.new
   end
 
-  # GET /frends/1/edit
-  def edit
-  end
+#  # GET /frends/1/edit
+#  def edit
+#  end
 
   # POST /frends
   # POST /frends.json
@@ -37,19 +37,19 @@ class FrendsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /frends/1
-  # PATCH/PUT /frends/1.json
-  def update
-    respond_to do |format|
-      if @frend.update(frend_params)
-        format.html { redirect_to @frend, notice: 'Frend was successfully updated.' }
-        format.json { render :show, status: :ok, location: @frend }
-      else
-        format.html { render :edit }
-        format.json { render json: @frend.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+#  # PATCH/PUT /frends/1
+#  # PATCH/PUT /frends/1.json
+#  def update
+#    respond_to do |format|
+#      if @frend.update(frend_params)
+#        format.html { redirect_to @frend, notice: 'Frend was successfully updated.' }
+#        format.json { render :show, status: :ok, location: @frend }
+#      else
+#        format.html { render :edit }
+#        format.json { render json: @frend.errors, status: :unprocessable_entity }
+#      end
+#    end
+#  end
 
   # DELETE /frends/1
   # DELETE /frends/1.json

@@ -1,0 +1,51 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Notifications", notifications_path %></a></li>
+  <li class="active">Detail</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Notifications
+    </strong>
+  </h3>
+  <p>Notification #<%= @notification.id %></p>
+</div>
+
+<p>
+  <strong>Notification reaction:</strong>
+  <%= Notification::RESPONSE[@notification.follow] %>
+</p>
+
+<p>
+  <strong>Tag:</strong>
+  <%= @notification.tag %>
+</p>
+
+<p>
+  <strong>Message:</strong>
+  <%= strip_tags(@notification.message) %>
+</p>
+
+<p>
+  <strong>URL:</strong>
+  <%= @notification.url %>
+</p>
+
+<p>
+  <strong>Sent at:</strong>
+  <%= @notification.sent_at %>
+</p>
+
+<p>
+  <strong>Notified at:</strong>
+  <%= @notification.notified_at %>
+</p>
+
+<p>
+  <strong>Expired at:</strong>
+  <%= @notification.expired_at %>
+</p>
+
+<%= link_to 'Edit', edit_notification_path(@notification) %> |
+<%= link_to 'Back', notifications_path %>

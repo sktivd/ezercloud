@@ -1,0 +1,43 @@
+<% content_for :breadcrumb do %>
+  <li class="active">Notifications</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Notifications
+    </strong>
+  </h3>
+  <p>Notification DB</p>
+</div>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Following</th>
+      <th>Tag</th>
+      <th>Message</th>
+      <th>Notified</th>
+      <th>Expired</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @notifications.each do |notification| %>
+      <tr>
+        <td><%= Notification::RESPONSE[notification.follow] %></td>
+        <td><%= notification.tag %></td> 
+        <td><%= truncate(strip_tags(notification.message), length: 20) %><button type="button" class="btn btn-default btn-lg btn-xs" data-toggle="popover" title="Message" data-content="<%= notification.message %>">F</button></td>
+        <td><%= notification.notified_at %></td>
+        <td><%= notification.expired_at %></td>
+        <td><%= link_to 'Detail', notification %></td>
+        <td><%= link_to 'Destroy', notification, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Notification', new_notification_path %>

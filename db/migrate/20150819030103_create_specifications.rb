@@ -10,7 +10,7 @@ class CreateSpecifications < ActiveRecord::Migration
       t.float :imprecision
       t.float :inaccuracy
       t.float :allowable_total_error
-      t.belongs_to :reagent, index: true
+      t.belongs_to :reagent, index: true, foreign_key: true
 
       t.timestamps null: false
     end

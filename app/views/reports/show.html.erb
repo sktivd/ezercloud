@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Equipment:</strong>
+  <%= @report.equipment %>
+</p>
+
+<p>
+  <strong>Serial number:</strong>
+  <%= @report.serial_number %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @report.date %>
+</p>
+
+<p>
+  <strong>Reagent:</strong>
+  <%= @report.reagent %>
+</p>
+
+<%= link_to 'Edit', edit_report_path(@report) %> |
+<%= link_to 'Back', reports_path %>

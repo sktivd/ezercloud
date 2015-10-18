@@ -30,15 +30,22 @@
             <li><%= link_to "Assay Kits", assay_kits_path %></li>
             <li><%= link_to "QC materials", quality_control_materials_path %></li>
             <li><%= link_to "Equipment", equipment_index_path %></li>
-            <li><%= link_to "Laboratories", laboratories_path %></li>
+            <li><%= link_to "Reports", reports_path %></li>
+          </ul>
+          <ul class="nav navbar-nav">
+            <% if administrator? %>
+              <li><%= link_to "Laboratories", laboratories_path %></li>
+              <li><%= link_to "Notifications", notifications_path %></li>
+              <li><%= link_to "Administrations", users_path %></li>            
+            <% elsif current_user %>
+              <li><%= link_to "Management", user_path(current_user) %></li>
+            <% end %>
           </ul>
           <% if logged_in? %>
             <div class= "nav navbar-nav navbar-right">
-              <div class="btn-group" role="group" aria-label="logged_in">
-                <button type = "button" class="btn btn-default navbar-btn btn-xs"><%= current_user.name -%></button>
-                <div class="btn-group" role="group">
-                <%= button_to "sign out", {action: "destroy", controller: "sessions"}, {class: "btn btn-default navbar-btn btn-xs inline-form", method: :delete} -%>
-                </div>
+              <div class="btn-group btn-group-xs" role="group" aria-label="logged_in">
+                <button type = "button" class="btn btn-default navbar-btn"><%= current_user.name -%></button>
+                <%= link_to "sign out", logout_path, { class: "btn btn-default btn-xs navbar-btn active", role: "button", method: :delete } -%>
               </div>
             </div>
           <% end %>
@@ -63,7 +70,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p>Copyright 2015-2015 <a href="http://sktelecom.com/en/index_real.html">SK telecom</a> & <a href="http://nanoentek.com">NanoEnTek</a> </p>
+      <p>Copyright 2015-2015 <a href="http://sktelecom.com/en/index_real.html">SK telecom</a></p>
       <ul class="footer-links">
         <li><a href="http://nanoentek.com/product.php?id=4">FREND</a></li>
         <li class="muted">·</li>

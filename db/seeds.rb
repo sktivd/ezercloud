@@ -9,6 +9,7 @@
 # Desirable Biological Variation Database specifications: https://www.westgard.com/biodatabase1.htm
 
 u = User.create(name: "admin", password: "11112222", privilege_super: true)
+#u = User.create(name: "reagent", password: "22221111", privilege_reagent: true)
 
 s = Specification.create(specimen: "Serum", analyte: "11-Desoxycortisol", papers: 2, cv_i: 21.3, cv_g: 31.5, imprecision: 10.7, inaccuracy: 9.5, allowable_total_error: 27.1)
 s = Specification.create(specimen: "Serum", analyte: "17-Hydroxyprogesterone", papers: 2, cv_i: 19.6, cv_g: 50.4, imprecision: 9.8, inaccuracy: 13.5, allowable_total_error: 29.7)
@@ -405,12 +406,27 @@ q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40882', expire:
 q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40883', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 25, sd: 0)
 
 a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "BNP", kit: 19)
-r = a.reagents.create(name: 'BNP', number: 19, unit: 'NA')
+r = a.reagents.create(name: 'BNP', number: 19, unit: 'pg/mL')
 
 a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: 'Cardiac Triple', kit: 15)
-r = a.reagents.create(name: 'Myoglobin', number: 14, unit: 'NA')
-r = a.reagents.create(name: 'Troponin I', number: 12, unit: 'NA')
-r = a.reagents.create(name: 'CK-MB', number: 13, unit: 'NA')
+r = a.reagents.create(name: 'Troponin I', number: 12, unit: 'ng/mL')
+r = a.reagents.create(name: 'CK-MB', number: 13, unit: 'ng/mL')
+r = a.reagents.create(name: 'Myoglobin', number: 14, unit: 'ng/mL')
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "Testosterone", kit: 35)
+r = a.reagents.create(name: 'Testosterone', number: 35, unit: 'ng/mL')
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "Free T4", kit: 41)
+r = a.reagents.create(name: 'Free T4', number: 41, unit: 'ng/dL')
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "T3", kit: 42)
+r = a.reagents.create(name: 'T3', number: 42, unit: 'ng/mL')
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "Vitamin D", kit: 50)
+r = a.reagents.create(name: 'Vitamin D', number: 50, unit: 'ng/mL')
+
+a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "PCT", kit: 60)
+r = a.reagents.create(name: 'PCT', number: 60, unit: 'ng/mL')
 
 # Labaoratories
 l = Laboratory.create(ip_address: '127.0.0.1', equipment: 'FREND', kit: 30)

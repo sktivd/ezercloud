@@ -1,0 +1,46 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Assay Kits", assay_kits_path %></li>
+  <li class="active">QC reports</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      QC repots measured by QC materials for all Equipments
+    </strong>
+  </h3>
+  <p>Here you'll see QC reports measured by QC materials for all equipments.</p>
+</div>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Equipment</th>
+      <th>Serial number</th>
+      <th>Assay Kit</th>
+      <th>Reagent</th>
+      <th>Date</th>
+      <th>Transmitted</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @reports.each do |report| %>
+      <tr>
+        <td><%= report.equipment %></td>
+        <td><%= report.serial_number %></td>
+        <td><%= AssayKit.find(report.reagent.assay_kit_id).device %></td>
+        <td><%= report.reagent.name %></td>
+        <td><%= report.date %></td>
+        <td><%= report.transmitted_at %></td>
+        <td><%= button_to "Download", report.document.url, class: "btn btn-default btn-xs", method: :get %></td>
+        <td><%= link_to 'Remove', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Report', new_report_path %>

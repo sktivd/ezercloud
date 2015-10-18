@@ -36,7 +36,7 @@
       <tr>
         <td><%= diagnosis.equipment %></td>
         <td><%= diagnosis.order_number %></td>
-        <td><%= diagnosis.measured_at %></td>
+        <td><%= diagnosis.measured_at.to_date %></td>
         <td><%= diagnosis.ip_address %></td>
         <td><%= diagnosis.location %></td>
         <td><%= diagnosis.created_at %></td>

@@ -2,7 +2,7 @@ class QualityControlMaterialsController < ApplicationController
   before_action only: [:new, :create, :update, :edit] do
     allow_only_to :reagent
   end
-  before_action :set_quality_control_material, only: [:show, :edit, :update, :destroy]
+  before_action :set_quality_control_material, only: [:edit, :update, :destroy]
 
   # GET /quality_control_materials
   # GET /quality_control_materials.json
@@ -18,9 +18,13 @@ class QualityControlMaterialsController < ApplicationController
   # GET /quality_control_materials/new
   def new
     @quality_control_material = QualityControlMaterial.new
-    session[:qcm_equipment] = nil
-    session[:qcm_assay_kit] = nil
-    session[:qcm_reagent]   = nil
+    if params[:quality_control_material]
+      @quality_control_material.assign_attributes(quality_control_material_params)
+    end
+    
+    session[:qcm_equipment] = @quality_control_material.equipment if @quality_control_material.equipment
+    session[:qcm_assay_kit] = @quality_control_material.assay_kit if @quality_control_material.assay_kit
+    session[:qcm_reagent]   = @quality_control_material.reagent_id if @quality_control_material.reagent_id
   end
 
   # GET /quality_control_materials/1/edit
@@ -81,7 +85,7 @@ class QualityControlMaterialsController < ApplicationController
       
       session[:qcm_equipment] = @quality_control_material.equipment
       session[:qcm_assay_kit] = @quality_control_material.assay_kit
-      session[:qcm_reagent]   = @quality_control_material.reagent.id
+      session[:qcm_reagent]   = @quality_control_material.reagent_id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

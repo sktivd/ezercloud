@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.4'
 ## Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use postgresql as the database for Active Record
@@ -15,6 +14,9 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
+
+# multipart post
+gem 'multipart-post'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -35,11 +37,16 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
-# Use Capistrano for deployment
-gem 'capistrano-rails', group: :development
+# Mailer
+gem 'letter_opener_web', '~> 1.2.0', :group => :development
+gem 'premailer-rails'
+gem 'nokogiri'
 
 gem 'json'
 gem 'thin'
+
+# Image & PDF File management
+gem 'paperclip', '~> 4.3'
 
 gem 'distribution'
 

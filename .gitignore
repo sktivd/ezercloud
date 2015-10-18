@@ -21,3 +21,6 @@
 
 # PDF generated files
 /report/PDF/*
+
+# Public Assets
+/public/assets/*

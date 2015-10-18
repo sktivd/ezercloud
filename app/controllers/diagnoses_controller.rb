@@ -2,9 +2,6 @@ class DiagnosesController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
   skip_before_action :authorize, only: [:create]
-  after_filter do
-    puts @error_msg
-  end
 
   before_action :set_diagnosis, only: [:show, :edit, :update, :destroy]
 
@@ -24,9 +21,9 @@ class DiagnosesController < ApplicationController
     @diagnosis = Diagnosis.new
   end
 
-  # GET /diagnoses/1/edit
-  def edit
-  end
+#  # GET /diagnoses/1/edit
+#  def edit
+#  end
 
   # JSON only
   # POST /diagnoses.json
@@ -45,6 +42,8 @@ class DiagnosesController < ApplicationController
 #          if @equipment.test_type = 1 and @equipment.processed and Laboratory.find_by(equipment: @diagnosis.equipment, ip_address: @diagnosis.ip_address, kit: @equipment.kit)
 #            ReagentManagementWorker.perform_async name: params[:equipment], id: @equipment.id, kit: @equipment.kit, service: @equipment.qc_service, lot: @equipment.qc_lot, expire: @equipment.qc_expire
 #          end
+          @equipment.notification
+          
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
           format.json { render :created, status: :created, location: @diagnosis }
         else
@@ -59,19 +58,19 @@ class DiagnosesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /diagnoses/1
-  # PATCH/PUT /diagnoses/1.json
-  def update
-    respond_to do |format|
-      if @diagnosis.update(diagnosis_params)
-        format.html { redirect_to @diagnosis, notice: 'Diagnosis was successfully updated.' }
-        format.json { render :show, status: :ok, location: @diagnosis }
-      else
-        format.html { render :edit }
-        format.json { render json: @diagnosis.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+#  # PATCH/PUT /diagnoses/1
+#  # PATCH/PUT /diagnoses/1.json
+#  def update
+#    respond_to do |format|
+#      if @diagnosis.update(diagnosis_params)
+#        format.html { redirect_to @diagnosis, notice: 'Diagnosis was successfully updated.' }
+#        format.json { render :show, status: :ok, location: @diagnosis }
+#      else
+#        format.html { render :edit }
+#        format.json { render json: @diagnosis.errors, status: :unprocessable_entity }
+#      end
+#    end
+#  end
 
   # DELETE /diagnoses/1
   # DELETE /diagnoses/1.json
@@ -96,7 +95,7 @@ class DiagnosesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
-      if params[:diagnosis] #and authenticated?
+      if params[:diagnosis] and authenticated?
         params[:diagnosis][:measured_at] = measured_time 
         params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
       end

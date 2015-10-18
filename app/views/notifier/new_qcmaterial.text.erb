@@ -1,0 +1,17 @@
+New Quality Control material has been tested by <%= @data[:equipment] %>
+
+<%= strip_tags(@notification.message) %>
+
+### Tested Reagent
+Equipment    : <%= @data[:equipment] %>
+Assay Kit    : <%= @data[:assay_kit] %>
+Reagent      : <%= @data[:reagent] %>
+Service Brand: <%= @data[:qc_service] %>
+Lot #        : <%= @data[:qc_lot] %>
+
+<%= @notification.url %>
+
+QCtoolkit,
+SK telecom
+
+This mail is automatically generated. Please do not reply.

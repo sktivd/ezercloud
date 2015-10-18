@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html { redirect_to users_url, notice: 'User was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -73,15 +73,12 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :password, :password_confirmation, :email, :privilege_super, :privilege_reagent)
+      params.require(:user).permit(:name, :password, :password_confirmation, :email, :privilege_super, :privilege_reagent, :privilege_notification)
     end
     
     def match_user
-#      if not administrator? and current_user.id != session[:user_id]
       unless administrator? or current_user.id == @user.id
-        STDERR.puts "merong"
         redirect_to diagnoses_path, notice: "Inaccessible!"
       end
-      STDERR.puts "merong2"
     end
 end

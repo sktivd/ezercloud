@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915024409) do
+ActiveRecord::Schema.define(version: 20151012094955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,24 @@ ActiveRecord::Schema.define(version: 20150915024409) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "follow",             default: 0,                     null: false
+    t.string   "authentication_key",                                 null: false
+    t.string   "tag",                                                null: false
+    t.text     "url"
+    t.text     "message"
+    t.text     "data"
+    t.string   "mailer"
+    t.datetime "sent_at"
+    t.datetime "notified_at"
+    t.datetime "expired_at",         default: '2015-10-19 13:55:18', null: false
+    t.integer  "user_id",                                            null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+  end
+
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
+
   create_table "quality_control_materials", force: :cascade do |t|
     t.string   "service"
     t.string   "lot"
@@ -130,6 +148,22 @@ ActiveRecord::Schema.define(version: 20150915024409) do
 
   add_index "reagents", ["assay_kit_id"], name: "index_reagents_on_assay_kit_id", using: :btree
 
+  create_table "reports", force: :cascade do |t|
+    t.string   "equipment"
+    t.string   "serial_number"
+    t.date     "date"
+    t.datetime "transmitted_at"
+    t.integer  "reagent_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.string   "document_file_name"
+    t.string   "document_content_type"
+    t.integer  "document_file_size"
+    t.datetime "document_updated_at"
+  end
+
+  add_index "reports", ["reagent_id"], name: "index_reports_on_reagent_id", using: :btree
+
   create_table "specifications", force: :cascade do |t|
     t.string   "specimen"
     t.string   "analyte"
@@ -151,13 +185,17 @@ ActiveRecord::Schema.define(version: 20150915024409) do
     t.string   "name"
     t.string   "password_digest"
     t.string   "email"
-    t.boolean  "privilege_super",   default: false
-    t.boolean  "privilege_reagent", default: false
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.boolean  "privilege_super",        default: false
+    t.boolean  "privilege_reagent",      default: false
+    t.boolean  "privilege_notification", default: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   add_foreign_key "error_codes", "equipment"
+  add_foreign_key "notifications", "users"
   add_foreign_key "quality_control_materials", "reagents"
   add_foreign_key "reagents", "assay_kits"
+  add_foreign_key "reports", "reagents"
+  add_foreign_key "specifications", "reagents"
 end

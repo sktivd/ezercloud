@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  notification_type: MyString
+  sent_at: MyString
+  notified_at: MyString
+  reaction_type: MyString
+  content: MyText
+
+two:
+  notification_type: MyString
+  sent_at: MyString
+  notified_at: MyString
+  reaction_type: MyString
+  content: MyText
