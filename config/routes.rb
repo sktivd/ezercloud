@@ -31,11 +31,11 @@ Rails.application.routes.draw do
     delete  'logout'  => :destroy
   end
 
-  # Sidekiq
-  mount Sidekiq::Web, at: '/sidekiq'
-
-  #  Letter Opener Web
   if Rails.env.development?
+    # Sidekiq monitoring
+    mount Sidekiq::Web, at: '/sidekiq'
+
+    #  Letter Opener Web
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
   

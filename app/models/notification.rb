@@ -18,9 +18,11 @@ class Notification < ActiveRecord::Base
   end
   
   def set_url path, method, parameters
-    query = Rack::Utils.build_nested_query({authentication_key: authentication_key, path: path, method: method.to_s}.merge(parameters))
-    uri = URI::HTTP.new(SCHEME, nil, HOSTNAME, PORT, nil, "/responses/" + id.to_s, nil, query, nil)
-    self.url = uri.to_s    
+    if path and method
+      query = Rack::Utils.build_nested_query({authentication_key: authentication_key, path: path, method: method.to_s}.merge(parameters))
+      uri = URI::HTTP.new(SCHEME, nil, HOSTNAME, PORT, nil, "/responses/" + id.to_s, nil, query, nil)
+      self.url = uri.to_s    
+    end
   end
   
   def parameters
@@ -32,7 +34,6 @@ class Notification < ActiveRecord::Base
   end
     
   def email
-    Notifier.send(mailer.to_sym, self).deliver_now
-    self.update(sent_at: DateTime.now)
+    NotificationEmailWorker.perform_async(id: id)
   end  
 end

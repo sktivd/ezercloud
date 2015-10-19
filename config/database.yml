@@ -43,5 +43,6 @@ test:
 
 production:
   <<: *default
-  database: skynet_production
-  password: skynet_qc_ezercloud
+  database: <%= ENV['POSTGRES_DATABASE'] %>
+  username: <%= ENV['POSTGRES_USERNAME'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>

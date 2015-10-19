@@ -429,10 +429,10 @@ a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "PCT"
 r = a.reagents.create(name: 'PCT', number: 60, unit: 'ng/mL')
 
 # Labaoratories
-l = Laboratory.create(ip_address: '127.0.0.1', equipment: 'FREND', kit: 30)
-l = Laboratory.create(ip_address: '127.0.0.1', equipment: 'FREND', kit: 40)
+l = Laboratory.create(ip_address: '211.210.64.61', equipment: 'FREND', kit: 30)
 l = Laboratory.create(ip_address: '211.210.64.61', equipment: 'FREND', kit: 40)
-l = Laboratory.create(ip_address: '211.210.64.61', equipment: 'FREND', kit: 40)
+l = Laboratory.create(ip_address: '58.226.94.194', equipment: 'FREND', kit: 30)
+l = Laboratory.create(ip_address: '58.226.94.194', equipment: 'FREND', kit: 40)
 
 # Error codes for FREND
 

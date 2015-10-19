@@ -14,9 +14,9 @@ class ResponsesController < ApplicationController
     else
       redirect_to the_path.merge(params.except(:controller, :action, :id, :method)), method: method, notice: "Already notified item"
     end
-#  rescue
-#    @notification.update(expired_at: DateTime.now)
-#    redirect_to root_path, notice: "Wrong controller/action!"
+  rescue
+    @notification.update(expired_at: DateTime.now)
+    redirect_to root_path, notice: "Wrong controller/action!"
   end
   
   private
