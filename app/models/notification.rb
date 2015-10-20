@@ -8,7 +8,7 @@ class Notification < ActiveRecord::Base
   
   if Rails.env == 'production'
     SCHEME = 'https'
-    HOSTNAME = 'https://qc.ezercloud.com'
+    HOSTNAME = 'qc.ezercloud.com'
     PORT = nil
   else
     SCHEME = 'http'
