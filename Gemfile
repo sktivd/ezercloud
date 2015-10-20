@@ -48,6 +48,10 @@ gem 'thin'
 # Image & PDF File management
 gem 'paperclip', '~> 4.3'
 
+# Pagenation
+#gem 'will_paginate'
+gem 'kaminari'
+
 gem 'distribution'
 
 #background worker

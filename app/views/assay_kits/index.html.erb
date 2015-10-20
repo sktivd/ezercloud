@@ -11,27 +11,45 @@
   <p>Here you'll see information of assay kits for all equipments.</p>
 </div>
 
-<table>
+<table class="table table-stripe table-hover">
   <thead>
     <tr>
-      <th>Equipment</th>
+      <th><a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" aria-controls="collapse">Equipment</a></th>
       <th>Manufacturer</th>
       <th>Device</th>
       <th>Kit</th>
       <th colspan="3"></th>
     </tr>
+    <tr id="collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading">
+      <th colspan="2"></th>
+      <th>Reagent name</th>
+      <th>Number</th>
+      <th>Unit</th>
+      <th colspan="2"></th>
+    </tr>
   </thead>
-
   <tbody>
     <% @assay_kits.each do |assay_kit| %>
       <tr>
-        <td><%= assay_kit.equipment %></td>
+        <td><a role="button" data-toggle="collapse" class="collapser" href="<%= "#collapse_" + assay_kit.id.to_s %>" aria-expanded="false" aria-controls="<%= "collapse_" + assay_kit.id.to_s %>"><%= assay_kit.equipment %></a></td>
         <td><%= assay_kit.manufacturer %></td>
         <td><%= assay_kit.device %></td>
         <td><%= assay_kit.kit %></td>
-        <td><%= link_to 'Show', assay_kit %></td>
-        <td><%= link_to 'Edit', edit_assay_kit_path(assay_kit) %></td>
-        <td><%= link_to 'Destroy', assay_kit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td></td>
+        <% if administrator? %>
+          <td><%= link_to 'Edit', edit_assay_kit_path(assay_kit) %></td>
+          <td><%= link_to 'Destroy', assay_kit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+      <% assay_kit.reagents.each do |reagent| %>
+        <tr class="collapse in" aria-labelledby="<%= "heading_" + assay_kit.id.to_s%>" other-target="<%= "collapse_" + assay_kit.id.to_s%>">
+          <td colspan="2"></td>
+          <td><%= reagent.name %></td>
+          <td><%= reagent.number %></td>
+          <td><%= reagent.unit %></td>
+          <td colspan="2"></td>
+        </tr>
+      <% end %>
       </tr>
     <% end %>
   </tbody>

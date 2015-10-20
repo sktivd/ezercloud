@@ -13,12 +13,12 @@ class Frend < ActiveRecord::Base
   validates :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calculated_ratio_test, :internal_qc_test, presence: true, if: :internal_qc? 
 
   def test_names
-    test_id.split(":").map { |value| Reagent.find_by(number: value).name if value and value != "0" }.compact
+    test_id.split(":", 3).map { |value| Reagent.find_by(number: value).name if value and value != "" and value != "0" }.compact
   end
   
   def test_values
     available_id = test_id.split(":")
-    test_result.split(":").map.with_index { |value, index| "%.2f" % value.to_f if available_id[index] and available_id[index] != "0" }.compact
+    test_result.split(":", 3).map.with_index { |value, index| "%.2f" % value.to_f if available_id[index] and available_id[index] != "" and available_id[index] != "0" }.compact
   end
  
   def notification    

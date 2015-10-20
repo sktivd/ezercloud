@@ -1,4 +1,7 @@
 class AssayKitsController < ApplicationController
+  before_action only: [:new, :create, :update, :edit, :destroy] do
+    allow_only_to :super
+  end
   before_action :set_assay_kit, only: [:show, :edit, :update, :destroy]
 
   # GET /assay_kits

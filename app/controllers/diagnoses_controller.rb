@@ -2,13 +2,16 @@ class DiagnosesController < ApplicationController
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
   skip_before_action :authorize, only: [:create]
+  before_action only: [:new, :update, :edit, :destroy] do
+    allow_only_to :super
+  end
 
   before_action :set_diagnosis, only: [:show, :edit, :update, :destroy]
 
   # GET /diagnoses
   # GET /diagnoses.json
   def index
-    @diagnoses = Diagnosis.order(:created_at).reverse_order
+    @diagnoses = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
   end
 
   # GET /diagnoses/1

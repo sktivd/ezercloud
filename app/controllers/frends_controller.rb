@@ -1,10 +1,13 @@
 class FrendsController < ApplicationController
+  before_action only: [:new, :update, :edit, :destroy] do
+    allow_only_to :super
+  end
   before_action :set_frend, only: [:show, :edit, :update, :destroy]
 
   # GET /frends
   # GET /frends.json
   def index
-    @frends = Frend.order(:created_at).reverse_order
+    @frends = Frend.order(:created_at).reverse_order.page(params[:page]).per(20)
   end
 
   # GET /frends/1

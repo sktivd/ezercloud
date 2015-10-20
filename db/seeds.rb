@@ -428,6 +428,9 @@ r = a.reagents.create(name: 'Vitamin D', number: 50, unit: 'ng/mL')
 a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "PCT", kit: 60)
 r = a.reagents.create(name: 'PCT', number: 60, unit: 'ng/mL')
 
+a = AssayKit.create(equipment: 'FREND', manufacturer: "NanoEnTek", device: "QC", kit: 11)
+r = a.reagents.create(name: 'QC', number: 11, unit: 'NA')
+
 # Labaoratories
 l = Laboratory.create(ip_address: '211.210.64.61', equipment: 'FREND', kit: 30)
 l = Laboratory.create(ip_address: '211.210.64.61', equipment: 'FREND', kit: 40)
