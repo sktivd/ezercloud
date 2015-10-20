@@ -6,12 +6,15 @@ class Notification < ActiveRecord::Base
   TYPES = { notice: 0, response: 1, undefined: 99 }
   RESPONSE = ["Notice", "Response", "Undefined"]
   
-  # SCHEME = 'https'
-  # HOSTNAME = 'https://qc.ezercloud.com'
-  # PORT = nil
-  SCHEME = 'http'
-  HOSTNAME = '127.0.0.1'
-  PORT = 3000
+  if Rails.env == 'production'
+    SCHEME = 'https'
+    HOSTNAME = 'https://qc.ezercloud.com'
+    PORT = nil
+  else
+    SCHEME = 'http'
+    HOSTNAME = '127.0.0.1'
+    PORT = 3000
+  end
   
   def uri
     URI.parse(url)

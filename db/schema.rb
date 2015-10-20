@@ -105,19 +105,19 @@ ActiveRecord::Schema.define(version: 20151012094955) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.integer  "follow",             default: 0,                     null: false
-    t.string   "authentication_key",                                 null: false
-    t.string   "tag",                                                null: false
+    t.integer  "follow",             default: 0, null: false
+    t.string   "authentication_key",             null: false
+    t.string   "tag",                            null: false
     t.text     "url"
     t.text     "message"
     t.text     "data"
     t.string   "mailer"
     t.datetime "sent_at"
     t.datetime "notified_at"
-    t.datetime "expired_at",         default: '2015-10-19 13:55:18', null: false
-    t.integer  "user_id",                                            null: false
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "expired_at",                     null: false
+    t.integer  "user_id",                        null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
