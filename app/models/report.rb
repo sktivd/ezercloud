@@ -18,8 +18,11 @@ class Report < ActiveRecord::Base
   private
   
   def registered_equipment?
-    if Equipment.find_by(equipment: equipment).nil?
+    @equipment = Equipment.find_by(equipment: equipment)
+    if @equipment.nil?
       errors.add(:equipment, "unregistered equipment")
+    elsif Object.const_get(@equipment.klass).find_by(serial_number: serial_number).nil?
+      errors.add(:serial_number, "unknown equipment")
     end
   end
   

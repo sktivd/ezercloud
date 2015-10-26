@@ -37,14 +37,12 @@
               <li><%= link_to "Laboratories", laboratories_path %></li>
               <li><%= link_to "Notifications", notifications_path %></li>
               <li><%= link_to "Administrations", users_path %></li>            
-            <% elsif current_user %>
-              <li><%= link_to "Management", user_path(current_user) %></li>
             <% end %>
           </ul>
           <% if logged_in? %>
             <div class= "nav navbar-nav navbar-right">
               <div class="btn-group btn-group-xs" role="group" aria-label="logged_in">
-                <button type = "button" class="btn btn-default navbar-btn"><%= current_user.name -%></button>
+                <%= link_to current_user.name, user_path(current_user), { class: "btn btn-default btn-xs navbar-btn", role: "button" } -%>
                 <%= link_to "sign out", logout_path, { class: "btn btn-default btn-xs navbar-btn active", role: "button", method: :delete } -%>
               </div>
             </div>
