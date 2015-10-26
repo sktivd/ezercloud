@@ -114,113 +114,6 @@ generate.frame.withtitle <- function(contents, title, subtitles = "", footnote =
     z
 }
 
-#generate.thismonth.qc <- function(object, prefix, qc.information, whole, reference, ...) {
-#    # comparative statistics
-#    qcstat1.w <- get.qcstat1(whole, object)
-#    qcstat2.w <- get.qcstat2(whole, object)
-#    qcstat1.r <- get.qcstat1(reference, object)
-#    qcstat2.r <- get.qcstat2(reference, object)
-#    
-#    o <- object[order(paste(object$qc_service, object$qc_lot, format(object$measured_at, "%F %X"))), ]
-#    o$.bs <- paste(o$qc_service, o$qc_lot, sep = "#")
-#    z <- NULL
-#    
-#    # equipment title
-#    z <- c(z,
-#        "\\blank[2*big]", 
-#        paste("\\framedtext{\\ss\\tfa ", serial, "}", sep = ""), 
-#        "\\blank[big]")
-#    # history table
-#    z <- c(z,
-#        "% HISTORY TABLE START", 
-#        "\\bTABLE[setups={table:history}, split=repeat]", 
-#        "\\bTABLEhead", 
-#        "\\bTR \\bTD Date \\eTD \\bTD Time \\eTD \\bTD Service \\eTD \\bTD Lot \\eTD \\bTD 3SD Range \\eTD \\bTD [aligncharacter=no, align={middle,lohi}] ", qc.information$unit[1], " \\eTD \\bTD QC status \\eTD \\bTD Tech. \\eTD \\eTR", 
-#        "\\eTABLEhead", 
-#        "\\bTABLEbody")        
-#    for (n in 1:nrow(e)) {
-#        tt <- sprintf("\\bTR \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\eTR", 
-#            format(o$measured_at[n], "%m-%d"), 
-#            format(o$measured_at[n], "%H:%M"),
-#            o$qc_service[n],
-#            o$qc_lot[n],
-#            o$.threesd.range[n],
-#            switch(as.integer(o$processed[n]) + 1, paste("[aligncharacter=no, align={middle,lohi}] ", o$error_code[n], sep = ""), formatC(o$.result[n], digits = 2, format = 'f')), 
-#            switch(as.integer(o$processed[n]) + 1, "NA", switch(as.integer(abs(o$.result.std[n]) < 3) + 1, "X", "O")),
-#            o$technician[n])
-#        z <- c(z, 
-#            sprintf("\\bTR \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\bTD %s \\eTD \\eTR", 
-#                format(o$measured_at[n], "%m-%d"), 
-#                format(o$measured_at[n], "%H:%M"),
-#                o$qc_service[n],
-#                o$qc_lot[n],
-#                o$.threesd.range[n],
-#                switch(as.integer(o$processed[n]) + 1, paste("[aligncharacter=no, align={middle,lohi}] ", o$error_code[n], sep = ""), formatC(o$.result[n], digits = 2, format = 'f')), 
-#                switch(as.integer(o$processed[n]) + 1, "NA", switch(as.integer(abs(o$.result.std[n]) < 3) + 1, "X", "O")),
-#                o$technician[n]))
-#        }
-#        z <- c(z, 
-#            "\\eTABLEbody",  
-#            "\\eTABLE", 
-#            "% HISTORY TABLE STOP")
-#        
-#        # spc plot
-#        pdf(file = paste(prefix, "-monthspc-", serial, ".pdf", sep = ""), width = 4, height = 4)
-#        grid.draw(spc.plot(y = .result.std, date = measured_at, lot = qc_lot, data = e, ...))
-#        dev.off()
-#        # linearity plot
-#        pdf(file = paste(prefix, "-monthlinear-", serial, ".pdf", sep = ""), width = 4, height = 4)
-#        grid.draw(linearity.plot(y = .result, x = qc.mean, error = qc.sd, data = e, breaks = sapply(strsplit(qc.information$break_points[1], ",")[[1]], as.numeric), ...))
-#        dev.off()
-#        z <- c(z, 
-#            "% SPC GRAPH START",
-#            paste("\\placefigure[center,here,none][fig:", serial, "-spclinear]{}", sep = ""),
-#            "{\\startcombination[2*1]",
-#            paste("{\\externalfigure[", paste(prefix, "-monthspc-", serial, ".pdf", "][width=.4\\hsize]}{}", sep = ""), sep = ""), 
-#            paste("{\\externalfigure[", paste(prefix, "-monthlinear-", serial, ".pdf", "][width=.4\\hsize]}{}", sep = ""), sep = ""), 
-#            "\\stopcombination}",
-#            "%\\blank[2*big]",
-#            "% SPC GRAPH STOP",
-#            "\\page[yes]")
-#        
-#        # qc statistic (precision & linearity)
-#        qc.summary1 <- get.qcstat(e)
-#        qc.summary2 <- list(r2 = cor(log(o$qc.mean), log(o$.result), use = "complete"))
-#        z <- c(z, 
-#            "% SUMMARY STATISTICS TABLE START",
-#            "\\bTABLE[setups={table:summaryframe}, split=yes]")
-#            for (l in 1:length(qc.summary1)) {
-#                qc.sum <- data.frame(sdi = c(qc.summary1[[l]]["sdi"], qc.summary1.w[[l]]["sdi"], qc.summary1.p[[l]]["sdi"]), cvr = c(qc.summary1[[l]]["cvr"], qc.summary1.w[[l]]["cvr"], qc.summary1.p[[l]]["cvr"]), shape = as.factor(1:3))
-#                pdf(file = paste(prefix, "-month_sdi_cvr-", serial, "-", l,".pdf", sep = ""), width = 4, height = 4)
-#                grid.draw(sdi_cvr.plot(sdi, cvr, shape, qc.sum))
-#                dev.off()
-#                z <- c(z,
-#                    "\\bTR \\bTD {\\startcombination[2*1]",
-#                    "{\\bTABLE[setups={table:summary}, style=\\tfx\\ss] \\bTR \\eTR",
-#                    paste("\\bTR \\bTD[nc=5, background=color, backgroundcolor=titlebackgroundcolor] ", names(qc.summary1)[l]," \\eTD \\eTR", sep = ""),
-#                    "\\bTR \\bTD \\eTD \\bTD \\eTD \\bTD \\eTD \\bTD whole \\eTD \\bTD reference \\eTD \\eTR",
-#                    paste("\\bTR \\bTD \\eTD \\bTD N \\eTD \\bTD ", formatC(qc.summary1[[l]]["n"], digits = 2), " \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["n"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["n"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    paste("\\bTR \\bTD \\eTD \\bTD Labs \\eTD \\bTD . \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["nlabs"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["nlabs"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    paste("\\bTR \\bTD \\eTD \\bTD Mean \\eTD \\bTD ", formatC(qc.summary1[[l]]["mean"], digits = 2), " \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["mean"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["mean"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    paste("\\bTR \\bTD \\eTD \\bTD SD \\eTD \\bTD ", formatC(qc.summary1[[l]]["sd"], digits = 2), " \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["sd"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["sd"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    paste("\\bTR \\bTD \\eTD \\bTD Bias \\eTD \\bTD ", formatC(qc.summary1[[l]]["bias"], digits = 2), " \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["bias"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["bias"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    paste("\\bTR \\bTD \\eTD \\bTD CV \\eTD \\bTD ", formatC(qc.summary1[[l]]["cv"], digits = 2), " \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["cv"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["cv"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    paste("\\bTR \\bTD \\eTD \\bTD SDI \\eTD \\bTD ", formatC(qc.summary1[[l]]["sdi"], digits = 2), " \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["sdi"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["sdi"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    paste("\\bTR \\bTD \\eTD \\bTD CVR \\eTD \\bTD ", formatC(qc.summary1[[l]]["cvr"], digits = 2), " \\eTD \\bTD ", formatC(qc.summary1.w[[l]]["cvr"], digits = 2), " \\eTD \\bTD", formatC(qc.summary1.p[[l]]["cvr"], digits = 2), " \\eTD \\eTR", sep = ""),
-#                    "\\bTR \\eTR",
-#                    "\\eTABLE}{}",
-#                    paste("{\\externalfigure[", paste(prefix, "-month_sdi_cvr-", serial, "-", l,".pdf", sep = ""), "][width=.25\\hsize]}{}", sep = ""),
-#                    "\\stopcombination} \\eTD \\eTR")
-#            }
-#        z <- c(z, 
-#            "\\eTABLE")
-#        
-#        z <- c(z, 
-#            "\\page[yes]")
-#    }
-#    write.table(z, file = paste(prefix, "-month.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n")
-#}
-
 generate.graph.thismonth.internal <- function(object, prefix, ...) {
     object <- object[order(format(object$measured_at, "%F %X")), ]    
 
@@ -449,7 +342,7 @@ generate.graph.thisyear.history.qc <- function(object, prefix, qc.information, w
 
 # method: database - imprecision & inaccuracy suggested from database
 # method: adaptive - imprecision & inaccuracy computed on whole data
-generate.graph.thisyear.quality.qc <- function(object, prefix, qc.information, whole, reference, method = "database", ...) {
+generate.graph.thisyear.quality.qc <- function(object, prefix, qc.information, whole, reference, method = "adaptive", ...) {
     object <- object[order(format(object$measured_at, "%F %X")), ]    
     object$.date.lot <- paste(format(object$measured_at, "%Y%m"), object$qc_lot, paste = ":")
 
@@ -457,12 +350,14 @@ generate.graph.thisyear.quality.qc <- function(object, prefix, qc.information, w
     opspecs <- get.qcstat5(object)
     
     if (method != "adaptive" || missing(whole)) {
-        inaccuracy  <- qc.information$inaccuracy[1]
-        imprecision <- qc.information$imprecision[1]
+        inaccuracy <- imprecision <- numeric(length(opspecs))
+        names(inaccuracy) <- names(imprecision) <- names(opspecs)
+        inaccuracy[]  <- qc.information$inaccuracy[1]
+        imprecision[] <- qc.information$imprecision[1]
     } else {
         z <- get.qcstat5(whole)
-        inaccuracy  <- z$inaccuracy
-        imprecision <- z$imprecision
+        inaccuracy  <- sapply(z, function(x) x$inaccuracy)
+        imprecision <- sapply(z, function(x) x$imprecision)
     }
 
     z <- c( 
@@ -470,13 +365,13 @@ generate.graph.thisyear.quality.qc <- function(object, prefix, qc.information, w
     )
     for (l in 1:length(opspecs)) {
         # QCSpecs Chart plot
-        pdf(file = paste(prefix, "year-quality-", l, ".pdf", sep = ""), width = 10, height = 6)
-        grid.draw(opspecs.plot(data = opspecs[[l]], base.inaccuracy = inaccuracy, base.imprecision = imprecision, title = names(opspecs)[l], ...))
+        pdf(file = paste(prefix, "-year-quality-", l, ".pdf", sep = ""), width = 10, height = 6)
+        grid.draw(opspecs.plot(data = opspecs[[l]], base.inaccuracy = inaccuracy[names(opspecs)[l]], base.imprecision = imprecision[names(opspecs)[l]], title = names(opspecs)[l], ...))
         dev.off()        
         
         z <- c(z,
             paste("\\bTR \\bTD[align=right, style=\\rm\\tfa]", str_replace(names(opspecs)[l], "#", "\\\\#"), "\\\\"), 
-            paste("\\placefigure[center,here,none][fig:", serial, "-quality]{}{\\externalfigure[", paste(prefix, "year-quality-", l, ".pdf", sep = ""), "][width=.75\\hsize]} \\eTD \\eTR", sep = "")
+            paste("\\placefigure[center,here,none][fig:", serial, "-quality]{}{\\externalfigure[", paste(prefix, "-year-quality-", l, ".pdf", sep = ""), "][width=.75\\hsize]} \\eTD \\eTR", sep = "")
         )
     }
     z <- c(z,
