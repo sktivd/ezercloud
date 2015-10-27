@@ -1,8 +1,7 @@
 require 'tmpdir'
 
 if ENV["RAILS_ENV"] == "production"
-  require '/etc/nginx/secrets/postgres.rb'
-  SKYNET_REPORT_DIR = '/home/server/skynet/report'
+  SKYNET_REPORT_DIR = '/home/servers/skynet/report'
 else
   SKYNET_REPORT_DIR = '/Users/skon/iCloudDocs/SK/Sources/QCtoolkit/skynet/report'
 end
