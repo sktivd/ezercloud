@@ -10,7 +10,8 @@ class Report < ActiveRecord::Base
   validate :date, :in_the_future?
   
   has_attached_file :document, url: "/assets/:class/:id/:basename.:extension", 
-                               path: ":rails_root/public/assets/:class/:id/:basename.:extension"
+                               path: ":rails_root/public/assets/:class/:id/:basename.:extension",
+                               preserve_files: false
   validates_attachment :document, presence: true
   validates_attachment :document, size: { less_than: 1.megabytes }
   validates_attachment :document, content_type: { content_type: ["application/pdf"] }

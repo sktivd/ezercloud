@@ -318,10 +318,10 @@ generate.graph.thisyear.history.qc <- function(object, prefix, qc.information, w
     object$.bs <- paste(object$qc_service, object$qc_lot, sep = "#")
 
     # comparative statistics
-    qcstat1.w <- get.qcstat1(whole, object)
-    qcstat2.w <- get.qcstat2(whole, object)
-    qcstat1.r <- get.qcstat1(reference, object)
-    qcstat2.r <- get.qcstat2(reference, object)
+    #qcstat1.w <- get.qcstat1(whole, object)
+    #qcstat2.w <- get.qcstat2(whole, object)
+    #qcstat1.r <- get.qcstat1(reference, object)
+    #qcstat2.r <- get.qcstat2(reference, object)
         
     # generate summary figure
     pdf(file = paste(prefix, "year-graph-history.pdf", sep = "-"), width = 12, height = 5 * length(unique(object$qc_lot)))

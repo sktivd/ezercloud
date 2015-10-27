@@ -9,7 +9,7 @@ class ReportsController < ApplicationController
   # GET /reports
   # GET /reports.json
   def index
-    @reports = Report.all
+    @reports = Report.order(:created_at).reverse_order.page(params[:page]).per(20)
   end
 
   # GET /reports/1
@@ -34,11 +34,11 @@ class ReportsController < ApplicationController
   
     respond_to do |format|
       if @report.save
-        
+                
         # remove old duplicated report
-        if (@old_report = Report.find_by(equipment: @report.equipment, serial_number: @report.serial_number, date: @report.date, reagent: @report.reagent)) and @old_report.id != @report.id
-          destroyed = " This report replaces report #{@old_report.id}: #{@old_report.document_file_name}." 
-          @old_report.destroy
+        if (@old_reports = Report.where(equipment: @report.equipment, serial_number: @report.serial_number, date: @report.date, reagent: @report.reagent).where.not(id: @report.id)).size > 0
+          destroyed = " This report replaces report #{@old_reports.map { |report| report.id.to_s + ":" + report.document_file_name }.join(", ")}." 
+          @old_reports.each { |report| report.destroy }
         else
           destroyed = ''
         end

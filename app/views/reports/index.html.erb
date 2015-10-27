@@ -21,7 +21,10 @@
       <th>Reagent</th>
       <th>Date</th>
       <th>Transmitted</th>
-      <th colspan="2"></th>
+      <th></th>
+      <% if administrator? %>
+        <th></th>
+      <% end %>
     </tr>
   </thead>
 
@@ -34,12 +37,42 @@
         <td><%= report.reagent.name %></td>
         <td><%= report.date %></td>
         <td><%= report.transmitted_at %></td>
-        <td><%= button_to "Download", report.document.url, class: "btn btn-default btn-xs", method: :get %></td>
-        <td><%= link_to 'Remove', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to "Download", report.document.url, { class: "btn btn-default btn-xs", role: "button" } %></td>
+        <% if false %>
+        <td>
+          <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#report_<%= report.id %>">
+            View
+          </button>
+  
+          <!-- Modal -->
+          <div class="modal fade" id="report_<%= report.id %>" tabindex="-1" role="dialog" aria-labelledby="reportLabel_<%= report.id %>">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="report_<%= report.id %>"><%= report.equipment + " " + report.serial_number + ": " + report.reagent.name %></h4>
+                </div>
+                <div class="modal-body">
+                  <iframe class="embed-reponsive-item" src="/pdfjs/web/viewer.html?file=<%= report.document.url %>" style="width:100%; height:75vh; border:0" scrolling="no"></iframe>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <% end %>
+        
+        <% if administrator? %>
+          <td><%= link_to 'Remove', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<%= paginate @reports %>
 
 <br>
 

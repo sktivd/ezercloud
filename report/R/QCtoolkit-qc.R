@@ -4,8 +4,6 @@ require("RCurl")
 # arguments
 args <- commandArgs(TRUE)
 path.report <- args[1]
-#equipment <- args[1]
-#kit <- args[2]
 
 # variables
 if (Sys.getenv("POSTGRES_DATABASE") == "skynet_production") {
@@ -17,11 +15,9 @@ if (Sys.getenv("POSTGRES_DATABASE") == "skynet_production") {
 }
 TIMEOUT <- 10
 
-setwd(path.report)
-
-source("R/QCtoolkit-qc-floats.R")
-source("R/QCtoolkit-graphs.R")
-source("R/QCtoolkit-utilities.R")
+source(file.path(path.report, "R/QCtoolkit-qc-floats.R"))
+source(file.path(path.report, "R/QCtoolkit-graphs.R"))
+source(file.path(path.report, "R/QCtoolkit-utilities.R"))
 
 # check today
 now <- Sys.time()
@@ -41,18 +37,14 @@ for (rindex in 1:nrow(reagent.list)) {
 
     # load basic information
     qcmaterial.information <- dbGetQuery(conn, paste("SELECT assay_kits.equipment, assay_kits.manufacturer, assay_kits.device, assay_kits.kit, reagents.name, reagents.number, reagents.unit, quality_control_materials.service, quality_control_materials.lot, quality_control_materials.expire, quality_control_materials.mean, quality_control_materials.sd, specifications.imprecision, specifications.inaccuracy, specifications.allowable_total_error FROM assay_kits RIGHT JOIN reagents ON assay_kits.id = reagents.assay_kit_id RIGHT JOIN quality_control_materials ON reagents.id = quality_control_materials.reagent_id LEFT JOIN specifications ON specifications.reagent_id = reagents.id WHERE quality_control_materials.expire > '", format(one.month.ago, "%F"), "' AND reagents.number = ", kit, " AND assay_kits.equipment = '", equipment, "'", sep = ""))
+    if (nrow(qcmaterial.information) == 0) {
+        next                                                        # no QC material information
+    }
     
     # load equipment information
     equipment.information <- dbGetQuery(conn, paste("SELECT * FROM equipment WHERE equipment = '", equipment, "'", sep = ""))
     reference.information <- dbGetQuery(conn, paste("SELECT * FROM laboratories WHERE equipment = '", equipment, "' AND kit = ", qcmaterial.information$kit[1], sep = ""))
-    
-    if (nrow(qcmaterial.information) == 0 || nrow(equipment.information) != 1) {
-        next                                                        # wrong kit ID || invalid equipment information
-    }
-    
-    # load reference site information
-    references <- dbGetQuery(conn, paste("SELECT * FROM laboratories WHERE equipment = '", equipment, "' AND kit = ", qcmaterial.information$kit[1], sep = ""))
-    
+            
     # load error code
     equipment.errorcodes <- dbGetQuery(conn, paste("SELECT error_codes.error_code, error_codes.level, error_codes.description FROM error_codes LEFT JOIN equipment ON equipment.id = error_codes.equipment_id WHERE equipment.equipment = '", equipment, "'", sep = ""))
     rownames(equipment.errorcodes) <- equipment.errorcodes$error_code
@@ -69,10 +61,6 @@ for (rindex in 1:nrow(reagent.list)) {
         internal.effective <- paste(variables.effective, paste("frends", c("internal_qc_laser_power_test", "internal_qc_laseralignment_test", "internal_qc_calculated_ratio_test", "internal_qc_test"), sep = ".", collapse = ", "), sep = ", ")
         internal.whole <- dbGetQuery(conn, paste("SELECT diagnoses.measured_at, diagnoses.equipment, diagnoses.ip_address, diagnoses.technician, ", internal.effective, " FROM diagnoses INNER JOIN frends ON diagnoses.diagnosable_id = frends.id AND diagnoses.diagnosable_type = 'Frend' WHERE diagnoses.measured_at > '", format(one.month.ago, "%F"), "' AND frends.test_type = 2 AND frends.kit = 11", sep = ""))    
         rm(internal.effective)
-        #internal.whole[c(1, 4), "internal_qc_laser_power_test"] <- FALSE
-        #internal.whole[c(2, 4), "internal_qc_laseralignment_test"] <- FALSE
-        #internal.whole[c(3, 4), "internal_qc_calculated_ratio_test"] <- FALSE
-        #internal.whole[1:4, "internal_qc_test"] <- FALSE
     }
     rm(variables.effective)
         
@@ -98,7 +86,8 @@ for (rindex in 1:nrow(reagent.list)) {
     qc.reference <- qc.whole[qc.whole$ip_address %in% reference.information$ip_address, ]
     
     # generation base ConTeXt file
-    path.pdf <- file.path(path.report, "PDF")
+#    path.pdf <- file.path(path.report, "PDF")
+    path.pdf <- getwd()
     
     # base keywords
     keywords <- matrix(c(
@@ -161,9 +150,7 @@ for (rindex in 1:nrow(reagent.list)) {
             generate.graph.thisyear.quality.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
             
             # upload QC report
-            setwd(file.path(path.report, "PDF"))
-            system(paste(file.path(CONTEXT_PATH, "context"), " --mode=", equipment, " ", file.path(path.pdf, paste(filename.prefix, ".tex", sep = "")), sep = ""))
-            setwd(path.report)
+            system(paste(file.path(CONTEXT_PATH, "context"), " --mode=", equipment, " ", file.path(path.pdf, paste(filename.prefix, ".tex > /dev/null", sep = "")), sep = ""))
             if (file.access(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = ""))) >= 0) {
                 postForm(uri = UPLOAD_HOST, "report[equipment]" = equipment, "report[serial_number]" = serial, "report[date]" = last.measured, "report[reagent_number]" = kit, "report[document]" = fileUpload(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = "")), contentType = "application/pdf"), ssl.verifypeer = FALSE)
             }
