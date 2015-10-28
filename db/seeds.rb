@@ -395,15 +395,15 @@ e = Equipment.create(equipment: 'FREND', manufacturer: 'NanoEnTek', klass: 'Fren
 
 a = AssayKit.create(equipment: 'FREND', manufacturer: "NanoEnTek", device: "PSA plus", kit: 30)
 r = a.reagents.create(name: 'PSA (Total)', number: 30, unit: 'ng/mL', specification: s_psa)
-q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40881', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 0.270, sd: (0.270 - 0.190) / 3)
-q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40882', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 3.95, sd: (3.95 - 3.37) / 3)
-q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40883', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 25, sd: 0)
+q = r.quality_control_materials.create(service: 'BIO-RAD', lot: '40881', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 0.270, sd: (0.270 - 0.190) / 3)
+q = r.quality_control_materials.create(service: 'BIO-RAD', lot: '40882', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 3.95, sd: (3.95 - 3.37) / 3)
+q = r.quality_control_materials.create(service: 'BIO-RAD', lot: '40883', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 25, sd: 0)
 
 a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "TSH", kit: 40)
 r = a.reagents.create(name: 'TSH', number: 40, unit: 'mIU/L', specification: s_tsh_p)
-q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40881', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 0.630, sd: (0.630 - 0.440) / 3)
-q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40882', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 5.99, sd: (5.99 - 5.08) / 3)
-q = r.quality_control_materials.create(service: 'Bio-Rad', lot: '40883', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 25, sd: 0)
+q = r.quality_control_materials.create(service: 'BIO-RAD', lot: '40881', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 0.630, sd: (0.630 - 0.440) / 3)
+q = r.quality_control_materials.create(service: 'BIO-RAD', lot: '40882', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 5.99, sd: (5.99 - 5.08) / 3)
+q = r.quality_control_materials.create(service: 'BIO-RAD', lot: '40883', expire: Date.new(2017, 2, 28), equipment: 'FREND', manufacturer: 'NanoEnTek', mean: 25, sd: 0)
 
 a = AssayKit.create(equipment: 'FREND', manufacturer: 'NanoEnTek', device: "BNP", kit: 19)
 r = a.reagents.create(name: 'BNP', number: 19, unit: 'pg/mL')

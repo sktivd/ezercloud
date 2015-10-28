@@ -21,7 +21,7 @@ class QualityControlMaterial < ActiveRecord::Base
   validates :lower_3sd, :upper_3sd, numericality: true, if: :threeSD?
   validates_with QCMValidator, fields: [:lower_3sd, :upper_3sd], if: :threeSD?
   
-  SEVICES = ['Bio-Rad', 'CLINIQA']
+  SEVICES = ['BIO-RAD', 'CLINIQA']
   
   def assay_kit_label
     if self.reagent
