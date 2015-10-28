@@ -1,0 +1,41 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Measured</th>
+      <th>IP address</th>
+      <th>Serial number</th>
+      <th>Type</th>
+      <th>Processed</th>
+      <th>Kit</th>
+      <th>Results</th>
+      <th>QC material</th>
+      <% if administrator? %>
+        <th colspan="1"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% equipment.each do |frend| %>
+      <tr>
+        <td><%= frend.diagnosis.measured_at.to_date %></td>
+        <td><%= frend.diagnosis.ip_address %></td>
+        <td><%= frend.serial_number %></td>
+        <td><%= Frend::TEST_TYPE[frend.test_type] %></td>
+        <% if frend.processed %>
+          <td><%= frend.processed %></td>
+        <% else %>
+          <td><%= frend.error_code %></td>
+        <% end %>
+        <td><%= AssayKit.find_by(kit: frend.kit).device %><% if frend.kit != 11 %><button type="button" class="btn btn-default btn-lg btn-xs" data-toggle="popover" title="Reagents (<%= frend.lot %>)" data-content="<%= frend.test_names.join(", ") %>">R</button><% end %></td>
+        <td><%= frend.test_values.join(", ") %></td>
+        <td><%= frend.qc_service + " \#" + frend.qc_lot if frend.qc_service %></td>
+        <% if administrator? %>
+          <td><%= link_to 'Destroy', frend, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate equipment, params: { active: 'frends' } %>

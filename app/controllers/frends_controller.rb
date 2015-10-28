@@ -7,7 +7,14 @@ class FrendsController < ApplicationController
   # GET /frends
   # GET /frends.json
   def index
-    @frends = Frend.order(:created_at).reverse_order.page(params[:page]).per(20)
+    respond_to do |format|
+      format.html { @frends = Frend.order(:created_at).reverse_order.page(params[:page]).per(20) }
+      format.json do
+        params[:from] = 1.month.ago   if params[:from].nil?
+        params[:to]   = DateTime.now  if params[:to].nil?
+        @frends = Frend.joins(:diagnosis).where("diagnoses.measured_at": params[:from]..params[:to])
+      end
+    end
   end
 
   # GET /frends/1

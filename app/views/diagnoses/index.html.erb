@@ -11,43 +11,32 @@
 <div class='alert alert-info fade in' data-alert='alert'>
   <h3>
     <strong>
-      Measurement history of Diagnosis for all equipments
+      Measurement history of Diagnosis
     </strong>
   </h3>
   <p>Here you'll see measurement history of diagnosis for all equipments.</p>
 </div>
 
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Equipment</th>
-      <th>Order Number</th>
-      <th>Measured</th>
-      <th>Ip address</th>
-      <th>Location</th>
-      <th>Transmitted</th>
-      <th>Technician</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div>
 
-  <tbody>
-    <% @diagnoses.each do |diagnosis| %>
-      <tr>
-        <td><%= diagnosis.equipment %></td>
-        <td><%= diagnosis.order_number %></td>
-        <td><%= diagnosis.measured_at.to_date %></td>
-        <td><%= diagnosis.ip_address %></td>
-        <td><%= diagnosis.location %></td>
-        <td><%= diagnosis.created_at %></td>
-        <td><%= diagnosis.technician %></td>
-<% if false %>
-        <td><%= link_to 'Show', diagnosis %></td>
-        <td><%= link_to 'Destroy', diagnosis, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-<% end %>
-      </tr>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="<%= 'active' if @active == 'diagnoses' %>"><a href="#diagnosis" aria-controls="diagnosis" role="tab" data-toggle="tab">Diagnosis</a></li>
+    <% @equipment.each do |equipment| %>
+      <li role="presentation" class="<%= 'active' if @active == equipment.db %>"><a href="#<%= equipment.db %>" aria-controls="<%= equipment.db %>" role="tab" data-toggle="tab"><%= equipment.equipment %></a></li>
     <% end %>
-  </tbody>
-</table>
+  </ul>
 
-<%= paginate @diagnoses %>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane <%= 'active' if @active == 'diagnoses' %>" id="diagnosis">
+      <%= render 'index' %>
+    </div>
+    <% @equipment.each do |equipment| %>
+      <div role="tabpanel" class="tab-pane <%= 'active' if @active == equipment.db %>" id="<%= equipment.db %>">
+        <%= render partial: equipment.db + '/index', locals: { equipment: @equipment_list[equipment.db.to_sym] } %>
+      </div>
+    <% end %>
+  </div>
+
+</div>

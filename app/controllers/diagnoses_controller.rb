@@ -11,7 +11,22 @@ class DiagnosesController < ApplicationController
   # GET /diagnoses
   # GET /diagnoses.json
   def index
-    @diagnoses = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
+    respond_to do |format|
+      format.html do
+        @active = params[:active] || "diagnoses"
+        @diagnoses = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
+        @equipment = Equipment.order(:equipment)
+        @equipment_list = {}
+        @equipment.each do |equipment|
+          @equipment_list[equipment.db.to_sym] = Object.const_get(equipment.klass).order(:created_at).reverse_order.page(params[:page]).per(20)
+        end
+      end
+      format.json do
+        params[:from] = 1.month.ago   if params[:from].nil?
+        params[:to]   = DateTime.now  if params[:to].nil?
+        @diagnoses = Diagnosis.where(measured_at: params[:from]..params[:to]) 
+      end
+    end
   end
 
   # GET /diagnoses/1

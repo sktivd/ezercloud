@@ -1,0 +1,34 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Equipment</th>
+      <th>Order Number</th>
+      <th>Measured</th>
+      <th>Ip address</th>
+      <th>Location</th>
+      <th>Transmitted</th>
+      <th>Technician</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @diagnoses.each do |diagnosis| %>
+      <tr>
+        <td><%= diagnosis.equipment %></td>
+        <td><%= diagnosis.order_number %></td>
+        <td><%= diagnosis.measured_at.to_date %></td>
+        <td><%= diagnosis.ip_address %></td>
+        <td><%= diagnosis.location %></td>
+        <td><%= diagnosis.created_at %></td>
+        <td><%= diagnosis.technician %></td>
+<% if false %>
+        <td><%= link_to 'Show', diagnosis %></td>
+        <td><%= link_to 'Destroy', diagnosis, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+<% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @diagnoses, params: { active: 'diagnoses' } %>
