@@ -14,9 +14,18 @@ class DiagnosesController < ApplicationController
     respond_to do |format|
       format.html do
         @active = params[:active] || "diagnoses"
-        @diagnoses = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
         @equipment = Equipment.order(:equipment)
         @equipment_list = {}
+        @equipment_list[:diagnoses] = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
+        @equipment.each do |equipment|
+          @equipment_list[equipment.db.to_sym] = Object.const_get(equipment.klass).order(:created_at).reverse_order.page(params[:page]).per(20)
+        end
+      end
+      format.js do
+        @active = params[:active] || "diagnoses"
+        @equipment = Equipment.order(:equipment)
+        @equipment_list = {}
+        @equipment_list[:diagnoses] = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
         @equipment.each do |equipment|
           @equipment_list[equipment.db.to_sym] = Object.const_get(equipment.klass).order(:created_at).reverse_order.page(params[:page]).per(20)
         end

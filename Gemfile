@@ -59,7 +59,6 @@ gem 'distribution'
 gem 'sidekiq'
 gem 'sinatra', require: nil
 
-
 # For form
 gem 'simple_form'
 gem 'bootstrap-sass'
@@ -67,6 +66,9 @@ gem 'autoprefixer-rails'
 # NOTE: The sass-rails gem is included with new Rails applications by default.
 #       Please make sure that it is not already in your Gemfile before uncommenting it.
 # gem 'sass-rails'
+
+# user registration with secure
+gem 'recaptcha', :require => 'recaptcha/rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

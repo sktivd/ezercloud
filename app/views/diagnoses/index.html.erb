@@ -21,19 +21,19 @@
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="<%= 'active' if @active == 'diagnoses' %>"><a href="#diagnosis" aria-controls="diagnosis" role="tab" data-toggle="tab">Diagnosis</a></li>
+    <li role="presentation" class="<%= 'active' if @active == 'diagnoses' %>"><a href="#tab-diagnoses" aria-controls="tab-diagnoses" role="tab" data-toggle="tab">Diagnosis</a></li>
     <% @equipment.each do |equipment| %>
-      <li role="presentation" class="<%= 'active' if @active == equipment.db %>"><a href="#<%= equipment.db %>" aria-controls="<%= equipment.db %>" role="tab" data-toggle="tab"><%= equipment.equipment %></a></li>
+      <li role="presentation" class="<%= 'active' if @active == equipment.db %>"><a href="#tab-<%= equipment.db %>" aria-controls="tab-<%= equipment.db %>" role="tab" data-toggle="tab"><%= equipment.equipment %></a></li>
     <% end %>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane <%= 'active' if @active == 'diagnoses' %>" id="diagnosis">
-      <%= render 'index' %>
+    <div role="tabpanel" class="tab-pane <%= 'active' if @active == 'diagnoses' %>" id="tab-diagnoses">
+      <%= render partial: 'diagnoses/index', locals: { equipment: @equipment_list[:diagnoses] } %>
     </div>
     <% @equipment.each do |equipment| %>
-      <div role="tabpanel" class="tab-pane <%= 'active' if @active == equipment.db %>" id="<%= equipment.db %>">
+      <div role="tabpanel" class="merong tab-pane <%= 'active' if @active == equipment.db %>" id="tab-<%= equipment.db %>">
         <%= render partial: equipment.db + '/index', locals: { equipment: @equipment_list[equipment.db.to_sym] } %>
       </div>
     <% end %>

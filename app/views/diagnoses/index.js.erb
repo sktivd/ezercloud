@@ -1,0 +1,1 @@
+$("#tab-<%= @active %>").html("<%= escape_javascript(render partial: @active + '/index', locals: { equipment: @equipment_list[@active.to_sym] }) %>");

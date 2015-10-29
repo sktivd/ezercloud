@@ -12,6 +12,10 @@
     <%= f.input :privilege_reagent, label: 'Reagent manager' %>
     <%= f.input :privilege_notification, label: 'Notification receiver' %>
   </div>
+  
+  <%= recaptcha_tags %>
+  
+  <br>
 
   <div class="form-actions">
     <%= f.button :submit %>

@@ -8,12 +8,11 @@
       <th>Location</th>
       <th>Transmitted</th>
       <th>Technician</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @diagnoses.each do |diagnosis| %>
+    <% equipment.each do |diagnosis| %>
       <tr>
         <td><%= diagnosis.equipment %></td>
         <td><%= diagnosis.order_number %></td>
@@ -22,13 +21,9 @@
         <td><%= diagnosis.location %></td>
         <td><%= diagnosis.created_at %></td>
         <td><%= diagnosis.technician %></td>
-<% if false %>
-        <td><%= link_to 'Show', diagnosis %></td>
-        <td><%= link_to 'Destroy', diagnosis, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-<% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= paginate @diagnoses, params: { active: 'diagnoses' } %>
+<%= paginate equipment, remote: true, params: { active: 'diagnoses' } %>
