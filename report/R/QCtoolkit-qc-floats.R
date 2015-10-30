@@ -5,7 +5,7 @@ require("stringr")
 
 # sumarize from qc data
 get.qcstat1 <- function(target, comparative) {
-    t(sapply(unique(paste(target$qc_service, " \\#", target$qc_lot, sep = "")), function(x) {
+    t(sapply(unique(paste(comparative$qc_service, " \\#", comparative$qc_lot, sep = "")), function(x) {
         base        <- target[paste(target$qc_service, " \\#", target$qc_lot, sep = "") == x, ]
         objective   <- comparative[paste(comparative$qc_service, " \\#", comparative$qc_lot, sep = "") == x, ]
                     

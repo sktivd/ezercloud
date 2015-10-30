@@ -60,6 +60,9 @@ for (rindex in 1:nrow(reagent.list)) {
     if (equipment == "FREND") {
         internal.effective <- paste(variables.effective, paste("frends", c("internal_qc_laser_power_test", "internal_qc_laseralignment_test", "internal_qc_calculated_ratio_test", "internal_qc_test"), sep = ".", collapse = ", "), sep = ", ")
         internal.whole <- dbGetQuery(conn, paste("SELECT diagnoses.measured_at, diagnoses.equipment, diagnoses.ip_address, diagnoses.technician, ", internal.effective, " FROM diagnoses INNER JOIN frends ON diagnoses.diagnosable_id = frends.id AND diagnoses.diagnosable_type = 'Frend' WHERE diagnoses.measured_at > '", format(one.month.ago, "%F"), "' AND frends.test_type = 2 AND frends.kit = 11", sep = ""))    
+        if (nrow(internal.whole) == 0) {
+            internal.whole <- data.frame(qc.whole[1, ], internal_qc_laser_power_test = NA, internal_qc_laseralignment_test = NA, internal_qc_calculated_ratio_test = NA, internal_qc_test = NA)[0, ]
+        }
         rm(internal.effective)
     }
     rm(variables.effective)
@@ -73,13 +76,12 @@ for (rindex in 1:nrow(reagent.list)) {
     rownames(qcmaterial.information) <- paste(qcmaterial.information$service, qcmaterial.information$lot, sep = "#")
     qc.whole$.qc.mean <- qcmaterial.information[paste(qc.whole$qc_service, qc.whole$qc_lot, sep = "#"), "mean"]
     qc.whole <- qc.whole[! is.na(qc.whole$.qc.mean), ]
+    if (nrow(qc.whole) == 0 || length(is.finite(qc.whole$.result)) == 0) {
+        next                                                    # no available data (all data with error or QC material information is not ready for target tests)
+    }
     qc.whole$.qc.sd <- qcmaterial.information[paste(qc.whole$qc_service, qc.whole$qc_lot, sep = "#"), "sd"]
     qc.whole$.result.std <- (qc.whole$.result - qc.whole$.qc.mean) / qc.whole$.qc.sd
     qc.whole$.threesd.range <- paste(qc.whole$.qc.mean - 3 * qc.whole$.qc.sd, qc.whole$.qc.mean + 3 * qc.whole$.qc.sd, sep = "-")
-    
-    if (length(is.finite(qc.whole$.result)) == 0) {
-        next                                                    # no available data
-    }
     
     # set subset tables
     qc.month <- qc.whole[qc.whole$measured_at > one.month.ago, ]

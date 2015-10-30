@@ -10,7 +10,6 @@ class CreateDiagnoses < ActiveRecord::Migration
       t.string :location
       t.float :latitude
       t.float :longitude
-      t.string :location
       t.string :technician
       t.integer :sex, default: -1
       t.integer :age_band, default: -1
