@@ -14,20 +14,25 @@ class DiagnosesController < ApplicationController
     respond_to do |format|
       format.html do
         @active = params[:active] || "diagnoses"
-        @equipment = Equipment.order(:equipment)
+        @equipment ||= Equipment.order(:equipment)
+        @diagnoses = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
         @equipment_list = {}
-        @equipment_list[:diagnoses] = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
+        @assay_kit_list = {}
+        @reagent_list   = {}
         @equipment.each do |equipment|
-          @equipment_list[equipment.db.to_sym] = Object.const_get(equipment.klass).order(:created_at).reverse_order.page(params[:page]).per(20)
+          @equipment_list[equipment.db] = Object.const_get(equipment.klass).read.page(params[:page]).per(20)
+          @assay_kit_list[equipment.db] = AssayKit.equipment equipment.equipment, @equipment_list[equipment.db].map { |equipment| equipment.kit }.uniq
         end
       end
       format.js do
         @active = params[:active] || "diagnoses"
-        @equipment = Equipment.order(:equipment)
-        @equipment_list = {}
-        @equipment_list[:diagnoses] = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
-        @equipment.each do |equipment|
-          @equipment_list[equipment.db.to_sym] = Object.const_get(equipment.klass).order(:created_at).reverse_order.page(params[:page]).per(20)
+        @equipment ||= Equipment.order(:equipment)
+        if @active == 'diagnoses'
+          @equipment_value = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
+        else
+          active_equipment = Equipment.find_by(db: @active)
+          @equipment_value = Object.const_get(active_equipment.klass).read.page(params[:page]).per(20)
+          @assay_kits = AssayKit.equipment active_equipment.equipment, @equipment_value.map { |equipment| equipment.kit }.uniq
         end
       end
       format.json do

@@ -53,6 +53,10 @@ class Frend < ActiveRecord::Base
     end
   end
   
+  def self.read
+    self.order(:created_at).reverse_order.includes(:diagnosis)
+  end
+  
   private
   
     def external_qc?
