@@ -22,7 +22,7 @@
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="<%= 'active' if @active == 'diagnoses' %>"><%= link_to Diagnosis, "#tab-diagnoses", role: "tab", aria: { controls: "tab-diagnoses"}, data: { toggle: "tab" } %></li>
-    <% @equipment.each do |equipment| %>
+    <% all_equipment.each do |equipment| %>
       <li role="presentation" class="<%= 'active' if @active == equipment.db %>"><%= link_to equipment.equipment, "\#tab-#{equipment.db}", role: "tab", aria: { controls: "tab-#{equipment.db}" }, data: { toggle: "tab" } %></li>
     <% end %>
   </ul>
@@ -32,9 +32,9 @@
     <div role="tabpanel" class="tab-pane <%= 'active' if @active == 'diagnoses' %>" id="tab-diagnoses">
       <%= render partial: 'diagnoses/index', locals: { equipment: @diagnoses } %>
     </div>
-    <% @equipment.each do |equipment| %>
+    <% all_equipment.each do |equipment| %>
       <div role="tabpanel" class="tab-pane <%= 'active' if @active == equipment.db %>" id="tab-<%= equipment.db %>">
-        <%= render partial: equipment.db + '/index', locals: { equipment: @equipment_list[equipment.db], assay_kits: @assay_kit_list[equipment.db], reagents: @reagent_list[equipment.db] } %>
+        <%= render partial: equipment.db + '/index', locals: { equipment: @equipment_list[equipment.db], assay_kits: @assay_kit_list[equipment.db], reagents: @reagent_list[equipment.db], page: @page } %>
       </div>
     <% end %>
   </div>

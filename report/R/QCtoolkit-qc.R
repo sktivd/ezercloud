@@ -7,7 +7,7 @@ path.report <- args[1]
 
 # variables
 if (Sys.getenv("POSTGRES_DATABASE") == "skynet_production") {
-    UPLOAD_HOST <- "https://qc.ezercloud.com/reports"    
+    UPLOAD_HOST <- "https://127.0.0.1/reports"    
     CONTEXT_PATH <- "/usr/local/bin"
 } else {
     UPLOAD_HOST <- "http://127.0.0.1:3000/reports"    
@@ -154,7 +154,8 @@ for (rindex in 1:nrow(reagent.list)) {
             # upload QC report
             system(paste(file.path(CONTEXT_PATH, "context"), " --mode=", equipment, " ", file.path(path.pdf, paste(filename.prefix, ".tex > /dev/null", sep = "")), sep = ""))
             if (file.access(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = ""))) >= 0) {
-                postForm(uri = UPLOAD_HOST, "report[equipment]" = equipment, "report[serial_number]" = serial, "report[date]" = last.measured, "report[reagent_number]" = kit, "report[document]" = fileUpload(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = "")), contentType = "application/pdf"), ssl.verifypeer = FALSE)
+                # TLSv1.2: sslversion = 6
+                postForm(uri = UPLOAD_HOST, "report[equipment]" = equipment, "report[serial_number]" = serial, "report[date]" = last.measured, "report[reagent_number]" = kit, "report[document]" = fileUpload(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = "")), contentType = "application/pdf"), .opts = list(timeout = TIMEOUT, ssl.verifypeer = FALSE, sslversion = 6))
             }
         }
     }

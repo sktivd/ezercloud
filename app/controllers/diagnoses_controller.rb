@@ -13,25 +13,27 @@ class DiagnosesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @active = params[:active] || "diagnoses"
-        @equipment ||= Equipment.order(:equipment)
-        @diagnoses = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
+        @active = params[:active] || 'diagnoses'
+        @page = params[:page] || '1'
+        
+        @diagnoses = Diagnosis.read.page(@page).per(20)
         @equipment_list = {}
         @assay_kit_list = {}
         @reagent_list   = {}
-        @equipment.each do |equipment|
-          @equipment_list[equipment.db] = Object.const_get(equipment.klass).read.page(params[:page]).per(20)
+        all_equipment.each do |equipment|
+          @equipment_list[equipment.db] = Object.const_get(equipment.klass).read.page(@page).per(20)
           @assay_kit_list[equipment.db] = AssayKit.equipment equipment.equipment, @equipment_list[equipment.db].map { |equipment| equipment.kit }.uniq
         end
       end
       format.js do
-        @active = params[:active] || "diagnoses"
-        @equipment ||= Equipment.order(:equipment)
+        @active = params[:active] || 'diagnoses'
+        @page = params[:page] || '1'
+        
         if @active == 'diagnoses'
-          @equipment_value = Diagnosis.order(:created_at).reverse_order.page(params[:page]).per(20)
+          @equipment_value = Diagnosis.read.page(@page).per(20)
         else
           active_equipment = Equipment.find_by(db: @active)
-          @equipment_value = Object.const_get(active_equipment.klass).read.page(params[:page]).per(20)
+          @equipment_value = Object.const_get(active_equipment.klass).read.page(@page).per(20)
           @assay_kits = AssayKit.equipment active_equipment.equipment, @equipment_value.map { |equipment| equipment.kit }.uniq
         end
       end
@@ -107,9 +109,25 @@ class DiagnosesController < ApplicationController
   # DELETE /diagnoses/1
   # DELETE /diagnoses/1.json
   def destroy
-    @diagnosis.destroy
+    @page = params[:page] || "1"
+    
+    equipment_name = all_equipment.find { |equipment| equipment.klass == @diagnosis.diagnosable_type }.equipment
+    Object.const_get(@diagnosis.diagnosable_type).find(@diagnosis.diagnosable_id).delete
+    @diagnosis.delete
     respond_to do |format|
-      format.html { redirect_to diagnoses_url, notice: 'Diagnosis was successfully destroyed.' }
+      format.html { redirect_to diagnoses_url(page: @page), notice: "Diagnosis (#{equipment_name}) was successfully removed." }
+      format.js do
+        @active = params[:active] || "diagnoses"
+        @notice = "Diagnosis (#{equipment_name}) was successfully removed."
+        if @active == 'diagnoses'
+          @equipment_value = Diagnosis.read.page(@page).per(20)
+        else
+          @diagnoses = Diagnosis.read.page(@page).per(20)
+          active_equipment = Equipment.find_by(db: @active)
+          @equipment_value = Object.const_get(active_equipment.klass).read.page(@page).per(20)
+          @assay_kits = AssayKit.equipment active_equipment.equipment, @equipment_value.map { |equipment| equipment.kit }.uniq
+        end
+      end
       format.json { head :no_content }
     end
   end

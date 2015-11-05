@@ -37,7 +37,7 @@
         <td><%= frend.test_values.join(", ") %></td>
         <td><%= frend.qc_service + " \#" + frend.qc_lot if frend.qc_service and frend.qc_service != "" %></td>
         <% if administrator? %>
-          <td><%= link_to 'Destroy', frend, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to 'Destroy', diagnosis_path(frend.diagnosis, active: 'frends', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
       </tr>
     <% end %>

@@ -38,4 +38,8 @@ class Diagnosis < ActiveRecord::Base
     end
   end
   
+  def self.read
+    self.order(:created_at).reverse_order
+  end
+  
 end

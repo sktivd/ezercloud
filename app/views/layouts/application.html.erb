@@ -56,12 +56,14 @@
       <%= yield :breadcrumb %>
     </ul>
 
-    <% if notice %>
-      <div class="alert alert-success fade in" data-alert="alert">
-        <a class="close" data-dismiss='alert' href="#">×</a>
-        <p><%= notice %></p>
-      </div>
-    <% end %>
+    <div id="header-alert" class=".col-xs-12">
+      <% if notice %>
+        <div class="alert alert-success fade in" data-alert="alert">
+          <a class="close" data-dismiss='alert' href="#">×</a>
+          <p><%= notice %></p>
+        </div>
+      <% end %>
+    </div>
 
     <%= yield %>
   </div>

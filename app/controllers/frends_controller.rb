@@ -8,7 +8,10 @@ class FrendsController < ApplicationController
   # GET /frends.json
   def index
     respond_to do |format|
-      format.html { @frends = Frend.order(:created_at).reverse_order.page(params[:page]).per(20) }
+      format.html do
+        @frends = Frend.read.page(params[:page]).per(20)
+        @assay_kits = AssayKit.equipment "FREND", @frends.map { |frend| frend.kit }.uniq
+      end
       format.json do
         params[:from] = 1.month.ago   if params[:from].nil?
         params[:to]   = DateTime.now  if params[:to].nil?
@@ -66,7 +69,8 @@ class FrendsController < ApplicationController
   def destroy
     @frend.destroy
     respond_to do |format|
-      format.html { redirect_to frends_url, notice: 'Frend was successfully destroyed.' }
+      format.html { redirect_to diagnoses_path(active: 'frends'), notice: 'Frend was successfully destroyed.' }
+      format.js {}
       format.json { head :no_content }
     end
   end

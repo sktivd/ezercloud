@@ -1,2 +1,2 @@
-$("#tab-<%= @active %>").html("<%= escape_javascript(render partial: @active + '/index', locals: { equipment: @equipment_value, assay_kits: @assay_kits }) %>");
+$("#tab-<%= @active %>").html("<%= escape_javascript(render partial: @active + '/index', locals: { equipment: @equipment_value, assay_kits: @assay_kits, page: @page }) %>");
 $('[data-toggle="tooltip"]').tooltip();

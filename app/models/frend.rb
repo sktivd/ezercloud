@@ -1,6 +1,6 @@
 class Frend < ActiveRecord::Base  
   include NotificationUtils
-  has_one :diagnosis, as: :diagnosable, dependent: :destroy
+  has_one :diagnosis, as: :diagnosable, dependent: :delete
   
   TEST_TYPE = ["Test", "External QC", "Internal QC"]
   

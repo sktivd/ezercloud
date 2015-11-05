@@ -1,0 +1,4 @@
+$("#header-alert").html("<div class='alert alert-success fade in' data-alert='alert'><a class='close' data-dismiss='alert' href='#'>×</a><p><%= @notice %></p></div>");
+$("#tab-<%= @active %>").html("<%= escape_javascript(render partial: @active + '/index', locals: { equipment: @equipment_value, assay_kits: @assay_kits, page: @page }) %>");
+$("#tab-diagnoses").html("<%= escape_javascript(render partial: 'diagnoses/index', locals: { equipment: @diagnoses }) %>");
+$('[data-toggle="tooltip"]').tooltip();
