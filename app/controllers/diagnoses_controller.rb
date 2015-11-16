@@ -38,8 +38,8 @@ class DiagnosesController < ApplicationController
         end
       end
       format.json do
-        params[:equipment] = "FREND"  if params[:from].nil?
-        params[:from] = 1.month.ago   if params[:from].nil?
+        params[:equipment] = "FREND"  if params[:equipment].nil?
+        params[:from] = 1.year.ago    if params[:from].nil?
         params[:to]   = DateTime.now  if params[:to].nil?
         
         @equipment_name = Equipment.find_by(equipment: params[:equipment])
