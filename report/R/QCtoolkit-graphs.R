@@ -128,11 +128,11 @@ frendInternal.plot <- function(date, data) {
 }
 
 # y should be standardized as linear scale although original scale is non-linear.
-spc.plot <- function(y, date, lot, data, date.format = "%m-%d", y.breaks = seq(-10, 10), y.scale = "identity", y.scale.options = "", y.expression = "identity", y.expression.options = c("digit = 0", "format = 'f'"), breaks.augumentation = 2) {
+levey_jennings.plot <- function(y, date, service, lot, data, date.format = "%m-%d", y.breaks = seq(-10, 10), y.scale = "identity", y.scale.options = "", y.expression = "identity", y.expression.options = c("digit = 0", "format = 'f'"), breaks.augumentation = 2, line.colors = c("#00000060", "#00000080", "#000000A0", "#000000C0", "#000000E0")) {
     mf <- match.call(expand.dots = FALSE)
     m <- match(c("data", "na.action"), names(mf), 0L)
     mf <- mf[c(1L, m)]
-    mf$formula <- as.formula(paste(substitute(y), "~", substitute(date) , "+", substitute(lot)))
+    mf$formula <- as.formula(paste(substitute(y), "~", substitute(date) , "+", substitute(service), "+", substitute(lot)))
     mf$drop.unused.levels <- TRUE
     mf[[1L]] <- quote(stats::model.frame)
     mf <- eval(mf, parent.frame())
@@ -157,13 +157,26 @@ spc.plot <- function(y, date, lot, data, date.format = "%m-%d", y.breaks = seq(-
     y.bl <- character(length(y.bp))
     y.bl[seq(1, length(y.bp), by = breaks.augumentation)] <- y.labels
     
-    mf$.date <- as.ordered(format(mf[, 2], date.format))
-    mf$.index <- unlist(tapply(mf$.date, mf[, 3], function(x) 1:length(x)))
-    mf$.indexlabel <- as.ordered(unlist(tapply(mf$.date, mf[, 3], function(x) paste(1:length(x), x, sep = ":"))))
-    mf$.lot <- mf[, 3]
+    mf$.date <- format(mf[, 2], date.format)
+    mf$.qc <- paste(substr(mf[, 3], 1, 1), mf[, 4], sep = ":")
+    mf$.service <- mf[, 3]
+    mf$.lot <- mf[, 4]
+    mf <- mf[order(paste(mf$.date, mf$.qc, sep = "-")), ]
+    mf$.indexsub <- unlist(tapply(mf$.date, paste(mf$.date, mf$.qc, sep = "-"), function(x) 1:length(x)))
+    mf$.label <- as.ordered(paste(mf$.date, mf$.indexsub, sep = ""))
+    mf$.index <- as.integer(mf$.label)
     
-    spc.labels <- data.frame(label = unique(mf$.indexlabel))
-    spc.labels$bp <- as.integer(spc.labels$label)
+    lj.label <- data.frame(bp = as.integer(mf$.label), label = mf$.date, sub = as.character(mf$.indexsub), stringsAsFactors = FALSE)
+    lj.label <- lj.label[! duplicated(lj.label$bp), ]
+    count <- table(lj.label$label)
+    lj.label$sub[lj.label$label %in% names(count)[count == 1]] <- ""
+    bp <- tapply(lj.label$bp, lj.label$label, function(x) mean(x))
+    lj.date <- data.frame(bp = bp, label = names(bp))
+    lj.date$count <- count
+    lj.date$l <- (cumsum(c(0, lj.date$count[1:(nrow(lj.date) - 1)])) + 0.15) / max(lj.label$bp)
+    lj.date$r <- (cumsum(lj.date$count) - 0.15) / max(lj.label$bp)
+    lj.date$l[lj.date$count == 1] <- lj.date$r[lj.date$count == 1] <- NA
+    
     ylim <- range(mf$.y)
     ylim[1] <- min(ylim[1], -3.5)
     ylim[2] <- max(ylim[2], 3.5)
@@ -172,17 +185,29 @@ spc.plot <- function(y, date, lot, data, date.format = "%m-%d", y.breaks = seq(-
         xlim[2] <- 6.5
     }
     ylim <- (ylim - mean(ylim)) * 1.1 + mean(ylim)
-    spc.ggplot <- ggplot(data = mf) + geom_rect(xmin = 0, xmax = xlim[2] + 1, ymin = 2, ymax = ylim[2] + 1, fill = "#F0F0F0") + geom_rect(xmin = 0, xmax = xlim[2] + 1, ymin = ylim[1] - 1, ymax = -2, fill = "#F0F0F0") + geom_hline(yintercept = c(-3, 0, 3), colour = c("#00000020", "white", "#00000020"), size = c(1, 3, 1), linetype = c(3, 1, 3)) + geom_line(aes(x = .index, y = .y, colour = .lot), size = 1.25) + scale_x_continuous(breaks = spc.labels$bp, label = spc.labels$label) + scale_y_continuous(breaks = c(seq(-10, -2), 0, seq(2, 10))) +  scale_colour_manual(values = c("#00000028", "#00000050", "#00000078", "#000000A0", "#000000B8", "#000000E0"), name = "Lot #") + coord_cartesian(xlim = xlim, ylim = ylim) + theme(panel.background = element_rect(fill = "#00000008"), legend.position = "right", axis.text = element_text(size = 10), axis.ticks = element_blank(), axis.title.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60")) + ylab("Standardized value")
+    lj.ggplot <- ggplot(data = mf) + geom_rect(xmin = 0, xmax = xlim[2] + 1, ymin = 2, ymax = ylim[2] + 1, fill = "#F0F0F0") + geom_rect(xmin = 0, xmax = xlim[2] + 1, ymin = ylim[1] - 1, ymax = -2, fill = "#F0F0F0") + geom_vline(xintercept = lj.label$bp, colour = "white") + geom_hline(yintercept = c(-3, 0, 3), colour = c("#00000080", "white", "#00000080"), size = c(1, 3, 1), linetype = c(3, 1, 3)) + geom_line(aes(x = .index, y = .y, colour = .qc), size = 2) + scale_x_continuous(breaks = lj.label$bp, label = lj.label$sub) + scale_y_continuous(breaks = c(seq(-10, -2), 0, seq(2, 10))) +  scale_colour_manual(values = line.colors, name = "Lot #") + coord_cartesian(xlim = xlim, ylim = ylim) + theme(panel.background = element_rect(fill = "#F8F8F8"), legend.position = "right", legend.title = element_text(size = 12), legend.text = element_text(size = 12), axis.text.y = element_text(size = 15), axis.text.x = element_text(size = 10), axis.ticks = element_blank(), axis.title.y = element_text(size = 15), axis.title.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60")) + ylab("Standardized value")
     
     if (any(abs(mf$.y) > 2)) {
         mfsub <- mf[abs(mf$.y) > 2, ]
         mfsub$.type <- ifelse(abs(mfsub$.y) < 3, "s2", "s3")
-        spc.ggplot <- spc.ggplot + geom_point(data = mfsub, aes(x = .index, y = .y, shape = .type), size = 5, colour = "#00000080") + scale_shape_manual(values = c(1, 16), name = "Type", breaks = c("s2", "s3"), labels = c(expression(1[2*s]), expression(1[3*s])))
+        lj.ggplot <- lj.ggplot + geom_point(data = mfsub, aes(x = .index, y = .y, shape = .type), size = 5, colour = "#00000080") + scale_shape_manual(values = c(1, 16), name = "Type", breaks = c("s2", "s3"), labels = c(expression(1[2*s]), expression(1[3*s])))
     }
     
-    spc.gtable <- ggplot_gtable(ggplot_build(spc.ggplot))
+    lj.gtable <- ggplot_gtable(ggplot_build(lj.ggplot))
+
+    date.ggplot <- ggplot(data = mf) + geom_line(aes(x = .index, y = .y, colour = .qc), size = 2) + scale_x_continuous(breaks = lj.date$bp, label = lj.date$label) + scale_y_continuous(breaks = c(seq(-10, -2), 0, seq(2, 10))) + coord_cartesian(xlim = xlim, ylim = ylim) + theme(legend.position = "right", axis.text = element_text(size = 14), axis.ticks = element_blank(), axis.title.x = element_blank(), panel.grid.minor = element_blank()) + ylab("Standardized value")
+    date.gtable <- ggplot_gtable(ggplot_build(date.ggplot))
+
+    lj.axis.l <- lj.gtable$layout$l[lj.gtable$layout$name == "axis-b"]
+    lj.axis.b <- lj.gtable$layout$b[lj.gtable$layout$name == "axis-b"]
+    lj.gtable <- gtable_add_rows(lj.gtable, lj.gtable$heights[lj.axis.b] + unit(0.5, "line"), pos = lj.axis.b - 1)
+    lj.gtable <- gtable_add_grob(lj.gtable, grob = date.gtable$grobs[[which(date.gtable$layout$name == "axis-b")]], name = "axis-date", clip = "off", l = lj.axis.l, r = lj.axis.l, t = lj.axis.b, b = lj.axis.b)
+    axis.x <- as.matrix(lj.date[, c("l", "r")])
+    axis.y <- axis.x
+    axis.y[] <- 0.35
+    lj.gtable <- gtable_add_grob(lj.gtable, grob = polylineGrob(x = axis.x, y = axis.y, id = rep(1:nrow(axis.x), 2), gp = gpar(col = rep("#00000080", nrow(axis.x)))), name = "axis-line", clip = "off", l = lj.axis.l, r = lj.axis.l, t = lj.axis.b, b = lj.axis.b + 1)
     
-    spc.gtable
+    lj.gtable
 }
 
 linearity.plot <- function(y, x, error, data, breaks, scale = "log10", scale.options = "", axis.expression = "identity", axis.expression.options = c("digit = 1", "format = 'f'"), breaks.augumentation = 1) {
@@ -244,7 +269,7 @@ sdi_cvr.plot <- function(sdi, cvr, shape, data) {
     mf$.x <- mf[, 2]
     mf$.shape <- mf[, 3]
     
-    sdi_cvr.ggplot <- ggplot(data = mf) + geom_rect(xmin = 0, xmax = 2, ymin = -2, ymax = 2, fill = "#E0E0E0") + geom_rect(xmin = 0, xmax = 1.5, ymin = -1.5, ymax = 1.5, fill = "#F0F0F0") + geom_rect(xmin = 0, xmax = 1, ymin = -1, ymax = 1, fill = "white") + geom_point(aes(x = .x, y = .y, shape = .shape, size = 2)) + geom_vline(xintercept = 0, size = 2, colour = "#00000080") + geom_hline(yintercept = 0, size = 1, colour = "#00000080") + scale_y_continuous(breaks = c(-2, -1, 0, 1, 2)) + annotate("text", x = c(1, 2), y = -0.2, label = c(1, 2), size = 6, colour = "#000000C0") + scale_shape_manual(values = c(16, 5, 0, 1)) + coord_cartesian(xlim = c(0, 2.08), ylim = c(-2.04, 2.04)) + theme(panel.background = element_rect(fill = "white"), axis.title.y = element_text(size = 20), axis.text.y = element_text(size = 20), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks = element_blank(), legend.position = "none") + ylab("SDI")
+    sdi_cvr.ggplot <- ggplot(data = mf) + geom_rect(xmin = 0, xmax = 2, ymin = -2, ymax = 2, fill = "#E0E0E0") + geom_rect(xmin = 0, xmax = 1.5, ymin = -1.5, ymax = 1.5, fill = "#F0F0F0") + geom_rect(xmin = 0, xmax = 1, ymin = -1, ymax = 1, fill = "white") + geom_point(aes(x = .x, y = .y, shape = .shape), size = 5) + geom_vline(xintercept = 0, size = 2, colour = "#00000080") + geom_hline(yintercept = 0, size = 1, colour = "#00000080") + scale_y_continuous(breaks = c(-2, -1, 0, 1, 2)) + annotate("text", x = c(1, 2), y = -0.2, label = c(1, 2), size = 7, colour = "#000000C0") + scale_shape_manual(values = c(16, 5, 12, 1)) + coord_cartesian(xlim = c(0, 2.08), ylim = c(-2.04, 2.04)) + theme(panel.background = element_rect(fill = "white"), axis.title.y = element_text(size = 20), axis.text.y = element_text(size = 20), axis.title.x = element_blank(), axis.text.x = element_blank(), axis.ticks = element_blank(), legend.position = "none") + ylab("SDI")
     
     sdi_cvr.gtable <- ggplot_gtable(ggplot_build(sdi_cvr.ggplot))
     x.lengend.pos <- sdi_cvr.gtable$layout$r[which(sdi_cvr.gtable$layout$name == "panel")]
@@ -267,7 +292,7 @@ opspecs.plot <- function(data, base.inaccuracy, base.imprecision, title, base.mu
     d.out <- data[test, ]
     data <- data[! test, ]
     
-    opspecs.ggplot <- ggplot(data = data) + geom_polygon(data = area, aes(x = x, y = y), fill = "#00000010") + geom_abline(intercept = allowableTotalError, slope = -base.multiplier, colour = "#00000080") + geom_abline(intercept = allowableTotalError, slope = - base.multiplier - q, linetype = 2, colour = "#00000080") + geom_point(aes(x = imprecision, y = inaccuracy, shape = date), size = 2, colour = "#00000080", show_guide = FALSE) + geom_point(data = d.out, aes(x = imprecision, y = inaccuracy, shape = date), size = 4, colour = "black") + scale_shape_manual(values = 1:12, name = "Month") + xlab("Allowable Imprecision (%)") + ylab("Allowable Inaccuracy (%)") + ggtitle(substitute(title * ": OPSpecs Chart " * TE[a] * " " * ate * "% with 90% AOA (SE)", list(title = title, ate = formatC(allowableTotalError, width = 2, digit = 2, format = "d")))) + coord_cartesian(xlim = c(0, allowableTotalError / base.multiplier * 1.2), ylim = c(0, allowableTotalError)) + theme(panel.background = element_rect(fill = "#00000008"), legend.position = "right", axis.text = element_text(size = 10), axis.ticks = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"))
+    opspecs.ggplot <- ggplot(data = data) + geom_polygon(data = area, aes(x = x, y = y), fill = "#00000015") + geom_abline(intercept = allowableTotalError, slope = -base.multiplier, colour = "#00000080", size = 1) + geom_abline(intercept = allowableTotalError, slope = - base.multiplier - q, linetype = 2, colour = "#00000080", size = 1) + geom_point(aes(x = imprecision, y = inaccuracy, shape = date), size = 4, colour = "#000000A0", show_guide = FALSE) + geom_point(data = d.out, aes(x = imprecision, y = inaccuracy, shape = date), size = 8, colour = "black") + scale_shape_manual(values = 1:12, name = "Month") + xlab("Allowable Imprecision (%)") + ylab("Allowable Inaccuracy (%)") + ggtitle(substitute(title * ": OPSpecs Chart " * TE[a] * " " * ate * "% with 90% AOA (SE)", list(title = title, ate = formatC(allowableTotalError, width = 2, digit = 2, format = "d")))) + coord_cartesian(xlim = c(0, allowableTotalError / base.multiplier * 1.2), ylim = c(0, allowableTotalError)) + theme(panel.background = element_rect(fill = "#00000006"), plot.title = element_text(size = 18), legend.position = "right", axis.text = element_text(size = 18), axis.title = element_text(size = 18), axis.ticks = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"))
     
     opspecs.gtable <- ggplot_gtable(ggplot_build(opspecs.ggplot))
     
@@ -275,114 +300,97 @@ opspecs.plot <- function(data, base.inaccuracy, base.imprecision, title, base.mu
 }
 
 # y: standardized value
-history.plot <- function(y, date, service, lot, base.mean, base.sd, data, date.format = "%b", y.scale = "identity", y.scale.options = "", y.expression = "identity", y.expression.options = c("digit = 2", "format = 'f'"), scale.factor = 2, breaks.augumentation = 2) {
+history.plot <- function(y, date, base.mean, base.sd, data, title, qc.stat, dates, months, years, date.format = "%b", y.scale = "identity", y.scale.options = "", y.expression = "identity", y.expression.options = c("digit = 2", "format = 'f'"), scale.factor = 2, breaks.augumentation = 2, histogram.height = 0.65) {
     mf <- match.call(expand.dots = FALSE)
     m <- match(c("data", "na.action"), names(mf), 0L)
     mf <- mf[c(1L, m)]
-    mf$formula <- as.formula(paste(substitute(y), "~", substitute(date), "+", substitute(lot), "+", substitute(base.mean), "+", substitute(base.sd), "+", substitute(service)))
+    mf$formula <- as.formula(paste(substitute(y), "~", substitute(date), "+", substitute(base.mean), "+", substitute(base.sd)))
     mf$drop.unused.levels <- TRUE
     mf[[1L]] <- quote(stats::model.frame)
     mf <- eval(mf, parent.frame())
 
-    base.year <- unique(format(range(mf[, 2]), "%Y")) 
-    base.date <- format(as.Date(paste(rep(base.year, each = 12), rep(1:12, length(base.year)), 1, sep = "-")), date.format)
-    names(base.date) <- format(as.Date(paste(rep(base.year, each = 12), rep(1:12, length(base.year)), 1, sep = "-")), "%Y%m")
-    base.date[str_sub(names(base.date), -2) == "01"] <- paste(base.date[str_sub(names(base.date), -2) == "01"], str_sub(names(base.date)[str_sub(names(base.date), -2) == "01"], 1, 4), sep = "\n")
-    mf$.date <- as.ordered(format(mf[, 2], "%Y%m"))
-    levels(mf$.date) <- base.date[levels(mf$.date)]
-    mf$.lot <- mf[, 3]
-    mf$.mean <- mf[, 4]
-    mf$.sd <- mf[, 5]
-    mf$.service <- paste(mf[, 6], " #", mf[, 3], sep = "")
-    lots <- unique(mf$.service)
+    .date <- 1:length(dates)
+    names(.date) <- format(dates, "%Y%m")
+    mf$.date <- format(mf[, 2], "%Y%m")
+    mf$.index <- .date[mf$.date]
+    mf$.mean <- mf[, 3]
+    mf$.sd <- mf[, 4]
     
     if (data.class(y.scale) == "character") {
         mf$.y <- eval(parse(text = paste(".scale.", y.scale, "(mf[, 1], ", paste(y.scale.options, collapse = ", "), ")", sep = "")))
     } else {
         mf$.y <- y.scale(mf[, 1])
-    }    
+    }
+        
+    y.breaks <- seq(min(get.steppedlimit(min(mf[, 1], na.rm = TRUE), scale.factor, lower = TRUE), -3), max(get.steppedlimit(max(mf[, 1], na.rm = TRUE), scale.factor, lower = FALSE), 3), by = scale.factor)
+    y.labels <- y.breaks * mf$.sd[1] + mf$.mean[1]
+    if (data.class(y.scale) == "character") {
+        y.breaks <- eval(parse(text = paste(".scale.", y.scale, "(y.breaks, ", paste(y.scale.options, collapse = ", "), ")", sep = "")))
+    } else {
+        y.breaks <- y.scale(y.breaks)
+    }
+    y.labels <- y.labels[is.finite(y.breaks)]
+    y.breaks <- y.breaks[is.finite(y.breaks)]
+    if (data.class(y.expression[1]) == "character") {
+        y.labels <- eval(parse(text = paste(".expression.", y.expression, "(y.labels, ", paste(y.expression.options, collapse = ", "), ")", sep = "")))
+    } else {
+        y.labels <- y.expression(y.labels)
+    }
+    y.bp <- unique(as.numeric(sapply(1:(length(y.breaks) - 1), function(x) seq(y.breaks[x], y.breaks[x + 1], len = breaks.augumentation + 1))))
+    y.bl <- character(length(y.bp))
+    y.bl[seq(1, length(y.bp), by = breaks.augumentation)] <- y.labels
+
+    histogram.stat <- get.histogram.block(mf$.y, y.bp)
+    histogram.path <- get.histogram.path(histogram.stat)    
+    histogram.path$x <- histogram.path$x / sum(is.finite(mf$.result.std))
     
-    history.ggplot <- ggplot(data = mf) + geom_point(aes(x = .date, y = .y)) + theme(panel.background = element_rect(fill = "#00000005"), axis.text = element_text(size = 15), axis.ticks = element_blank(), axis.title = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"))
-    tmp.gtable <- ggplot_gtable(ggplot_build(history.ggplot))
-    panel.loc <- get.gtableloc.all(tmp.gtable, "panel")
-    base.gtable <- gtable(heights = tmp.gtable$heights, widths = tmp.gtable$widths)
+    ylim <- range(histogram.path$y)
+    ylim <- (ylim - mean(ylim)) * 1.1 + mean(ylim)
+    ylim[1] <- min(-3.5, ylim[1])
+    ylim[2] <- max(3.5, ylim[2])
+
+    statistics <- data.frame(bias = as.numeric(qc.stat["bias", ]), mean = (as.numeric(qc.stat["mean", ]) - mf$.mean[1]) / mf$.sd[1], cv = as.numeric(qc.stat["cv", ]), index = 1:length(months), date = paste(format(dates, "%b"), years, sep = "\n"), stringsAsFactors = FALSE)
+    statistics$bias.s <- format(statistics$bias * 100, digit = 2)
+    statistics$bias.s[grep("NA", statistics$bias.s)] <- ""
+    statistics$cv.s <- format(statistics$cv * 100, digit = 2)
+    statistics$cv.s[grep("NA", statistics$cv.s)] <- ""
+    
+    tmp <- max(abs(range(statistics$bias, na.rm = TRUE)))
+    bias.ylim <- c(-tmp, tmp)
+    
+    history.ggplot <- ggplot(data = mf) + geom_hline(yintercept = c(-3, 0, 3), colour = c("#00000080", "white", "#00000080"), size = c(1, 3, 1), linetype = c(3, 1, 3)) + geom_point(aes(x = .index, y = .y), position = position_jitter(width = 0.05, height = 0), colour = "#000000A0", shape = 1) + geom_line(data = statistics, aes(x = index, y = bias), colour = "#00000080", size = 2) + geom_point(data = statistics, aes(x = index, y = mean), colour = "#808080", size = 4) + scale_x_continuous(breaks = statistics$index, label = statistics$date) + scale_y_continuous(breaks = y.bp, label = y.bl) + coord_cartesian(xlim = c(min(statistics$index) - 0.5, max(statistics$index) + 0.5), ylim = ylim) + theme(panel.background = element_rect(fill = "#FCFCFC"), axis.text = element_text(size = 12), axis.ticks = element_blank(), axis.title = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"))
+    histogram.ggplot <- ggplot(data = histogram.path) + geom_vline(xintercept = -0.05, colour = "#00000020", size = 0.5) + geom_polygon(aes(x = x, y = y), fill = "gray95") + xlab("") + ylab("") + theme(panel.background = element_rect(fill = "white"), axis.ticks = element_blank(), panel.grid = element_blank(), axis.title.x = element_blank()) + scale_y_continuous(breaks = y.bp, label = y.bl) + geom_path(data = histogram.path[2:(nrow(histogram.path) - 1), ], aes(x = x, y = y), colour = "#00000080", size = 0.25) + coord_cartesian(ylim = ylim, xlim = c(-0.075, histogram.height))
+    bias.ggplot <- ggplot(data = statistics) + geom_hline(yintercept = 0, colour = "white", size = 1) + geom_line(aes(x = index, y = bias), colour = "00000080", size = 2) + geom_point(aes(x = index, y = bias), colour = "#606060", size = 3) + geom_text(data = statistics, aes(x = index, label = bias.s), y = bias.ylim[1] * 2.75, vjust = 0, colour = "#00000080", size = 4) + theme(panel.background = element_rect(fill = "#00000010"), axis.text = element_text(size = 15), axis.ticks = element_blank(), axis.title = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"), legend.position = "none") + scale_x_continuous(breaks = statistics$index, label = statistics$date) + scale_y_continuous(breaks = seq(-1, 1, 0.1)) + coord_cartesian(xlim = c(min(statistics$index) - 0.5, max(statistics$index) + 0.5), ylim = bias.ylim * 3)
+    cv.ggplot <- ggplot(data = statistics) + geom_bar(aes(x = index, y = cv), colour = "white", fill = "#00000080", stat = "identity", width = 0.4, size = 0.8) + geom_text(aes(x = index, label = cv.s), y = max(statistics$cv, na.rm = TRUE) * 1.25, vjust = 1, colour = "#00000080", size = 4) + theme(panel.background = element_rect(fill = "#00000010"), axis.text = element_text(size = 15), axis.ticks = element_blank(), axis.title = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"), legend.position = "none") + scale_x_continuous(breaks = statistics$index, label = statistics$date) + scale_y_continuous(breaks = seq(0, 1, 0.1)) + coord_cartesian(xlim = c(min(statistics$index) - 0.5, max(statistics$index) + 0.5), ylim = c(0, max(statistics$cv, na.rm = TRUE) * 1.3))
+
+    history.gtable <- ggplot_gtable(ggplot_build(history.ggplot))
+    histogram.gtable <- ggplot_gtable(ggplot_build(histogram.ggplot))
+    bias.gtable <- ggplot_gtable(ggplot_build(bias.ggplot))
+    cv.gtable <- ggplot_gtable(ggplot_build(cv.ggplot))
+    
+    panel.loc <- get.gtableloc.all(history.gtable, "panel")
+    base.gtable <- gtable(heights = history.gtable$heights, widths = history.gtable$widths)
     base.gtable <- gtable_add_rows(base.gtable, height = unit(2, "lines"), pos = panel.loc["t"] - 1)
     base.gtable <- gtable_add_cols(base.gtable, width = unit(0.5, "null"), pos = panel.loc["l"] - 1)
     base.gtable <- gtable_add_cols(base.gtable, width = unit.c(unit(0.25, "lines"), unit(0.15, "null")), pos = panel.loc["r"] + 1)
-    base.gtable <- gtable_add_rows(base.gtable, height = unit.c(unit(0.25, "lines"), unit(0.25, "null")), pos = panel.loc["b"] + 1)
+    base.gtable <- gtable_add_rows(base.gtable, height = unit.c(unit(0.25, "lines"), unit(0.25, "null"), unit(0.25, "lines"), unit(0.25, "null")), pos = panel.loc["b"] + 1)
     
-    panel.loc <- c(panel.loc["l"], panel.loc["r"] + 1)
-    names(panel.loc) <- c("l", "r")
+    panel.loc["r"] <- panel.loc["r"] + 1
+    panel.loc["t"] <- panel.loc["t"] + 1  
+    panel.loc["b"] <- panel.loc["b"] + 1
     
-    height.loc <- 3
-    if (length(lots) > 1) {
-        for (l in 2:length(lots)) {
-            base.gtable <- gtable_add_rows(base.gtable, height = unit.c(unit(0.5, "lines"), unit(2, "lines"), unit(1, "null"), unit(0.25, "lines"), unit(0.25, "null")), pos = height.loc[l - 1] + 3)
-            height.loc <- c(height.loc, height.loc[l - 1] + 5)
-        }
-    }
-    base.gtable <- gtable_add_grob(base.gtable, tmp.gtable$grobs[[which(tmp.gtable$layout$name == "background")]], name = "background", clip = "on", t = 1, l = 1, b = length(base.gtable$heights), r = length(base.gtable$widths))
-    base.gtable <- gtable_add_grob(base.gtable, tmp.gtable$grobs[[which(tmp.gtable$layout$name == "axis-b")]], name = "axis-b:date", clip = "off", t = height.loc[length(height.loc)] + 4, l = panel.loc["l"], b = height.loc[length(height.loc)] + 4, r = panel.loc["r"])
+    base.gtable <- gtable_add_grob(base.gtable, history.gtable$grobs[[which(history.gtable$layout$name == "background")]], name = "background", clip = "on", t = 1, l = 1, b = length(base.gtable$heights), r = length(base.gtable$widths))
+    base.gtable <- gtable_add_grob(base.gtable, history.gtable$grobs[[which(history.gtable$layout$name == "axis-b")]], name = "axis-b:date", clip = "off", t = panel.loc["b"] + 5, l = panel.loc["l"], b = panel.loc["b"] + 5, r = panel.loc["r"])
     
-    statistics <- data.frame(index = paste("D", formatC(unique(as.integer(mf$.date)), width = 2, flag = "0"), sep = "_"))
-    statistics$index.n <- 1:nrow(statistics)
-    # base
-    for (l in 1:length(lots)) {
-        mf.sub <- mf[mf$.service == lots[l], ]
-    
-        y.breaks <- seq(min(get.steppedlimit(min(mf.sub[, 1], na.rm = TRUE), scale.factor, lower = TRUE), -3), max(get.steppedlimit(max(mf.sub[, 1], na.rm = TRUE), scale.factor, lower = FALSE), 3), by = scale.factor)
-        y.labels <- y.breaks * mf.sub$.sd[1] + mf.sub$.mean[1]
-        if (data.class(y.scale) == "character") {
-            y.breaks <- eval(parse(text = paste(".scale.", y.scale, "(y.breaks, ", paste(y.scale.options, collapse = ", "), ")", sep = "")))
-        } else {
-            y.breaks <- y.scale(y.breaks)
-        }
-        y.labels <- y.labels[is.finite(y.breaks)]
-        y.breaks <- y.breaks[is.finite(y.breaks)]
-        if (data.class(y.expression[1]) == "character") {
-            y.labels <- eval(parse(text = paste(".expression.", y.expression, "(y.labels, ", paste(y.expression.options, collapse = ", "), ")", sep = "")))
-        } else {
-            y.labels <- y.expression(y.labels)
-        }
-        y.bp <- unique(as.numeric(sapply(1:(length(y.breaks) - 1), function(x) seq(y.breaks[x], y.breaks[x + 1], len = breaks.augumentation + 1))))
-        y.bl <- character(length(y.bp))
-        y.bl[seq(1, length(y.bp), by = breaks.augumentation)] <- y.labels
-    
-        histogram.stat <- get.histogram.block(mf.sub$.y, y.bp)
-        histogram.path <- get.histogram.path(histogram.stat)
-        statistics.sub <- tapply(mf.sub[, 1], paste("D", formatC(as.integer(mf.sub$.date), width = 2, flag = "0"), sep = "_"), function(x) {
-            c(bias = mean(x, na.rm = TRUE), cv = sd(x, na.rm = TRUE) * mf.sub$.sd[1] / (mean(x, na.rm = TRUE) * mf.sub$.sd[1] + mf.sub$.mean[1]))
-        })
-        statistics$bias <- sapply(statistics$index, function(x) if (x %in% names(statistics.sub)) {
-            statistics.sub[[x]]["bias"]
-        } else {
-            NA
-        })
-        statistics$cv <- sapply(statistics$index, function(x) if (x %in% names(statistics.sub)) {
-            statistics.sub[[x]]["cv"]
-        } else {
-            NA
-        })
-        
-        ylim <- range(histogram.path$y)
-        ylim <- (ylim - mean(ylim)) * 1.1 + mean(ylim)
-        history.ggplot <- ggplot(data = mf.sub) + geom_hline(yintercept = c(-3, 0, 3), colour = c("#00000020", "white", "#00000020"), size = c(1, 3, 1), linetype = c(3, 1, 3)) + geom_point(aes(x = .date, y = .y), position = position_jitter(width = 0.05, height = 0), colour = "#00000080", shape = 1) + geom_line(data = statistics, aes(x = index.n, y = bias), colour = "#00000060") + geom_point(data = statistics, aes(x = index.n, y = bias), colour = "#808080", size = 3) + scale_y_continuous(breaks = y.bp, label = y.bl) + coord_cartesian(ylim = ylim) + theme(panel.background = element_rect(fill = "#00000005"), axis.text = element_text(size = 15), axis.ticks = element_blank(), axis.title = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"))
-        histogram.ggplot <- ggplot(data = histogram.path) + geom_vline(xintercept = -1, colour = "#00000020", size = 0.5) + geom_polygon(aes(x = x, y = y), fill = "gray95") + xlab("") + ylab("") + theme(panel.background = element_rect(fill = "white"), axis.ticks = element_blank(), panel.grid = element_blank(), axis.title.x = element_blank()) + scale_y_continuous(breaks = y.bp, label = y.bl) + geom_path(data = histogram.path[2:(nrow(histogram.path) - 1), ], aes(x = x, y = y), colour = "#00000080", size = 0.25) + coord_cartesian(ylim = ylim)
-        statistics.ggplot <- ggplot(data = statistics) + geom_bar(aes(x = index, y = cv), colour = "white", fill = "#00000025", stat = "identity", width = 0.4, size = 0.8) + geom_text(aes_string(x = "index", label = "format(cv * 100, digit = 2)"), y = max(statistics$cv, na.rm = TRUE) * 1.25, vjust = 1, colour = "#00000050", size = 4)+ theme(panel.background = element_rect(fill = "#00000005"), axis.text = element_text(size = 15), axis.ticks = element_blank(), axis.title = element_blank(), panel.grid.minor = element_blank(), panel.grid.major.y = element_line(colour = "#FFFFFF60"), legend.position = "none") + scale_y_continuous(breaks = seq(0, 1, 0.1)) + coord_cartesian(ylim = c(0, max(statistics$cv, na.rm = TRUE) * 1.3))
-        x <<- statistics
-
-        history.gtable <- ggplot_gtable(ggplot_build(history.ggplot))
-        histogram.gtable <- ggplot_gtable(ggplot_build(histogram.ggplot))
-        statistics.gtable <- ggplot_gtable(ggplot_build(statistics.ggplot))
-
-        base.gtable <- gtable_add_grob(base.gtable, rectGrob(gp = gpar(fill = "#00000010", col = 0)), name = paste(lots[l], ":background", sep = ""), clip = "off", t = height.loc[l], l = panel.loc["l"], b = height.loc[l], r = panel.loc["l"])
-        base.gtable <- gtable_add_grob(base.gtable, textGrob(lots[l], x = unit(0.1, "npc"), hjust = 0, gp = gpar(col = "gray20", fontsize = 18)), name = lots[l], clip = "on", t = height.loc[l], l = panel.loc["l"], b = height.loc[l], r = panel.loc["l"])
-        base.gtable <- gtable_add_grob(base.gtable, history.gtable$grob[[which(tmp.gtable$layout$name == "panel")]], name = paste("history:", l, sep = ""), clip = "on", t = height.loc[l] + 1, l = panel.loc["l"], b = height.loc[l] + 1, r = panel.loc["r"])
-        base.gtable <- gtable_add_grob(base.gtable, histogram.gtable$grob[[which(tmp.gtable$layout$name == "panel")]], name = paste("histogram:", l, sep = ""), clip = "on", t = height.loc[l] + 1, l = panel.loc["r"] + 2, b = height.loc[l] + 1, r = panel.loc["r"] + 2)
-        base.gtable <- gtable_add_grob(base.gtable, statistics.gtable$grob[[which(tmp.gtable$layout$name == "panel")]], name = paste("cv:", l, sep = ""), clip = "on", t = height.loc[l] + 3, l = panel.loc["l"], b = height.loc[l] + 3, r = panel.loc["r"])
-        base.gtable <- gtable_add_grob(base.gtable, textGrob("CV\n(%)", gp = gpar(col = "gray20", fontsize = 10)), name = paste("axis-l-cv:", l, sep = ""), clip = "off", t = height.loc[l] + 3, l = panel.loc["l"] - 1, b = height.loc[l] + 3, r = panel.loc["l"] - 1)
-        base.gtable <- gtable_add_grob(base.gtable, history.gtable$grob[[which(tmp.gtable$layout$name == "axis-l")]], name = paste("axis-l:", l, sep = ""), clip = "off", t = height.loc[l] + 1, l = panel.loc["l"] - 1, b = height.loc[l] + 1, r = panel.loc["l"] - 1)
-    }
+    base.gtable <- gtable_add_grob(base.gtable, rectGrob(gp = gpar(fill = "#00000010", col = 0)), name = "title:background", clip = "off", t = panel.loc["t"] - 1, l = panel.loc["l"], b = panel.loc["t"] - 1, r = panel.loc["l"])
+    base.gtable <- gtable_add_grob(base.gtable, textGrob(title, x = unit(0.1, "npc"), hjust = 0, gp = gpar(col = "gray20", fontsize = 18)), name = "title", clip = "on", t = panel.loc["t"] - 1, l = panel.loc["l"], b = panel.loc["t"] - 1, r = panel.loc["l"])
+    base.gtable <- gtable_add_grob(base.gtable, history.gtable$grob[[which(history.gtable$layout$name == "panel")]], name = "history:", clip = "on", t = panel.loc["t"], l = panel.loc["l"], b = panel.loc["b"], r = panel.loc["r"])
+    base.gtable <- gtable_add_grob(base.gtable, history.gtable$grob[[which(history.gtable$layout$name == "axis-l")]], name = "axis-l", clip = "off", t = panel.loc["t"], l = panel.loc["l"] - 1, b = panel.loc["t"], r = panel.loc["l"] - 1)
+    base.gtable <- gtable_add_grob(base.gtable, histogram.gtable$grob[[which(history.gtable$layout$name == "panel")]], name = "histogram:", clip = "on", t = panel.loc["t"], l = panel.loc["r"] + 2, b = panel.loc["b"], r = panel.loc["r"] + 2)
+    base.gtable <- gtable_add_grob(base.gtable, bias.gtable$grob[[which(bias.gtable$layout$name == "panel")]], name = "bias", clip = "on", t = panel.loc["t"] + 2, l = panel.loc["l"], b = panel.loc["t"] + 2, r = panel.loc["r"])
+    base.gtable <- gtable_add_grob(base.gtable, textGrob("Bias\n(%)", gp = gpar(col = "gray20", fontsize = 10)), name = "axis-l:bias", clip = "off", t = panel.loc["t"] + 2, l = panel.loc["l"] - 1, b = panel.loc["t"] + 2, r = panel.loc["l"] - 1)
+    base.gtable <- gtable_add_grob(base.gtable, cv.gtable$grob[[which(cv.gtable$layout$name == "panel")]], name = "cv", clip = "on", t = panel.loc["t"] + 4, l = panel.loc["l"], b = panel.loc["t"] + 4, r = panel.loc["r"])
+    base.gtable <- gtable_add_grob(base.gtable, textGrob("CV\n(%)", gp = gpar(col = "gray20", fontsize = 10)), name = "axis-l:cv", clip = "off", t = panel.loc["t"] + 4, l = panel.loc["l"] - 1, b = panel.loc["t"] + 4, r = panel.loc["l"] - 1)
         
     base.gtable
 }
