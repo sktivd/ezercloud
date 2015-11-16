@@ -22,8 +22,10 @@
         <td><%= frend.serial_number %></td>
         <td><%= Frend::TEST_TYPE[frend.test_type] %></td>
         <td>
-          <% if frend.kit != 11 %>
+          <% if frend.kit != 0 and frend.kit != 11 %>
             <a href="#" data-toggle="tooltip" data-placement="right" title="<%= '(' + frend.lot.to_s + ') ' +  assay_kits[frend.kit][:reagents].join(",  ") %>"><%= assay_kits[frend.kit][:kit] %></a>
+          <% elsif frend.kit == 0 %>
+            <%= frend.kit %>          
           <% else %>
             <%= assay_kits[frend.kit][:kit] %>
           <% end %>
