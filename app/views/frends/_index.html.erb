@@ -5,7 +5,6 @@
       <th>IP address</th>
       <th>Serial number</th>
       <th>Type</th>
-      <th>Processed</th>
       <th>Kit</th>
       <th>Results</th>
       <th>QC material</th>
@@ -22,11 +21,6 @@
         <td><%= frend.diagnosis.ip_address %></td>
         <td><%= frend.serial_number %></td>
         <td><%= Frend::TEST_TYPE[frend.test_type] %></td>
-        <% if frend.processed %>
-          <td><%= frend.processed %></td>
-        <% else %>
-          <td><%= frend.error_code %></td>
-        <% end %>
         <td>
           <% if frend.kit != 11 %>
             <a href="#" data-toggle="tooltip" data-placement="right" title="<%= '(' + frend.lot.to_s + ') ' +  assay_kits[frend.kit][:reagents].join(",  ") %>"><%= assay_kits[frend.kit][:kit] %></a>
@@ -34,7 +28,11 @@
             <%= assay_kits[frend.kit][:kit] %>
           <% end %>
         </td>
-        <td><%= frend.test_values.join(", ") %></td>
+        <% if frend.processed %>
+          <td><%= frend.test_values.join(", ") %></td>
+        <% else %>
+          <td><%= frend.error_code %></td>
+        <% end %>
         <td><%= frend.qc_service + " \#" + frend.qc_lot if frend.qc_service and frend.qc_service != "" %></td>
         <% if administrator? %>
           <td><%= link_to 'Destroy', diagnosis_path(frend.diagnosis, active: 'frends', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
