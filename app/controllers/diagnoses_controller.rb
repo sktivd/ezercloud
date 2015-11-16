@@ -38,9 +38,16 @@ class DiagnosesController < ApplicationController
         end
       end
       format.json do
+        params[:equipment] = "FREND"  if params[:from].nil?
         params[:from] = 1.month.ago   if params[:from].nil?
         params[:to]   = DateTime.now  if params[:to].nil?
-        @diagnoses = Diagnosis.where(measured_at: params[:from]..params[:to]) 
+        
+        @equipment_name = Equipment.find_by(equipment: params[:equipment])
+        if @equipment_name
+          @equipment = Object.const_get(@equipment_name[:klass]).read.where(diagnoses: { measured_at: params[:from]..params[:to] })
+        else
+          redirect_to root_path, notice: 'invalid Equipment'
+        end
       end
     end
   end

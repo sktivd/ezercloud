@@ -1,4 +1,8 @@
-json.array!(@diagnoses) do |diagnosis|
-  json.extract! diagnosis, :order_number, :equipment, :measured_at, :ip_address, :location, :created_at, :technician
-#  json.url diagnosis_url(diagnosis, format: :json)
+json.array!(@equipment) do |equipment|
+  json.set! @equipment_name.equipment do
+    json.partial! equipment
+  end
+  json.Diagnosis do
+    json.partial! equipment.diagnosis
+  end
 end
