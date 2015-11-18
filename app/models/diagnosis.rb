@@ -22,8 +22,9 @@ class Diagnosis < ActiveRecord::Base
   validates :elapsed_time,  allow_blank:true, numericality: { greater_than_or_equal_to: 0, message: "should be greater than or equal to 0" }
   validates :latitude,      allow_blank:true, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
   validates :longitude,     allow_blank:true, numericality: { greater_than_or_equal_to: -360, less_than_or_equal_to: 360 }
-  validates :sex,           allow_blank:true, numericality: { integer_only: true, greater_than_or_equal_to: -1, less_than_or_equal_to: 2 }
-  validates :age_band,      allow_blank:true, numericality: { integer_only: true, greater_than_or_equal_to: -1, less_than_or_equal_to: 9 }
+#  in future?
+#  validates :sex,           allow_blank:true, numericality: { integer_only: true, greater_than_or_equal_to: -1, less_than_or_equal_to: 2 }
+#  validates :age_band,      allow_blank:true, numericality: { integer_only: true, greater_than_or_equal_to: -1, less_than_or_equal_to: 9 }
   validate :check_protocol_name, :check_measured_time
   
   def check_protocol_name

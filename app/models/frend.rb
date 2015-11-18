@@ -10,7 +10,8 @@ class Frend < ActiveRecord::Base
   validates :serial_number, :test_type, :kit, :lot, presence: true
   validates :version,       numericality: { equal_to: VERSION, message: "should be matched to server's version" }  
   validates :qc_service, :qc_lot, presence: true, if: :external_qc?
-  validates :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calculated_ratio_test, :internal_qc_test, presence: true, if: :internal_qc? 
+# temporary does not check internal QC data 
+#  validates :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calculated_ratio_test, :internal_qc_test, presence: true, if: :internal_qc? 
 
   def test_names
     test_id.split(":", 3).map { |value| Reagent.find_by(number: value).name if value and value != "" and value != "0" }.compact
