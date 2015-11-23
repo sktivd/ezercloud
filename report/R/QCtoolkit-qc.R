@@ -41,7 +41,7 @@ one.year.ago <- as.Date(paste(one.year.ago.year, one.year.ago.month, "01", sep =
 period <- generate.period(firstday.month, now)
 
 # connect to database
-conn <- dbConnect(dbDriver("PostgreSQL"), dbname = Sys.getenv("POSTGRES_DATABASE"), user = Sys.getenv("POSTGRES_USERNAME"), password = Sys.getenv("POSTGRES_PASSWORD"))
+conn <- dbConnect(dbDriver("PostgreSQL"), dbname = Sys.getenv("POSTGRES_DATABASE"), user = Sys.getenv("POSTGRES_USERNAME"), password = Sys.getenv("POSTGRES_PASSWORD"), host = "127.0.0.1")
 
 # check available reagents
 reagent.list <- dbGetQuery(conn, paste("SELECT equipment.equipment, reagents.number FROM equipment RIGHT JOIN assay_kits ON equipment.equipment = assay_kits.equipment RIGHT JOIN reagents ON assay_kits.id = reagents.assay_kit_id"))
@@ -123,9 +123,12 @@ for (rindex in 1:nrow(reagent.list)) {
         qc.month.s <- qc.month[qc.month$serial_number == serial, ]
         qc.s <- qc.whole[qc.whole$serial_number == serial, ]
         qc.month.r <- qc.month[qc.month$ip_address %in% reference.information$ip_address, ]
-        latest.measured <- format(max(qc.month.s$measured_at), "%F")
+        latest.measured <- qc.month.s[rev(order(qc.month.s$measured_at))[1], ]
+        latest.measured.date <- format(latest.measured$measured_at, "%F")
+        latest.ip_address <- latest.measured$ip_address
+        latest.technician <- latest.measured$technician
 
-        filename.prefix <- paste(equipment, serial, kit, latest.measured, "qc", sep = "-")
+        filename.prefix <- paste(equipment, serial, kit, latest.measured.date, "qc", sep = "-")
 
         # IP based keywords
         keywords.serial <- matrix(c(
@@ -152,26 +155,26 @@ for (rindex in 1:nrow(reagent.list)) {
                 internal.s[1, "equipment"] <- "FREND"
                 internal.s[1, "serial_number"] <- serial
             }
-            generate.graph.thismonth.internal(internal.s, prefix = file.path(path.pdf, filename.prefix))
+            generate.graph.thismonth.internal(internal.s, prefix = file.path(path.pdf, filename.prefix), ip_address = latest.ip_address, technician = latest.technician)
         }
 
-        generate.table.thismonth.history(qc.month.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, messages = equipment.errorcodes)
+        generate.table.thismonth.history(qc.month.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, messages = equipment.errorcodes, ip_address = latest.ip_address, technician = latest.technician)
 
-        generate.tablegraph.thismonth.levey_jennings(qc.month.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information)
+        generate.tablegraph.thismonth.levey_jennings(qc.month.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, ip_address = latest.ip_address, technician = latest.technician)
 
-        generate.tablegraph.thisyear.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+        generate.tablegraph.thisyear.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference, ip_address = latest.ip_address, technician = latest.technician)
         
-        generate.table.thisyear.history.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+        generate.table.thisyear.history.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference, ip_address = latest.ip_address, technician = latest.technician)
 
-        generate.graph.thisyear.history.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+        generate.graph.thisyear.history.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference, ip_address = latest.ip_address, technician = latest.technician)
 
-        generate.graph.thisyear.opspecs.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference)
+        generate.graph.thisyear.opspecs.qc(qc.s, prefix = file.path(path.pdf, filename.prefix), qc.info = qcmaterial.information, whole = qc.whole, reference = qc.reference, ip_address = latest.ip_address, technician = latest.technician)
         
         # upload QC report
         system(paste(file.path(CONTEXT_PATH, "context"), " --mode=", equipment, " ", file.path(path.pdf, paste(filename.prefix, ".tex > /dev/null", sep = "")), sep = ""))
         if (file.access(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = ""))) >= 0) {
             # TLSv1.2: sslversion = 6
-            postForm(uri = UPLOAD_HOST, "report[equipment]" = equipment, "report[serial_number]" = serial, "report[date]" = latest.measured, "report[reagent_number]" = kit, "report[document]" = fileUpload(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = "")), contentType = "application/pdf"), .opts = list(timeout = TIMEOUT, ssl.verifypeer = FALSE, sslversion = 6))
+            postForm(uri = UPLOAD_HOST, "report[equipment]" = equipment, "report[serial_number]" = serial, "report[date]" = latest.measured.date, "report[reagent_number]" = kit, "report[document]" = fileUpload(file.path(path.pdf, paste(filename.prefix, ".pdf", sep = "")), contentType = "application/pdf"), .opts = list(timeout = TIMEOUT, ssl.verifypeer = FALSE, sslversion = 6))
         }
     }
 }

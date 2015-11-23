@@ -19,7 +19,7 @@ class NotificationEmailWorker
     options       = JSON.parse options.to_json, symbolize_names: true
     @notification = Notification.find(options[:id])
     
-    if @notification and @notification.notified_at.nil?
+    if @notification and @notification.notified_at.nil? and DateTime.now < @notification.expired_at
       Notifier.send(@notification.mailer.to_sym, @notification).deliver_now
       @notification.update(sent_at: DateTime.now)
       NotificationEmailWorker.perform_at(RECHECK_TIME.days.from_now, id: @notification.id)

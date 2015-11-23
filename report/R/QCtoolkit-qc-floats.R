@@ -94,6 +94,15 @@ get.qcstat5 <- function(site) {
     z
 }
 
+get.location <- function(ip_address, technician, longitude, latitude) {
+    location <- paste("Location: ", technician, " (", ip_address, ")", sep = "")
+    
+    if (! missing(longitude) && ! missing(latitude)) {
+    }
+    
+    location
+}
+
 generate.frame.withtitle <- function(contents, title, subtitles = "", footnote = "") {
     if (! is.list(contents)) {
         contents <- list(contents)
@@ -146,7 +155,7 @@ generate.multiple.pages <- function(contents, header = "", footer = "", lines = 
     z
 }
 
-generate.graph.thismonth.internal <- function(object, prefix, ...) {
+generate.graph.thismonth.internal <- function(object, prefix, ip_address, technician, ...) {
     object <- object[order(format(object$measured_at, "%F %X")), ]    
 
     # FREND internal plot
@@ -158,14 +167,14 @@ generate.graph.thismonth.internal <- function(object, prefix, ...) {
     z <- paste("\\placefigure[center,here,none][fig:", serial, "-internal]{}{\\externalfigure[", paste(prefix, "month-internal.pdf", sep = "-"), "][width=\\hsize]}", sep = "")
 
     # equipment title
-    z <- generate.frame.withtitle(z, object$serial_number[1], paste("Location: ", object$ip_address[1], sep = ""), 
+    z <- generate.frame.withtitle(z, object$serial_number[1], get.location(ip_address, technician), 
         "P Error: FREND Laser Power Failure\\\\A Error: FREND Laser Alignment Failure\\\\M Error: Measurement Failure (Calculated Ratio differs from Manufacture setting)")
     
     write.table(z, file = paste(prefix, "-month-graph-internal.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n")
     
 }
 
-generate.table.thismonth.history <- function(object, prefix, qc.information, messages, ...) {
+generate.table.thismonth.history <- function(object, prefix, qc.information, messages, ip_address, technician, ...) {
     object <- object[order(paste(object$qc_service, object$qc_lot, format(object$measured_at, "%F %X"))), ]
     object$.bs <- paste(object$qc_service, object$qc_lot, sep = "#")
         
@@ -174,7 +183,7 @@ generate.table.thismonth.history <- function(object, prefix, qc.information, mes
     header <- c(
         "\\bTABLE[setups={table:monthhistory}, split=repeat]", 
         "\\bTABLEhead", 
-        paste("\\bTR[style=\\rm] \\bTH Date \\eTH \\bTH Service \\eTH \\bTH Lot \\eTH \\bTH 3SD Range \\eTH \\bTH", qc.information$unit[1], " \\eTH \\bTH QC status \\eTH \\bTH Technician \\eTH \\eTR"), 
+        paste("\\bTR[style=\\rm] \\bTH Date \\eTH \\bTH Service \\eTH \\bTH Lot \\eTH \\bTH Mean \\eTH \\bTH 3SD Range \\eTH \\bTH", qc.information$unit[1], " \\eTH \\bTH QC status \\eTH \\eTR"), 
         "\\eTABLEhead", 
         "\\bTABLEbody"
     )
@@ -193,16 +202,19 @@ generate.table.thismonth.history <- function(object, prefix, qc.information, mes
                 format(object$measured_at[n], "%b %d"), 
                 object$qc_service[n],
                 object$qc_lot[n],
+                object$.qc.mean[n],
                 object$.threesd.range[n],
                 value, 
-                status,
-                object$technician[n])
+                status
+            )
         )
     }
     footer <- c( 
         "\\eTABLEbody",  
         "\\eTABLE"
     )
+    # qc status
+    qc.status <- c("pass: managed within 2SD range\\\\warning: out of 2SD range\\\\fail: out of 3SD range")
     # error codes
     errorcodes <- unique(errorcodes)
     if (length(errorcodes) > 0) {
@@ -215,12 +227,12 @@ generate.table.thismonth.history <- function(object, prefix, qc.information, mes
     z <- generate.multiple.pages(contents, header, footer)
     
     # equipment title
-    z <- generate.frame.withtitle(z, object$serial_number[1], paste("Location: ", object$ip_address[1], sep = ""), error.messages)
+    z <- generate.frame.withtitle(z, object$serial_number[1], get.location(ip_address, technician), paste(qc.status, error.messages, collapse = "\\\\"))
     
     write.table(z, file = paste(prefix, "-month-table-history.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n")
 }
 
-generate.tablegraph.thismonth.levey_jennings <- function(object, prefix, qc.information, ...) {
+generate.tablegraph.thismonth.levey_jennings <- function(object, prefix, qc.information, ip_address, technician, ...) {
     object <- object[order(paste(object$qc_service, object$qc_lot, format(object$measured_at, "%F %X"))), ]
     object$.bs <- paste(object$qc_service, object$qc_lot, sep = "#")
         
@@ -247,13 +259,13 @@ generate.tablegraph.thismonth.levey_jennings <- function(object, prefix, qc.info
     )
     
     # equipment title
-    z <- generate.frame.withtitle(z, object$serial_number[1], paste("Location: ", object$ip_address[1], sep = ""),
+    z <- generate.frame.withtitle(z, object$serial_number[1], get.location(ip_address, technician),
     "$\\tfx\\rm{1_{3s}}$: Out of 3SD Range\\\\$\\tfx\\rm{1_{2s}}$: Out of 2SD Range\\\\$\\tfx\\rm{R_{4s}}$: Over 4SD variation")
     
     write.table(z, file = paste(prefix, "-month-tablegraph-diagnosis.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n")
 }
 
-generate.tablegraph.thisyear.qc <- function(object, prefix, qc.information, whole, reference, ...) {
+generate.tablegraph.thisyear.qc <- function(object, prefix, qc.information, whole, reference, ip_address, technician, ...) {
     object <- object[order(paste(object$qc_service, object$qc_lot, format(object$measured_at, "%F %X"))), ]
     object$.bs <- paste(object$qc_service, object$qc_lot, sep = "#")
 
@@ -263,43 +275,39 @@ generate.tablegraph.thisyear.qc <- function(object, prefix, qc.information, whol
     qcstat.b <- get.qcstat3(object)
 
     # generate summary table    
-    z <- c( 
-        "\\bTABLE[setups={table:yearframe}]"
-    )
-        for (l in 1:nrow(qcstat.w)) {
-            sdicvr <- data.frame(sdi = c(qcstat.b[l, "sdi"], qcstat.w[l, "sdi"], qcstat.r[l, "sdi"]), cvr = c(qcstat.b[l, "cvr"], qcstat.w[l, "cvr"], qcstat.r[l, "cvr"]), shape = c("insert", "whole", "reference"))
-            pdf(file = paste(prefix, "-year-sdi_cvr-", l,".pdf", sep = ""), width = 5, height = 4)
-            grid.draw(sdi_cvr.plot(sdi, cvr, shape, sdicvr))
-            dev.off()
-            z <- c(z,
-                "\\bTR \\bTD {\\startcombination[2*1]",
-                "{\\bTABLE[setups={table:yearsdicvr}, style=\\tfx\\ss]",
-#                "\\bTR \\eTR",
-#                paste("\\bTR \\bTD[nc=4, background=color, backgroundcolor=titlebackgroundcolor, align=right, style=\\rm] ", rownames(qcstat.w)[l]," \\eTD \\bTD \\eTD \\eTR", sep = ""),
-                paste("\\bTR[bottomframe=on, framecolor=titlebackgroundcolor, rulethickness=1pt] \\bTD[nc=5, align=right, style=\\rm] ", rownames(qcstat.w)[l]," \\eTD \\bTD \\eTD \\eTR", sep = ""),
-                "\\bTR \\bTH \\eTH \\bTH \\eTH \\bTH \\bullet       \\eTH \\bTH \\diamond    \\eTH \\bTH \\boxplus        \\eTH \\bTH \\eTH \\eTR",
-                "\\bTR \\bTH \\eTH \\bTH \\eTH \\bTH {\\bf insert } \\eTH \\bTH {\\bf whole} \\eTH \\bTH {\\bf reference} \\eTH \\bTH \\eTH \\eTR",
-                paste("\\bTR \\bTD \\eTD \\bTD SDI \\eTD \\bTD", formatC(qcstat.b[l, "sdi"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.w[l, "sdi"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.r[l, "sdi"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD \\eTD \\eTR"),
-                paste("\\bTR \\bTD \\eTD \\bTD CVR \\eTD \\bTD", formatC(qcstat.b[l, "cvr"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.w[l, "cvr"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.r[l, "cvr"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD \\eTD \\eTR"),
-                paste("\\bTR[aligncharacter=no] \\bTD \\eTD \\bTD N. Labs \\eTD \\bTD . \\eTD \\bTD", formatC(qcstat.w[l, "nlabs"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD", formatC(qcstat.r[l, "nlabs"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD \\eTD \\eTR"),
-                paste("\\bTR[aligncharacter=no] \\bTD \\eTD \\bTD N. Measurement \\eTD \\bTD . \\eTD \\bTD", formatC(qcstat.w[l, "n"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD", formatC(qcstat.r[l, "n"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD \\eTD \\eTR"),
-                "\\bTR[offset=none] \\eTR",
-                "\\eTABLE}{}",
-                paste("{\\externalfigure[", paste(prefix, "-year-sdi_cvr-", l,".pdf", sep = ""), "][width=.4\\hsize]}{}", sep = ""),
-                "\\stopcombination} \\eTD \\eTR"
-            )
-        }
+    z <- "\\bTABLE[setups={table:yearframe}]"
+    for (l in 1:nrow(qcstat.w)) {
+        sdicvr <- data.frame(sdi = c(qcstat.b[l, "sdi"], qcstat.w[l, "sdi"], qcstat.r[l, "sdi"]), cvr = c(qcstat.b[l, "cvr"], qcstat.w[l, "cvr"], qcstat.r[l, "cvr"]), shape = c("insert", "whole", "reference"))
+        pdf(file = paste(prefix, "-year-sdi_cvr-", l,".pdf", sep = ""), width = 5, height = 4)
+        grid.draw(sdi_cvr.plot(sdi, cvr, shape, sdicvr))
+        dev.off()
+        z <- c(z,
+            "\\bTR \\bTD {\\startcombination[2*1]",
+            "{\\bTABLE[setups={table:yearsdicvr}, style=\\tfx\\ss]",
+            paste("\\bTR[bottomframe=on, framecolor=titlebackgroundcolor, rulethickness=1pt] \\bTD[nc=5, align=right, style=\\rm] ", rownames(qcstat.w)[l]," \\eTD \\bTD \\eTD \\eTR", sep = ""),
+            "\\bTR \\bTH \\eTH \\bTH \\eTH \\bTH \\bullet       \\eTH \\bTH \\diamond    \\eTH \\bTH \\boxplus        \\eTH \\bTH \\eTH \\eTR",
+            "\\bTR \\bTH \\eTH \\bTH \\eTH \\bTH {\\bf insert } \\eTH \\bTH {\\bf whole} \\eTH \\bTH {\\bf reference} \\eTH \\bTH \\eTH \\eTR",
+            paste("\\bTR \\bTD \\eTD \\bTD SDI \\eTD \\bTD", formatC(qcstat.b[l, "sdi"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.w[l, "sdi"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.r[l, "sdi"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD \\eTD \\eTR"),
+            paste("\\bTR \\bTD \\eTD \\bTD CVR \\eTD \\bTD", formatC(qcstat.b[l, "cvr"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.w[l, "cvr"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD", formatC(qcstat.r[l, "cvr"], digits = 2, width = 2, format = "f"), "\\eTD \\bTD \\eTD \\eTR"),
+            paste("\\bTR[aligncharacter=no] \\bTD \\eTD \\bTD N. Labs \\eTD \\bTD . \\eTD \\bTD", formatC(qcstat.w[l, "nlabs"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD", formatC(qcstat.r[l, "nlabs"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD \\eTD \\eTR"),
+            paste("\\bTR[aligncharacter=no] \\bTD \\eTD \\bTD N. Measurement \\eTD \\bTD . \\eTD \\bTD", formatC(qcstat.w[l, "n"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD", formatC(qcstat.r[l, "n"], digits = 2, width = 2, format = "d"), "\\eTD \\bTD \\eTD \\eTR"),
+            "\\bTR[offset=none] \\eTR",
+            "\\eTABLE}{}",
+            paste("{\\externalfigure[", paste(prefix, "-year-sdi_cvr-", l,".pdf", sep = ""), "][width=.4\\hsize]}{}", sep = ""),
+            "\\stopcombination} \\eTD \\eTR"
+        )
+    }
     z <- c(z, 
         "\\eTABLE"
     )
     
     # equipment title
-    z <- generate.frame.withtitle(z, object$serial_number[1], paste("Location: ", object$ip_address[1], sep = ""), "{\\tfa\\bf White zone (Great), Gray zone (in Control), Dark zone (need more management) and Out of zone (out of Control)} \\\\Standard Deviation Index (SDI): (Laboratory Mean - Consensus Group Mean) / (Consensus Group SD) \\\\Coefficient of Variation Ratio (CVR): Laboratory CV / Consensus Group CV")
+    z <- generate.frame.withtitle(z, object$serial_number[1], get.location(ip_address, technician), "{\\tfa\\bf White zone (Great), Gray zone (in Control), Dark zone (need more management) and Out of zone (out of Control)} \\\\Standard Deviation Index (SDI): (Laboratory Mean - Consensus Group Mean) / (Consensus Group SD) \\\\Coefficient of Variation Ratio (CVR): Laboratory CV / Consensus Group CV")
     
     write.table(z, file = paste(prefix, "-year-tablegraph.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n")
 }
 
-generate.table.thisyear.history.qc <- function(object, prefix, qc.information, whole, reference, period = 12, ...) {
+generate.table.thisyear.history.qc <- function(object, prefix, qc.information, whole, reference, period = 12, ip_address, technician, ...) {
     object <- object[order(paste(object$qc_service, object$qc_lot, format(object$measured_at, "%F %X"))), ]
     object$.bs <- paste(object$qc_service, object$qc_lot, sep = "#")
     latest.measured <- max(object$measured_at)
@@ -360,12 +368,12 @@ generate.table.thisyear.history.qc <- function(object, prefix, qc.information, w
     z <- generate.multiple.pages(contents, header, footer, lines = 3)
     
     # equipment title
-    z <- generate.frame.withtitle(z, object$serial_number[1], paste("Location: ", object$ip_address[1], sep = ""))
+    z <- generate.frame.withtitle(z, object$serial_number[1], get.location(ip_address, technician))
     
     write.table(z, file = paste(prefix, "-year-table-history.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n")
 }
 
-generate.graph.thisyear.history.qc <- function(object, prefix, qc.information, whole, reference, period = 12, ...) {
+generate.graph.thisyear.history.qc <- function(object, prefix, qc.information, whole, reference, period = 12, ip_address, technician, ...) {
     object <- object[order(paste(object$qc_service, object$qc_lot, format(object$measured_at, "%F %X"))), ]
     object$.qs <- paste(object$qc_service, object$qc_lot, sep = " #")
     latest.measured <- max(object$measured_at)
@@ -409,14 +417,14 @@ generate.graph.thisyear.history.qc <- function(object, prefix, qc.information, w
     z <- generate.multiple.pages(contents, lines = 3)
     
     # equipment title
-    z <- generate.frame.withtitle(z, object$serial_number[1], paste("Location: ", object$ip_address[1], sep = ""))
+    z <- generate.frame.withtitle(z, object$serial_number[1], get.location(ip_address, technician))
     
     write.table(z, file = paste(prefix, "-year-graph-history.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n")
 }
 
 # method: database - imprecision & inaccuracy suggested from database
 # method: adaptive - imprecision & inaccuracy computed on whole data
-generate.graph.thisyear.opspecs.qc <- function(object, prefix, qc.information, whole, reference, method = "adaptive", ...) {
+generate.graph.thisyear.opspecs.qc <- function(object, prefix, qc.information, whole, reference, method = "adaptive", ip_address, technician, ...) {
     object <- object[order(format(object$measured_at, "%F %X")), ]    
 #    object$.date.lot <- paste(format(object$measured_at, "%Y %b"), object$qc_lot, paste = ":")
 
@@ -453,13 +461,13 @@ generate.graph.thisyear.opspecs.qc <- function(object, prefix, qc.information, w
     )   
 
     # equipment title
-    z <- generate.frame.withtitle(z, object$serial_number[1], paste("Location: ", object$ip_address[1], sep = ""), 
+    z <- generate.frame.withtitle(z, object$serial_number[1], get.location(ip_address, technician), 
         "{\\tfa\\bf Gray zone (in Control), Up right zone (out of Control), and Down left zone (Superior control)} \\\\Dashed line: Limits of bias and imprecision for suggested QC procedure (Operating Limits line)\\\\Solid line: Maximum limits of a stable process")
     
     write.table(z, file = paste(prefix, "-year-graph-opspecs.tex", sep = ""), row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\n") 
 }
 
-generate.TableHistory.qc <- function(object, prefix, unit, ...) {
+generate.TableHistory.qc <- function(object, prefix, unit, ip_address, technician, ...) {
     o <- object[order(object$measured_at), ]
     z <- NULL
     for (f in unique(o$serial_number)) {
