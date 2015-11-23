@@ -1,18 +1,56 @@
-<h1>Editing User <%= @user.name %></h1>
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Management", user_path(@user) %></li>
+  <li class="active">Change user setting</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    User <strong><%= @user.name %></strong> <small><%= @user.full_name %></small>
+  </h3>
+</div>
 
 <%= simple_form_for(@user) do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :password %>
-    <%= f.input :password_confirmation, label: 'Password confirmation' %>
-    <%= f.input :email, label: 'E-mail', placeholder: 'user@domain.com' %>
-  </div>
+  <% if @authorized %>
+    <div class="form-inputs">
+      <% if @change_mode == 'password' %>
+        <%= f.input :password, label: 'New Password', placeholder: 'Enter new password if you want' %>
+        <%= f.input :password_confirmation, label: false, placeholder: 'Confirm new password' %>
+      <% else %>
+        <%= f.input :full_name, label: 'Name' %>
+        <%= f.input :email, label: 'E-mail', placeholder: 'user@domain.com' %>
+        <% if administrator? %>
+          <hr>
+          <h5>Available Privileges</h5>
+          <%= f.input :privilege_super, label: 'Super user' %>
+          <%= f.input :privilege_reagent, label: 'Reagent Manager' %>
+          <%= f.input :privilege_notification, label: 'Notification Receiver' %>
+          <hr>
+          <h5>Permitted Equipment</h5>
+          <% all_equipment.each do |equipment| %>
+            <%= f.input ('equipment_' + equipment.db).to_sym, label: equipment.equipment %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+    <div class="form-actions">
+      <%= hidden_field_tag(:change_mode, @change_mode) %>
+      <%= f.button :submit, 'Change' -%> 
+      <%= link_to 'Cancel', user_path(@user), { class: "btn btn-default", role: "button" } %>
+    </div>
+  <% else %>
+    <div class="form-inputs">
+      <%= f.input :current_password, label: 'Password' %>
+    </div>
+    
+    <div class="form-actions">
+      <%= hidden_field_tag(:change_mode, @change_mode) %>
+      <%= f.button :submit, 'Authorize' -%> 
+      <%= link_to 'Cancel', user_path(@user), { class: "btn btn-default", role: "button" } %>
+    </div>  
+  <% end %>
 <% end %>
 
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
+<% console %>

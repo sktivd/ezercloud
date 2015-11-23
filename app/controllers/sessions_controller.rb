@@ -20,7 +20,8 @@ class SessionsController < ApplicationController
         redirect_to root_path, notice: "Logged in"
       end
     else
-      redirect_to login_path, notice: "User name or password is incorrect."
+      # keep redirect_to information
+      redirect_to login_path(redirect_to: session[:redirect_to]), notice: "User name or password is incorrect."
     end
   end
 
