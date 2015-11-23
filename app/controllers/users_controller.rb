@@ -64,7 +64,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    if administrator?
+    if administrator? and current_user.id != @user.id
       respond_to do |format|
         if @user.update(user_params)
           format.html { redirect_to user_path(@user), notice: "User #{@user.name}'s #{params[:change_mode]} was successfully updated." }
