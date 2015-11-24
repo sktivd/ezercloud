@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    if administrator?
+    if administrator? and current_user.id != @user.id
       @authorized = true
     end
     
