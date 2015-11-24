@@ -191,7 +191,7 @@ generate.table.thismonth.history <- function(object, prefix, qc.information, mes
     for (n in 1:nrow(object)) {
         if (object$processed[n]) {
             value <- formatC(object$.result[n], digits = 2, format = 'f')
-            status <- ifelse(abs(object$.result.std[n]) < 3, ifelse(abs(object$.result.std[n]) < 2, "pass", "warning"), "[style=\\bf] fail")
+            status <- ifelse(abs(object$.result.std[n]) < 3, "pass", "[style=\\tfx\\bf] fail")
         } else {
             value <- object$error_code[n]
             status <- "na"
@@ -214,7 +214,7 @@ generate.table.thismonth.history <- function(object, prefix, qc.information, mes
         "\\eTABLE"
     )
     # qc status
-    qc.status <- c("pass: managed within 2SD range\\\\warning: out of 2SD range\\\\fail: out of 3SD range")
+    qc.status <- c("pass: managed within 2SD range\\\\fail: out of 3SD range")
     # error codes
     errorcodes <- unique(errorcodes)
     if (length(errorcodes) > 0) {

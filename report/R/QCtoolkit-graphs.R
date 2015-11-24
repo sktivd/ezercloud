@@ -173,7 +173,11 @@ levey_jennings.plot <- function(y, date, service, lot, data, date.format = "%m-%
     bp <- tapply(lj.label$bp, lj.label$label, function(x) mean(x))
     lj.date <- data.frame(bp = bp, label = names(bp))
     lj.date$count <- count
-    lj.date$l <- (cumsum(c(0, lj.date$count[1:(nrow(lj.date) - 1)])) + 0.15) / max(lj.label$bp)
+    if (nrow(lj.date) <= 1) {
+        lj.date$l <- 0.15 / max(lj.label$bp)
+    } else {
+        lj.date$l <- (cumsum(c(0, lj.date$count[1:(nrow(lj.date) - 1)])) + 0.15) / max(lj.label$bp)        
+    }
     lj.date$r <- (cumsum(lj.date$count) - 0.15) / max(lj.label$bp)
     lj.date$l[lj.date$count == 1] <- lj.date$r[lj.date$count == 1] <- NA
     
