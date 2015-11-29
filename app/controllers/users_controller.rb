@@ -76,6 +76,8 @@ class UsersController < ApplicationController
       if session[:authorized_password]
         if params[:change_mode] == 'password'
           u_params = user_password_params
+        elsif administrator?
+          u_params = user_admin_params session[:authorized_password]
         else
           u_params = user_settings_params session[:authorized_password]
         end
@@ -118,6 +120,11 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:name, :password, :password_confirmation, :current_password, :full_name, :email, :privilege_super, :privilege_reagent, :privilege_notification, :equipment_frends)
+    end
+    
+    def user_admin_params password
+      u_params = user_params
+      u_params.merge(password: password, password_confirmation: password)      
     end
 
     def user_password_params

@@ -85,6 +85,7 @@ get.qcstat5 <- function(site) {
               imprecision   = sd(b, na.rm = TRUE) / mean(b, na.rm = TRUE) * 100)
         })))
         stat$date <- as.ordered(stat$date)
+        stat$imprecision[is.na(stat$imprecision)] <- 0
         l <- levels(stat$date)
         levels(stat$date) <- format(as.Date(paste(substr(l, 1, 4), substr(l, 5, 6), "01", sep = "-")), "%Y %b")
         stat

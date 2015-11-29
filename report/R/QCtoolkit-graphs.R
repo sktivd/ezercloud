@@ -356,6 +356,9 @@ history.plot <- function(y, date, base.mean, base.sd, data, title, qc.stat, date
     statistics <- data.frame(bias = as.numeric(qc.stat["bias", ]), mean = (as.numeric(qc.stat["mean", ]) - mf$.mean[1]) / mf$.sd[1], cv = as.numeric(qc.stat["cv", ]), index = 1:length(months), date = paste(format(dates, "%b"), years, sep = "\n"), stringsAsFactors = FALSE)
     statistics$bias.s <- format(statistics$bias * 100, digit = 2)
     statistics$bias.s[grep("NA", statistics$bias.s)] <- ""
+    if (! any(is.finite(statistics$cv))) {
+        statistics$cv[1] <- 0
+    }
     statistics$cv.s <- format(statistics$cv * 100, digit = 2)
     statistics$cv.s[grep("NA", statistics$cv.s)] <- ""
     

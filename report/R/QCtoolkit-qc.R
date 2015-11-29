@@ -20,6 +20,9 @@ source(file.path(path.report, "R/QCtoolkit-qc-floats.R"))
 source(file.path(path.report, "R/QCtoolkit-graphs.R"))
 source(file.path(path.report, "R/QCtoolkit-utilities.R"))
 
+# working directory
+path.pdf <- getwd()
+
 # check today
 if (!is.na(args[2])) {
     now <- as.Date(args[2])
@@ -47,6 +50,7 @@ conn <- dbConnect(dbDriver("PostgreSQL"), dbname = Sys.getenv("POSTGRES_DATABASE
 reagent.list <- dbGetQuery(conn, paste("SELECT equipment.equipment, reagents.number FROM equipment RIGHT JOIN assay_kits ON equipment.equipment = assay_kits.equipment RIGHT JOIN reagents ON assay_kits.id = reagents.assay_kit_id"))
 
 for (rindex in 1:nrow(reagent.list)) {
+#    cat("##############\nrindex: ", rindex, "\n")
     equipment <- reagent.list[rindex, "equipment"]
     kit <- reagent.list[rindex, "number"]
 
@@ -101,11 +105,7 @@ for (rindex in 1:nrow(reagent.list)) {
     # set subset tables
     qc.month <- qc.whole[format(qc.whole$measured_at, "%m") == this.month, ]
     qc.reference <- qc.whole[qc.whole$ip_address %in% reference.information$ip_address, ]
-    
-    # generation base ConTeXt file
-#    path.pdf <- file.path(path.report, "PDF")
-    path.pdf <- getwd()
-    
+        
     # base keywords
     keywords <- matrix(c(
         "@EQUIPMENT",       equipment,
@@ -120,8 +120,11 @@ for (rindex in 1:nrow(reagent.list)) {
     keywords.file <- file.path(path.pdf, paste("keywords",  kit, sep = "-"))
     
     for (serial in unique(qc.month$serial_number)) {
+#        cat("###serial: ", serial, "\n")
         qc.month.s <- qc.month[qc.month$serial_number == serial, ]
         qc.s <- qc.whole[qc.whole$serial_number == serial, ]
+        # too small number of tests
+        
         qc.month.r <- qc.month[qc.month$ip_address %in% reference.information$ip_address, ]
         latest.measured <- qc.month.s[rev(order(qc.month.s$measured_at))[1], ]
         latest.measured.date <- format(latest.measured$measured_at, "%F")
