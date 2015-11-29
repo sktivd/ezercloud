@@ -44,7 +44,8 @@ one.year.ago <- as.Date(paste(one.year.ago.year, one.year.ago.month, "01", sep =
 period <- generate.period(firstday.month, now)
 
 # connect to database
-conn <- dbConnect(dbDriver("PostgreSQL"), dbname = Sys.getenv("POSTGRES_DATABASE"), user = Sys.getenv("POSTGRES_USERNAME"), password = Sys.getenv("POSTGRES_PASSWORD"), host = "127.0.0.1")
+#conn <- dbConnect(dbDriver("PostgreSQL"), dbname = Sys.getenv("POSTGRES_DATABASE"), user = Sys.getenv("POSTGRES_USERNAME"), password = Sys.getenv("POSTGRES_PASSWORD"), host = "127.0.0.1")
+conn <- dbConnect(dbDriver("PostgreSQL"), dbname = Sys.getenv("POSTGRES_DATABASE"), user = Sys.getenv("POSTGRES_USERNAME"), password = Sys.getenv("POSTGRES_PASSWORD"))
 
 # check available reagents
 reagent.list <- dbGetQuery(conn, paste("SELECT equipment.equipment, reagents.number FROM equipment RIGHT JOIN assay_kits ON equipment.equipment = assay_kits.equipment RIGHT JOIN reagents ON assay_kits.id = reagents.assay_kit_id"))
