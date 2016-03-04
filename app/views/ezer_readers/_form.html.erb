@@ -1,0 +1,27 @@
+<%= simple_form_for(@ezer_reader) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :version %>
+    <%= f.input :manufacturer %>
+    <%= f.input :serial_number %>
+    <%= f.input :processed %>
+    <%= f.input :error_code %>
+    <%= f.input :kit_maker %>
+    <%= f.input :kit %>
+    <%= f.input :lot %>
+    <%= f.input :test_decision %>
+    <%= f.input :user_comment %>
+    <%= f.input :test_id %>
+    <%= f.input :test_result %>
+    <%= f.input :test_threshold %>
+    <%= f.input :patient_id %>
+    <%= f.input :weather %>
+    <%= f.input :temperature %>
+    <%= f.input :humidity %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

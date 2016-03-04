@@ -3,6 +3,7 @@
     <tr>
       <th>Measured</th>
       <th>IP address</th>
+      <th>Location</th>
       <th>Serial number</th>
       <th>Type</th>
       <th>Kit</th>
@@ -19,12 +20,13 @@
       <tr>
         <td><%= frend.diagnosis.measured_at.to_date %></td>
         <td><%= frend.diagnosis.ip_address %></td>
+        <td><%= frend.diagnosis.location %></td>
         <td><%= frend.serial_number %></td>
         <td><%= Frend::TEST_TYPE[frend.test_type] %></td>
         <td>
-          <% if frend.kit != 0 and frend.kit != 11 %>
-            <a href="#" data-toggle="tooltip" data-placement="right" title="<%= '(' + frend.lot.to_s + ') ' +  assay_kits[frend.kit][:reagents].join(",  ") %>"><%= assay_kits[frend.kit][:kit] %></a>
-          <% elsif frend.kit == 0 %>         
+          <% if frend.kit != "0" and frend.kit != "11" %>
+            <a href="#" data-toggle="tooltip" data-placement="right" title="<%= '(' + frend.lot + ') ' +  assay_kits[frend.kit][:reagents].join(",  ") %>"><%= assay_kits[frend.kit][:kit] %></a>
+          <% elsif frend.kit == "0" %>         
           <% else %>
             <%= assay_kits[frend.kit][:kit] %>
           <% end %>

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5.2'
 ## Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use postgresql as the database for Active Record
@@ -52,6 +52,12 @@ gem 'pdfjs_rails'
 # Pagenation
 #gem 'will_paginate'
 gem 'kaminari'
+
+# GMap for rails
+gem 'gmaps4rails'
+
+# asset-pipeline
+gem 'underscore-rails'
 
 gem 'distribution'
 

@@ -1,0 +1,1 @@
+json.extract! @ezer_reader, :id, :version, :manufacturer, :serial_number, :processed, :error_code, :kit_maker, :kit, :lot, :test_decision, :user_comment, :test_id, :test_result, :test_threshold, :patient_id, :weather, :temperature, :humidity, :created_at, :updated_at

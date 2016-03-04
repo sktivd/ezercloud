@@ -1,6 +1,11 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :images
+  resources :buddis
+  resources :ezer_readers
+  get 'google_maps/index'
+
   resources :notifications
   resources :reports
   resources :users
@@ -29,6 +34,10 @@ Rails.application.routes.draw do
     get     'login'   => :new
     post    'login'   => :create
     delete  'logout'  => :destroy
+  end
+
+  controller :google_maps do
+    get     'maps'    => :index
   end
 
   if Rails.env.development?

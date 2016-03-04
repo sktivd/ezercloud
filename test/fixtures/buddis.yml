@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  version: 1
+  manufacturer: MyString
+  serial_number: MyString
+  processed: false
+  error_code: MyString
+  kit: MyString
+  lot: MyString
+  device_expired_date: 2016-03-02
+  patient_id: MyString
+  test_zone_data: MyString
+  control_zone_data: MyString
+  ratio_data: MyString
+
+two:
+  version: 1
+  manufacturer: MyString
+  serial_number: MyString
+  processed: false
+  error_code: MyString
+  kit: MyString
+  lot: MyString
+  device_expired_date: 2016-03-02
+  patient_id: MyString
+  test_zone_data: MyString
+  control_zone_data: MyString
+  ratio_data: MyString

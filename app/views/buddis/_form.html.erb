@@ -1,0 +1,22 @@
+<%= simple_form_for(@buddi) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :version %>
+    <%= f.input :manufacturer %>
+    <%= f.input :serial_number %>
+    <%= f.input :processed %>
+    <%= f.input :error_code %>
+    <%= f.input :kit %>
+    <%= f.input :lot %>
+    <%= f.input :device_expired_date %>
+    <%= f.input :patient_id %>
+    <%= f.input :test_zone_data %>
+    <%= f.input :control_zone_data %>
+    <%= f.input :ratio_data %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Ezer Readers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>Manufacturer</th>
+      <th>Serial number</th>
+      <th>Processed</th>
+      <th>Error code</th>
+      <th>Kit maker</th>
+      <th>Kit</th>
+      <th>Lot</th>
+      <th>Test decision</th>
+      <th>User comment</th>
+      <th>Test</th>
+      <th>Test result</th>
+      <th>Test threshold</th>
+      <th>Patient</th>
+      <th>Weather</th>
+      <th>Temperature</th>
+      <th>Humidity</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ezer_readers.each do |ezer_reader| %>
+      <tr>
+        <td><%= ezer_reader.version %></td>
+        <td><%= ezer_reader.manufacturer %></td>
+        <td><%= ezer_reader.serial_number %></td>
+        <td><%= ezer_reader.processed %></td>
+        <td><%= ezer_reader.error_code %></td>
+        <td><%= ezer_reader.kit_maker %></td>
+        <td><%= ezer_reader.kit %></td>
+        <td><%= ezer_reader.lot %></td>
+        <td><%= ezer_reader.test_decision %></td>
+        <td><%= ezer_reader.user_comment %></td>
+        <td><%= ezer_reader.test_id %></td>
+        <td><%= ezer_reader.test_result %></td>
+        <td><%= ezer_reader.test_threshold %></td>
+        <td><%= ezer_reader.patient_id %></td>
+        <td><%= ezer_reader.weather %></td>
+        <td><%= ezer_reader.temperature %></td>
+        <td><%= ezer_reader.humidity %></td>
+        <td><%= link_to 'Show', ezer_reader %></td>
+        <td><%= link_to 'Edit', edit_ezer_reader_path(ezer_reader) %></td>
+        <td><%= link_to 'Destroy', ezer_reader, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ezer reader', new_ezer_reader_path %>

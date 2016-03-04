@@ -16,4 +16,6 @@
 //= require turbolinks
 //= require sweet-alert
 //= require sweet-alert-confirm
+//= require underscore
+//= require gmaps/google    
 //= require_tree .

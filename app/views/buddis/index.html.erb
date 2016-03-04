@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Buddis</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>Manufacturer</th>
+      <th>Serial number</th>
+      <th>Processed</th>
+      <th>Error code</th>
+      <th>Kit</th>
+      <th>Lot</th>
+      <th>Device expired date</th>
+      <th>Patient</th>
+      <th>Test zone data</th>
+      <th>Control zone data</th>
+      <th>Ratio data</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @buddis.each do |buddi| %>
+      <tr>
+        <td><%= buddi.version %></td>
+        <td><%= buddi.manufacturer %></td>
+        <td><%= buddi.serial_number %></td>
+        <td><%= buddi.processed %></td>
+        <td><%= buddi.error_code %></td>
+        <td><%= buddi.kit %></td>
+        <td><%= buddi.lot %></td>
+        <td><%= buddi.device_expired_date %></td>
+        <td><%= buddi.patient_id %></td>
+        <td><%= buddi.test_zone_data %></td>
+        <td><%= buddi.control_zone_data %></td>
+        <td><%= buddi.ratio_data %></td>
+        <td><%= link_to 'Show', buddi %></td>
+        <td><%= link_to 'Edit', edit_buddi_path(buddi) %></td>
+        <td><%= link_to 'Destroy', buddi, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Buddi', new_buddi_path %>

@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Version:</strong>
+  <%= @buddi.version %>
+</p>
+
+<p>
+  <strong>Manufacturer:</strong>
+  <%= @buddi.manufacturer %>
+</p>
+
+<p>
+  <strong>Serial number:</strong>
+  <%= @buddi.serial_number %>
+</p>
+
+<p>
+  <strong>Processed:</strong>
+  <%= @buddi.processed %>
+</p>
+
+<p>
+  <strong>Error code:</strong>
+  <%= @buddi.error_code %>
+</p>
+
+<p>
+  <strong>Kit:</strong>
+  <%= @buddi.kit %>
+</p>
+
+<p>
+  <strong>Lot:</strong>
+  <%= @buddi.lot %>
+</p>
+
+<p>
+  <strong>Device expired date:</strong>
+  <%= @buddi.device_expired_date %>
+</p>
+
+<p>
+  <strong>Patient:</strong>
+  <%= @buddi.patient_id %>
+</p>
+
+<p>
+  <strong>Test zone data:</strong>
+  <%= @buddi.test_zone_data %>
+</p>
+
+<p>
+  <strong>Control zone data:</strong>
+  <%= @buddi.control_zone_data %>
+</p>
+
+<p>
+  <strong>Ratio data:</strong>
+  <%= @buddi.ratio_data %>
+</p>
+
+<%= link_to 'Edit', edit_buddi_path(@buddi) %> |
+<%= link_to 'Back', buddis_path %>

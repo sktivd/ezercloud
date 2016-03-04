@@ -8,9 +8,16 @@
     <%= f.input :password %>
     <%= f.input :password_confirmation, label: 'Password confirmation' %>
     <%= f.input :email, label: 'E-mail', placeholder: 'user@domain.com' %>
+    
+    <h5>Available Privileges</h5>
     <%= f.input :privilege_super, label: 'Super user' %>
     <%= f.input :privilege_reagent, label: 'Reagent manager' %>
     <%= f.input :privilege_notification, label: 'Notification receiver' %>
+    
+    <h5>Permitted Equipment</h5>
+    <% all_equipment.each do |equipment| %>
+      <%= f.input ('equipment_' + equipment.db).to_sym, label: equipment.equipment %>
+    <% end %>
   </div>
   
   <%= recaptcha_tags %>

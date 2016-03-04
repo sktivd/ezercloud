@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119061015) do
+ActiveRecord::Schema.define(version: 20160301165436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,9 +20,26 @@ ActiveRecord::Schema.define(version: 20151119061015) do
     t.string   "equipment"
     t.string   "manufacturer"
     t.string   "device"
-    t.integer  "kit"
+    t.string   "kit"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "buddis", force: :cascade do |t|
+    t.integer  "version"
+    t.string   "manufacturer"
+    t.string   "serial_number"
+    t.boolean  "processed"
+    t.string   "error_code"
+    t.string   "kit"
+    t.string   "lot"
+    t.date     "device_expired_date"
+    t.string   "patient_id"
+    t.string   "test_zone_data"
+    t.string   "control_zone_data"
+    t.string   "ratio_data"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   create_table "diagnoses", force: :cascade do |t|
@@ -69,6 +86,28 @@ ActiveRecord::Schema.define(version: 20151119061015) do
 
   add_index "error_codes", ["equipment_id"], name: "index_error_codes_on_equipment_id", using: :btree
 
+  create_table "ezer_readers", force: :cascade do |t|
+    t.integer  "version"
+    t.string   "manufacturer"
+    t.string   "serial_number"
+    t.boolean  "processed"
+    t.string   "error_code"
+    t.string   "kit_maker"
+    t.string   "kit"
+    t.string   "lot"
+    t.string   "test_decision"
+    t.string   "user_comment"
+    t.string   "test_id",        default: ":::::", null: false
+    t.string   "test_result",    default: ":::::", null: false
+    t.string   "test_threshold", default: ":::::", null: false
+    t.string   "patient_id"
+    t.string   "weather"
+    t.float    "temperature"
+    t.float    "humidity"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
   create_table "frends", force: :cascade do |t|
     t.integer  "version"
     t.string   "manufacturer"
@@ -76,8 +115,8 @@ ActiveRecord::Schema.define(version: 20151119061015) do
     t.integer  "test_type"
     t.boolean  "processed",                         default: false, null: false
     t.string   "error_code"
-    t.integer  "kit"
-    t.integer  "lot"
+    t.string   "kit"
+    t.string   "lot"
     t.string   "test_id",                           default: "::",  null: false
     t.string   "test_result",                       default: "::",  null: false
     t.string   "integrals"
@@ -95,6 +134,23 @@ ActiveRecord::Schema.define(version: 20151119061015) do
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
   end
+
+  create_table "images", force: :cascade do |t|
+    t.string   "protocol"
+    t.integer  "version"
+    t.string   "tag"
+    t.string   "hash_code"
+    t.integer  "imagable_id"
+    t.string   "imagable_type"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "image_file_file_name"
+    t.string   "image_file_content_type"
+    t.integer  "image_file_file_size"
+    t.datetime "image_file_updated_at"
+  end
+
+  add_index "images", ["imagable_type", "imagable_id"], name: "index_images_on_imagable_type_and_imagable_id", using: :btree
 
   create_table "laboratories", force: :cascade do |t|
     t.string   "ip_address"
@@ -139,7 +195,7 @@ ActiveRecord::Schema.define(version: 20151119061015) do
 
   create_table "reagents", force: :cascade do |t|
     t.string   "name"
-    t.integer  "number"
+    t.string   "number"
     t.string   "unit"
     t.integer  "assay_kit_id"
     t.datetime "created_at",   null: false

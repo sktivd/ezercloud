@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authorize
   
-  helper_method :current_user, :logged_in?, :administrator?, :all_equipment
+  helper_method :current_user, :logged_in?, :administrator?, :all_equipment, :authorized_equipment
     
   protected
   
@@ -38,9 +38,23 @@ class ApplicationController < ActionController::Base
       @all_equipment ||= Equipment.order(:equipment)
     end
     
+    def authorized_equipment
+      @authorized_equipment ||= search_authorized_equipment_of current_user
+    end
+    
     rescue_from ActionController::InvalidAuthenticityToken do 
       session[:user_id] = nil
       redirect_to login_path, notice: "Session Timeout"
     end
 
+  private
+  
+    def search_authorized_equipment_of user
+      aequipment = []
+      all_equipment.each do |equipment|
+        aequipment << equipment if user[("equipment_" + equipment.db).to_sym] or administrator?
+      end
+      
+      aequipment
+    end
 end

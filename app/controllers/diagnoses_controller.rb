@@ -20,7 +20,7 @@ class DiagnosesController < ApplicationController
         @equipment_list = {}
         @assay_kit_list = {}
         @reagent_list   = {}
-        all_equipment.each do |equipment|
+        authorized_equipment.each do |equipment|
           @equipment_list[equipment.db] = Object.const_get(equipment.klass).read.page(@page).per(20)
           @assay_kit_list[equipment.db] = AssayKit.equipment equipment.equipment, @equipment_list[equipment.db].map { |equipment| equipment.kit }.uniq
         end
@@ -68,31 +68,31 @@ class DiagnosesController < ApplicationController
 
   # JSON only
   # POST /diagnoses.json
-  def create    
+  def create
     @diagnosis = Diagnosis.new(diagnosis_params)
     @equipment = new_equipment(params[:equipment], params[:data].to_json)
     if @equipment
       @equipment.diagnosis = @diagnosis 
     else
-      @diagnosis.errors[:equipment] << "is not generated."
+      @diagnosis.errors.add(:data_for_equipment, "is not generated.")
     end
 
     respond_to do |format|
       if @equipment and @diagnosis.save 
         if @equipment.save
-#          if @equipment.test_type = 1 and @equipment.processed and Laboratory.find_by(equipment: @diagnosis.equipment, ip_address: @diagnosis.ip_address, kit: @equipment.kit)
-#            ReagentManagementWorker.perform_async name: params[:equipment], id: @equipment.id, kit: @equipment.kit, service: @equipment.qc_service, lot: @equipment.qc_lot, expire: @equipment.qc_expire
-#          end
           @equipment.notification
           
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
           format.json { render :created, status: :created, location: @diagnosis }
         else
           @diagnosis.delete
+          @diagnosis.errors.add(:response, "fail")
+          @diagnosis.errors.add(:data, @equipment.errors)
           format.html { render :new }
-          format.json { render json: {:equipment => @equipment.errors, :diagnosis => @diagnosis.errors}, status: :unprocessable_entity }          
+          format.json { render json: @diagnosis.errors, status: :unprocessable_entity }          
         end
       else
+        @diagnosis.errors.add(:response, "fail")
         format.html { render :new }
         format.json { render json: @diagnosis.errors, status: :unprocessable_entity }
       end
@@ -152,9 +152,12 @@ class DiagnosesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
-      if params[:diagnosis] and authenticated?
-        params[:diagnosis][:measured_at] = measured_time 
-        params.require(:diagnosis).permit(:protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
+      if params[:diagnosis]
+        params[:diagnosis][:measured_at] = measured_time
+        params[:diagnosis][:authentication_key] = params[:authentication_key]
+        params[:diagnosis][:remote_ip] = request.remote_ip.to_sym
+
+        params.require(:diagnosis).permit(:authentication_key, :remote_ip, :protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
       end
     end
     
@@ -165,14 +168,11 @@ class DiagnosesController < ApplicationController
         @equipment.from_json data if data
         @equipment
       end
+    rescue ActiveRecord::UnknownAttributeError
+      nil
     end
     
     def json_request?
       request.format.json?
-    end 
-    
-    def authenticated?
-      authenicated_key = Diagnosis::AUTHENTICATION_KEYS[request.remote_ip.to_sym]
-      authenicated_key and authenicated_key == params[:authentication_key]
-    end
+    end     
 end
