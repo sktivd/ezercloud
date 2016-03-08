@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require turbolinks
-//= require sweet-alert
+//= require sweetalert2
 //= require sweet-alert-confirm
 //= require underscore
 //= require gmaps/google    

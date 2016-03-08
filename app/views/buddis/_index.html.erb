@@ -1,0 +1,39 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Measured</th>
+      <th>IP address</th>
+      <th>Location</th>
+      <th>Serial number</th>
+      <th>Kit</th>
+      <th>Results</th>
+      <% if administrator? %>
+        <th colspan="2"></th>
+      <% else %>
+        <th colspan="1"></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% equipment.each do |buddi| %>
+      <tr>
+        <td><%= buddi.diagnosis.measured_at.to_date %></td>
+        <td><%= buddi.diagnosis.ip_address %></td>
+        <td><%= buddi.diagnosis.location %></td>
+        <td><%= buddi.serial_number %></td>
+        <td><%= buddi.kit + ":" + buddi.lot %></td>
+        <% if buddi.processed %>
+          <td><%= buddi.ratio_data %></td>
+        <% else %>
+          <td><%= buddi.error_code %></td>
+        <% end %>
+        <td><%= link_to 'Show', diagnosis_path(buddi, active: 'buddi'), method: :get, remote: true %></td>
+        <% if administrator? %>
+          <td><%= link_to 'Destroy', diagnosis_path(buddi.diagnosis, active: 'buddis', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

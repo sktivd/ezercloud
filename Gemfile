@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# rails assets
+gem 'bundler', '>= 1.8.4'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5.2'
 ## Use sqlite3 as the database for Active Record
@@ -20,8 +23,14 @@ gem 'multipart-post'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+
+
 # SweetAlert
-gem 'sweet-alert'
+source 'https://rails-assets.org' do
+  gem 'rails-assets-sweetalert2'
+end
+#gem 'sweet-alert-rails-confirm'
+#gem 'sweet-alert'
 gem 'sweet-alert-confirm'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
