@@ -1,0 +1,174 @@
+<% @buddi = equipment %>
+
+<div id="collasped-buddi" aria-expanded="true" class="collapse in">
+  <div class="container scrollable_detail" data-spy="scroll" data-target="#navbar-buddis">
+    <div class="row">
+      <div class="col-sm-9">
+        <section id="buddi-diagnosis">
+          <h4>@diagnosis</h4>
+          <div class="container-fluid">
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Processed
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.processed %></strong>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Error code
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.error_code %></strong>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Test Zone Data
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.test_zone_data %></strong>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Control Zone
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.control_zone_data %></strong>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Ratio
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.ratio_data %></strong>
+              </div>
+            </div>
+          </div>
+          <br>
+          <% if false %>
+          <div class="container-fluid">
+            <div class="panel panel-default">
+              <div class="panel-heading">Test result</div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <% @buddi.test_id.split(":").each do |id| %>
+                    <th><%= id %></th>
+                    <% end %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Measured</td>
+                    <% @buddi.test_result.split(":").each do |result| %>
+                    <td><%= result %></td>
+                    <% end %>
+                  </tr>
+                  <tr>
+                    <td>Threshold</td>
+                    <% @buddi.test_threshold.split(":").each do |threshold| %>
+                    <td><%= threshold %></td>
+                    <% end %>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td>Result</td>
+                    <% @buddi.test_result.split(":").zip(@buddi.test_threshold.split(":")).each do |test, threshold| %>
+                    <td><%= "Positive" if test.to_f >= threshold.to_f %><%= "Negative" if test.to_f < threshold.to_f %></td>
+                    <% end %>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <% end %>
+        </section>
+        <section id="buddi-images" class="section">
+          <h4>@images</h4>
+          <div class="row thumbnail-base">
+            <div id="thumbnail-buddis", class="col-xs-12 thumbnail-window">
+              <%= link_to image_tag(@buddi.image_window.image_file.url, alt: @buddi.image_window.tag), "#buddi-images", class: "thumbnail" %>
+            </div>
+            <div class="thumbnails">
+              <% @buddi.images.each do |image| %>
+              <%= link_to image_tag(image.image_file.url(:thumbnail), alt: image.tag), "#buddi-images", class: "img-thumbnail" %>
+            <% end %>
+            </div>            
+          </div>            
+        </section>
+        
+        <section id="buddi-equipment" class="section">
+          <h4>@equipment</h4>
+          <div class="container-fluid">
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Manufacturer
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.manufacturer %></strong>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Serial number
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.serial_number %></strong>
+              </div>
+            </div> 
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Device Expired Date
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.device_expired_date %></strong>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Kit
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.kit + " (" + @buddi.lot + ")" %></strong>
+              </div>
+            </div>      
+          </div>      
+        </section>
+              
+        <section id="buddi-addition" class="section">
+          <h4>@addition</h4>
+          <div class="container-fluid">
+            <div class="col-xs-6">
+              <div class="col-xs-5">
+                Patient
+              </div>
+              <div class="col-xs-7">
+                <strong><%= @buddi.patient_id %></strong>
+              </div>
+            </div>
+          </div>      
+        </section>
+      </div>
+      <div class="col-sm-3 hidden-xs">
+        <nav id="navbar-buddis">
+          <ul id="affix-buddis" class="nav nav-pills nav-stacked hidden-xs affix-top" data-spy="affix">
+            <li><a href="#buddi-diagnosis">Diagnosis</a></li>
+            <li><a href="#buddi-images">Images</a></li>
+            <li><a href="#buddi-equipment">Equipment</a></li>
+            <li><a href="#buddi-addition">Addition</a></li>
+          </ul>  
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <a class="btn" role="button" data-toggle="collapse" href="#collasped-buddi" aria-expanded="true" aria-controls="collasped-buddi">
+    &#9776;
+  </a>
+</div>

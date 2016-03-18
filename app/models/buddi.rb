@@ -12,4 +12,9 @@ class Buddi < ActiveRecord::Base
     self.order(:created_at).reverse_order.includes(:diagnosis)
   end
 
+  # tag: result/original
+  def image_window
+    images.find_by(tag: 'result') || images[0]
+  end
+
 end

@@ -1,0 +1,17 @@
+$("#detail-<%= @active %>").html("<%= escape_javascript(render partial: @active + '/show', locals: { equipment: @equipment }) %>");
+$("body").scrollspy({ 
+    target: "#navbar-<%= @active %>",
+    offset: 100
+});
+$("#affix-<%= @active %>").affix({
+  offset: {
+    top: 203,
+    bottom: function () {
+      return (this.bottom = $('.footer').outerHeight(true) + 135)
+    }
+  }
+});
+$(".img-thumbnail").click(function() {
+    $("#thumbnail-<%= @active %>").find('img').attr('src', $(this).find('img').attr('src'));
+    $("#thumbnail-<%= @active %>").find('img').attr('alt', $(this).find('img').attr('alt'));
+});

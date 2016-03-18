@@ -55,6 +55,13 @@ class DiagnosesController < ApplicationController
   # GET /diagnoses/1
   # GET /diagnoses/1.json
   def show
+    @equipment = Object.const_get(@diagnosis.diagnosable_type).find(@diagnosis.diagnosable_id)
+    
+    respond_to do |format|
+      format.js do
+        @active = params[:active] || "diagnoses"
+      end
+    end
   end
 
   # GET /diagnoses/new

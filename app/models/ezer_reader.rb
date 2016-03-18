@@ -11,5 +11,9 @@ class EzerReader < ActiveRecord::Base
   def self.read
     self.order(:created_at).reverse_order.includes(:diagnosis)
   end
-
+  
+  def image_window
+    images.find_by(tag: 'window') || images[0]
+  end
+    
 end

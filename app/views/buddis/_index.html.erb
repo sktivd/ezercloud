@@ -1,3 +1,6 @@
+<div id="detail-buddis" class="collapse .col-xs-12">
+</div>
+
 <table class="table table-striped table-hover">
   <thead>
     <tr>
@@ -28,7 +31,7 @@
         <% else %>
           <td><%= buddi.error_code %></td>
         <% end %>
-        <td><%= link_to 'Show', diagnosis_path(buddi, active: 'buddi'), method: :get, remote: true %></td>
+        <td><%= link_to 'Show', diagnosis_path(buddi.diagnosis, active: 'buddis'), method: :get, remote: true %></td>
         <% if administrator? %>
           <td><%= link_to 'Destroy', diagnosis_path(buddi.diagnosis, active: 'buddis', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
         <% end %>

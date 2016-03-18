@@ -29,11 +29,11 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane <%= 'active' if @active == 'diagnoses' %>" id="tab-diagnoses">
+    <div role="tabpanel" class="tab-pane fade in <%= 'active' if @active == 'diagnoses' %>" id="tab-diagnoses">
       <%= render partial: 'diagnoses/index', locals: { equipment: @diagnoses } %>
     </div>
     <% authorized_equipment.each do |equipment| %>
-      <div role="tabpanel" class="tab-pane <%= 'active' if @active == equipment.db %>" id="tab-<%= equipment.db %>">
+      <div role="tabpanel" class="tab-pane fade <%= 'active' if @active == equipment.db %>" id="tab-<%= equipment.db %>">
         <%= render partial: equipment.db + '/index', locals: { equipment: @equipment_list[equipment.db], assay_kits: @assay_kit_list[equipment.db], reagents: @reagent_list[equipment.db], page: @page } %>
       </div>
     <% end %>

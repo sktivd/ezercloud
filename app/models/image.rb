@@ -21,7 +21,11 @@ class Image < ActiveRecord::Base
 
   has_attached_file :image_file, url: "/assets/:class/:id/:basename.:extension", 
                                  path: ":rails_root/public/assets/:class/:id/:basename.:extension",
-                                 preserve_files: false
+                                 preserve_files: false,
+                                 styles: {
+                                   thumbnail: ["80x80>", :png],
+                                   large:     ["200x200>", :png],
+                                 }
   validates_attachment :image_file, presence: true
   validates_attachment :image_file, size: { less_than: 1.megabytes }
   validates_attachment :image_file, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/tiff", "image/tif", "image/bmp"] }
