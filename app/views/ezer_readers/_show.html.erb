@@ -80,7 +80,9 @@
           </div>
         </section>
         
+        <% if @ezer_reader.images.size > 0 %>
         <section id="ezer_reader-images" class="section">
+          
           <h4>@images</h4>
           <div class="row thumbnail-base">
             <div id="thumbnail-ezer_readers", class="col-xs-12 thumbnail-window">
@@ -93,6 +95,7 @@
             </div>            
           </div>            
         </section>
+        <% end %>
         
         <section id="ezer_reader-equipment" class="section">
           <h4>@equipment</h4>
@@ -175,7 +178,9 @@
         <nav id="navbar-ezer_readers">
           <ul id="affix-ezer_readers" class="nav nav-pills nav-stacked hidden-xs affix-top" data-spy="affix">
             <li><a href="#ezer_reader-diagnosis">Diagnosis</a></li>
+            <% if @ezer_reader.images.size > 0 %>
             <li><a href="#ezer_reader-images">Images</a></li>
+            <% end %>
             <li><a href="#ezer_reader-equipment">Equipment</a></li>
             <li><a href="#ezer_reader-addition">Addition</a></li>
           </ul>  
