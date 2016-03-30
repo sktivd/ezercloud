@@ -1,0 +1,21 @@
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      New account '<%= @notification.user.name %>' has been created.
+    </strong>
+  </h3>
+</div>
+
+<p>
+  <%= @notification.message.sub("\n", "</p><p>").html_safe %>
+</p>
+
+<p>
+  Please, click following link to confirm:
+  <%= link_to @notification.url, @notification.url %>
+</p>
+
+<p>QCtoolkit,</p>
+<p>SK telecom</p>
+
+<p>This mail is automatically generated. Please do not reply.</p>

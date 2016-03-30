@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160318075946) do
+ActiveRecord::Schema.define(version: 20160323080605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,16 +53,14 @@ ActiveRecord::Schema.define(version: 20160318075946) do
     t.float    "latitude"
     t.float    "longitude"
     t.string   "technician"
-    t.integer  "sex",               default: -1
-    t.integer  "age_band",          default: -1
+    t.integer  "sex",              default: -1
+    t.integer  "age_band",         default: -1
     t.string   "order_number"
     t.integer  "diagnosable_id"
     t.string   "diagnosable_type"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.string   "user_id"
-    t.integer  "measured_points"
-    t.text     "point_intensities"
   end
 
   add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id", using: :btree
@@ -100,15 +98,17 @@ ActiveRecord::Schema.define(version: 20160318075946) do
     t.string   "lot"
     t.string   "test_decision"
     t.string   "user_comment"
-    t.string   "test_id",        default: ":::::", null: false
-    t.string   "test_result",    default: ":::::", null: false
-    t.string   "test_threshold", default: ":::::", null: false
+    t.string   "test_id",           default: ":::::", null: false
+    t.string   "test_result",       default: ":::::", null: false
+    t.string   "test_threshold",    default: ":::::", null: false
     t.string   "patient_id"
     t.string   "weather"
     t.float    "temperature"
     t.float    "humidity"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "measured_points"
+    t.text     "point_intensities"
   end
 
   create_table "frends", force: :cascade do |t|
@@ -177,6 +177,8 @@ ActiveRecord::Schema.define(version: 20160318075946) do
     t.integer  "user_id",                        null: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.integer  "every"
+    t.string   "redirect_path"
   end
 
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
@@ -251,6 +253,11 @@ ActiveRecord::Schema.define(version: 20160318075946) do
     t.datetime "updated_at",                             null: false
     t.boolean  "equipment_frends",       default: false
     t.string   "full_name",              default: ""
+    t.boolean  "equipment_buddis",       default: false
+    t.boolean  "equipment_ezer_readers", default: false
+    t.boolean  "privilege_monitoring",   default: false
+    t.boolean  "privilege_qc",           default: false
+    t.boolean  "authorized",             default: false
   end
 
   add_foreign_key "error_codes", "equipment"

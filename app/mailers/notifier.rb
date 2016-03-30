@@ -11,4 +11,10 @@ class Notifier < ApplicationMailer
     @data = JSON.parse(@notification.data, symbolize_names: true)
     mail to: @notification.user.email, subject: "QCtoolkit: New QC material has been tested."
   end
+  
+  def authorization(notification)
+    @notification = notification
+    @data = JSON.parse(@notification.data, symbolize_names: true)
+    mail to: @notification.user.email, subject: "QCtoolkit: Account is required to be confirmed."    
+  end
 end

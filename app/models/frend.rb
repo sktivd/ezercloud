@@ -21,39 +21,22 @@ class Frend < ActiveRecord::Base
     available_id = test_id.split(":")
     test_result.split(":", 3).map.with_index { |value, index| "%.2f" % value.to_f if available_id[index] and available_id[index] != "" and available_id[index] != "0" }.compact
   end
- 
+
   def notification    
     if test_type == 1
+      notifications = []
       test_id.split(':', 3).map { |value| Reagent.find_by(number: value.to_i) if value.to_i != '0' }.compact.each do |reagent|
         if QualityControlMaterial.find_by(service: qc_service, lot: qc_lot, reagent_id: reagent.id).nil?
           User.where(privilege_reagent: true, privilege_notification: true).each do |user|
-            @notification = generate_notification(follow: :response, tag: ['F', reagent.id, qc_service[0], qc_lot].join, message: "Unregistered Quality Control material has been tested.\nPlease input QC material information!", expired_at: 3.day.from_now, data: { equipment: 'FREND', assay_kit: AssayKit.find_by(kit: kit).device, reagent: reagent.name, qc_service: qc_service, qc_lot: qc_lot, date: diagnosis.measured_at }, user: user, path: '/quality_control_materials/new', method: :get, parameters: { quality_control_material: { equipment: 'FREND', reagent_id: reagent.id, service: qc_service, lot: qc_lot, expire: qc_expire } }, mailer: "new_qcmaterial")
+            notifications.append({ follow: :response, tag: ['F', reagent.id, qc_service[0], qc_lot].join, message: "Unregistered Quality Control material has been tested.\nPlease input QC material information!", every: 1.day, expired_at: 3.day.from_now, data: { equipment: 'FREND', assay_kit: AssayKit.find_by(kit: kit).device, reagent: reagent.name, qc_service: qc_service, qc_lot: qc_lot, date: diagnosis.measured_at }, user: user, redirect_path: '/quality_control_materials/new', parameters: { quality_control_material: { equipment: 'FREND', reagent_id: reagent.id, service: qc_service, lot: qc_lot, expire: qc_expire } }, mailer: "new_qcmaterial" })
           end
         end
       end
+      
+      notifications
     end
   end
-
-  def self.generate_notification params
-    @notification = Notification.new(follow: Notification::TYPES[params[:follow]], message: params[:message], user_id: params[:user].id, data: params[:data].to_json)
-    @notification.authentication_key = Digest::SHA256.hexdigest @notification.to_s
-
-    if @notification.follow == Notification::TYPES[:response]
-      @notification.set_url(params[:path], params[:method], params[:parameters])
-      if params[:mailer]
-          @notification.mailer = params[:mailer]
-          @notification.email
-      end
-    end
-    
-    @notification.sent_at = DateTime.now
-    if @notification.save
-      @notification
-    else
-      nil
-    end
-  end
-  
+ 
   def self.read
     self.order(:created_at).reverse_order.includes(:diagnosis)
   end

@@ -25,6 +25,12 @@
     <% if @user.privilege_notification %>
       <p class="text-warning"><big><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Notification Reciever</big></p>
     <% end %>
+    <% if @user.privilege_monitoring %>
+      <p class="text-warning"><big><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Monitoring</big></p>
+    <% end %>
+    <% if @user.privilege_qc %>
+      <p class="text-warning"><big><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Quality Control</big></p>
+    <% end %>
   </div>
   
   <div class="col-lg-4">

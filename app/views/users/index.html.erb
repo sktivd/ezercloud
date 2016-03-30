@@ -19,6 +19,8 @@
       <th>Super User</th>
       <th>Reagent Manager</th>
       <th>Notification Receiver</th>
+      <th>Monitoring</th>
+      <th>Quality Control</th>
       <% all_equipment.each do |equipment| %>
         <th><%= equipment.equipment %></th>
       <% end %>
@@ -33,6 +35,8 @@
         <td><%= user.privilege_super %></td>
         <td><%= user.privilege_reagent %></td>
         <td><%= user.privilege_notification %></td>
+        <td><%= user.privilege_monitoring %></td>
+        <td><%= user.privilege_qc %></td>
         <% all_equipment.each do |equipment| %>
           <td><%= user[('equipment_' + equipment.db).to_sym] %></td>
         <% end %>

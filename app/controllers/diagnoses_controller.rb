@@ -1,4 +1,6 @@
 class DiagnosesController < ApplicationController
+  include NotificationMethods
+  
   protect_from_forgery
   skip_before_action :verify_authenticity_token, if: :json_request?
   skip_before_action :authorize, only: [:create]
@@ -87,7 +89,8 @@ class DiagnosesController < ApplicationController
     respond_to do |format|
       if @equipment and @diagnosis.save 
         if @equipment.save
-          @equipment.notification
+#          @equipment.notification
+          send_email_notification @equipment.notification
           
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
           format.json { render :created, status: :created, location: @diagnosis }

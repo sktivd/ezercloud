@@ -8,8 +8,8 @@
 
 # Desirable Biological Variation Database specifications: https://www.westgard.com/biodatabase1.htm
 
-u = User.create(name: "admin", password: "11112222", full_name: "Administrator", privilege_super: true, email: "skonmeme@gmail.com")
-u = User.create(name: "reagent", password: "22221111", full_name: "Reagent Manager for FREND", email: "skonmemekr@gmail.com", privilege_reagent: true, privilege_notification: true, equipment_frends: true)
+u = User.create(name: "admin", password: "11112222", full_name: "Administrator", privilege_super: true, email: "skonmeme@gmail.com", authorized: true)
+u = User.create(name: "reagent", password: "22221111", full_name: "Reagent Manager for FREND", email: "skonmemekr@gmail.com", privilege_reagent: true, privilege_notification: true, equipment_frends: true, authorized: true)
 
 s = Specification.create(specimen: "Serum", analyte: "11-Desoxycortisol", papers: 2, cv_i: 21.3, cv_g: 31.5, imprecision: 10.7, inaccuracy: 9.5, allowable_total_error: 27.1)
 s = Specification.create(specimen: "Serum", analyte: "17-Hydroxyprogesterone", papers: 2, cv_i: 19.6, cv_g: 50.4, imprecision: 9.8, inaccuracy: 13.5, allowable_total_error: 29.7)

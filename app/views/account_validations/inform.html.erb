@@ -1,0 +1,25 @@
+<% content_for :breadcrumb do %>
+  <li>Users</li>
+  <li class="active">Account Confirmation</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Account confirmation
+    </strong>
+  </h3>
+  <p><%= current_user.name + ' <' + current_user.email + '>' %></p>
+</div>
+
+<p>We sent an e-mail with an authorization code to <%= current_user.email %> in order to confirm validation.</p>
+<p>If you have not received authorization code, you should reset authorization code. 
+  <% if @remained < 0 %>
+  The authorization code has been already expired. You should resend new authorization code.
+  <% else %>
+  The authorization code will be expired in <%= distance_of_time_in_words DateTime.now, @notification.expired_at %>.</p>
+  <% end %>
+
+<div id='resend'>
+  <%= button_to 'Resend', authorize_path, class: 'btn btn-default', remote: true %>
+</div>

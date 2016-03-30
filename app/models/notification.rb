@@ -3,8 +3,8 @@ class Notification < ActiveRecord::Base
   
   validates :tag, uniqueness: { scope: [:user] }
     
-  TYPES = { notice: 0, response: 1, undefined: 99 }
-  RESPONSE = ["Notice", "Response", "Undefined"]
+  TYPES = { notice: 0, response: 1, account_validation: 2, undefined: 99 }
+  RESPONSE = ["Notice", "Response", "Account Validation", "Undefined"]
   
   if Rails.env == 'production'
     SCHEME = 'https'
@@ -20,12 +20,16 @@ class Notification < ActiveRecord::Base
     URI.parse(url)
   end
   
-  def set_url path, method, parameters
-    if path and method
-      query = Rack::Utils.build_nested_query({authentication_key: authentication_key, path: path, method: method.to_s}.merge(parameters))
-      uri = URI::HTTP.new(SCHEME, nil, HOSTNAME, PORT, nil, "/responses/" + id.to_s, nil, query, nil)
-      self.url = uri.to_s    
+  def set_url parameters
+    controller = case follow
+    when TYPES[:response], TYPES[:account_validation] 
+      "/responses/"
+    else 
+      "/"
     end
+    query = Rack::Utils.build_nested_query({authentication_key: authentication_key, redirect_path: redirect_path}.merge(parameters))
+    uri = URI::HTTP.new(SCHEME, nil, HOSTNAME, PORT, nil, controller + id.to_s, nil, query, nil)
+    self.url = uri.to_s
   end
   
   def parameters

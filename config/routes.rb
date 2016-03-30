@@ -31,9 +31,15 @@ Rails.application.routes.draw do
   root 'diagnoses#index'
 
   controller :sessions do
-    get     'login'   => :new
-    post    'login'   => :create
-    delete  'logout'  => :destroy
+    get     'login'         => :new
+    post    'login'         => :create
+    delete  'logout'        => :destroy
+  end
+  
+  controller :account_validations do
+    get     'authorize'     => :inform
+    post    'authorize'     => :resend
+    get     'authorize/:id' => :confirm
   end
 
   controller :google_maps do

@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include NotificationMethods
+  
   before_action only: [:index, :new] do
     allow_only_to :super
   end
@@ -36,11 +38,7 @@ class UsersController < ApplicationController
       end
     end
     
-    if params[:change_mode] == 'password'
-      @change_mode = 'password'
-    else
-      @change_mode = 'settings'
-    end
+    @change_mode = params[:change_mode]
   end
 
   # POST /users
@@ -51,7 +49,8 @@ class UsersController < ApplicationController
     respond_to do |format|
       if verify_recaptcha
         if @user.save
-          format.html { redirect_to users_url, notice: "User #{@user.name} was successfully created." }
+          send_email_notification @user.notification
+          format.html { redirect_to users_url, notice: "User #{@user.name} was successfully created. E-mail has been sent to authorize your account" }
           format.json { render :show, status: :created, location: @user }
         else
           format.html { render :new }
@@ -67,7 +66,12 @@ class UsersController < ApplicationController
     if administrator? and current_user.id != @user.id
       respond_to do |format|
         if @user.update(user_params)
-          format.html { redirect_to user_path(@user), notice: "User #{@user.name}'s #{params[:change_mode]} was successfully updated." }
+          notice = "User #{@user.name}'s #{params[:change_mode]} was successfully updated."
+          unless @user.authorized
+            send_email_notification @user.notification, replacement: true
+            notice += "E-mail has been sent to authorize your account"
+          end
+          format.html { redirect_to user_path(@user), notice: notice }
         else
           format.html { redirect_to edit_user_path(@user, change_mode: params[:change_mode]), notice: "invalid settings" }
         end
@@ -76,15 +80,26 @@ class UsersController < ApplicationController
       if session[:authorized_password]
         if params[:change_mode] == 'password'
           u_params = user_password_params
+          STDERR.puts "1"
         elsif administrator?
           u_params = user_admin_params session[:authorized_password]
+          STDERR.puts "2"
         else
           u_params = user_settings_params session[:authorized_password]
+          STDERR.puts "3"
         end
         
         respond_to do |format|
+          STDERR.puts u_params
           if @user.update(u_params)
-            format.html { redirect_to user_path(@user), notice: "User #{@user.name}'s #{params[:change_mode]} was successfully updated." }
+            notice = "User #{@user.name}'s #{params[:change_mode]} was successfully updated."
+            # when password is updated
+            STDERR.puts "hieng~ " + @user.authorized.to_s
+            unless @user.authorized
+              send_email_notification @user.notification, replacement: true
+              notice += "E-mail has been sent to authorize your account"
+            end
+            format.html { redirect_to user_path(@user), notice: notice }
           else
             format.html { redirect_to edit_user_path(@user, change_mode: params[:change_mode]), notice: "invalid settings" }
           end
@@ -119,16 +134,20 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :password, :password_confirmation, :current_password, :full_name, :email, :privilege_super, :privilege_reagent, :privilege_notification, :equipment_frends)
+      u_params = params.require(:user).permit(:name, :password, :password_confirmation, :current_password, :full_name, :email, :privilege_super, :privilege_reagent, :privilege_notification, :equipment_frends)
+      u_params[:authorized] = false if u_params[:password]
+      u_params
     end
     
     def user_admin_params password
       u_params = user_params
-      u_params.merge(password: password, password_confirmation: password)      
+      u_params.merge(password: password, password_confirmation: password)
     end
 
     def user_password_params
-      params.require(:user).permit(:password, :password_confirmation, :current_password)
+      u_params = params.require(:user).permit(:password, :password_confirmation, :current_password)
+      u_params[:authorized] = false
+      u_params
     end
 
     def user_settings_params password
