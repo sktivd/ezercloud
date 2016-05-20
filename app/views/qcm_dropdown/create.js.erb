@@ -2,7 +2,7 @@ $('#equipment-frame').replaceWith("<%= escape_javascript(render partial: 'dropdo
 
 $('#assay_kit-frame').replaceWith("<%= escape_javascript(render partial: 'dropdown', locals: {title: @qcm.assay_kit_label || 'AssayKit', data: @assay_kits, label: 'device', value: 'id', menu_id: 'assay_kit'}) -%>")
 
-$('#reagent-frame').replaceWith("<%= escape_javascript(render partial: 'dropdown', locals: {title: @qcm.reagent_label || 'Reagent', data: @reagents, label: 'name', value: 'id', menu_id: 'reagent'}) -%>")
+$('#plate-frame').replaceWith("<%= escape_javascript(render partial: 'dropdown', locals: {title: @qcm.reagent_label || 'Reagent', data: @plates, label: 'reagent.name', value: 'id', menu_id: 'plate'}) -%>")
 
 $('#sd_range').replaceWith("<label id=sd_range class=string for=​quality_control_material_lower_3sd>​<abbr title=required>*</abbr> 3SD Range​<%= @qcm.reagent_unit %></label>​")
 

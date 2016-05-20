@@ -1,11 +1,12 @@
 class Report < ActiveRecord::Base
-  belongs_to :reagent
+#  belongs_to :reagent
+  belongs_to :plate
   
-  attr_accessor :reagent_number
+  attr_accessor :assay_kit, :reagent
   
   REPORT_URI = "https://www.ezercloud.com/api/server/qc/10/qcReport/qcReportReceiver"
   
-  validates :equipment, :serial_number, :date, :reagent, presence: true
+  validates :equipment, :serial_number, :date, :plate, presence: true
   validate :equipment, :registered_equipment?
   validate :date, :in_the_future?
   
@@ -16,20 +17,24 @@ class Report < ActiveRecord::Base
   validates_attachment :document, size: { less_than: 1.megabytes }
   validates_attachment :document, content_type: { content_type: ["application/pdf"] }
   
+#  def reagent
+#    self.plate.reagent
+#  end
+  
   private
   
-  def registered_equipment?
-    @equipment = Equipment.find_by(equipment: equipment)
-    if @equipment.nil?
-      errors.add(:equipment, "unregistered equipment")
-    elsif Object.const_get(@equipment.klass).find_by(serial_number: serial_number).nil?
-      errors.add(:serial_number, "unknown equipment")
+    def registered_equipment?
+      @equipment = Equipment.find_by(equipment: equipment)
+      if @equipment.nil?
+        errors.add(:equipment, "unregistered equipment")
+      elsif Object.const_get(@equipment.klass).find_by(serial_number: serial_number).nil?
+        errors.add(:serial_number, "unknown equipment")
+      end
     end
-  end
-  
-  def in_the_future?
-    if date > Date.today
-      errors.add(:date, "can't be in the future")
-    end
-  end  
+    
+    def in_the_future?
+      if date > Date.today
+        errors.add(:date, "can't be in the future")
+      end
+    end  
 end

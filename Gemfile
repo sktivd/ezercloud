@@ -64,6 +64,7 @@ gem 'kaminari'
 
 # GMap for rails
 gem 'gmaps4rails'
+gem 'geocoder'
 
 # asset-pipeline
 gem 'underscore-rails'
@@ -81,6 +82,7 @@ gem 'autoprefixer-rails'
 # NOTE: The sass-rails gem is included with new Rails applications by default.
 #       Please make sure that it is not already in your Gemfile before uncommenting it.
 # gem 'sass-rails'
+gem 'bootstrap-datepicker-rails'
 
 # user registration with secure
 gem 'recaptcha', :require => 'recaptcha/rails'

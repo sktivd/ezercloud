@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  assay_kit_id: 
+  reagent_id: 
+
+two:
+  assay_kit_id: 
+  reagent_id: 

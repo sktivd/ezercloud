@@ -33,8 +33,8 @@
       <tr>
         <td><%= report.equipment %></td>
         <td><%= report.serial_number %></td>
-        <td><%= AssayKit.find(report.reagent.assay_kit_id).device %></td>
-        <td><%= report.reagent.name %></td>
+        <td><%= report.plate.assay_kit.device %></td>
+        <td><%= report.plate.reagent.name %></td>
         <td><%= report.date %></td>
         <td><%= report.transmitted_at %></td>
         <td><%= link_to "Download", report.document.url, { class: "btn btn-default btn-xs", role: "button" } %></td>
@@ -50,7 +50,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="report_<%= report.id %>"><%= report.equipment + " " + report.serial_number + ": " + report.reagent.name %></h4>
+                  <h4 class="modal-title" id="report_<%= report.id %>"><%= report.equipment + " " + report.serial_number + ": " + report.plate.reagent.name %></h4>
                 </div>
                 <div class="modal-body">
                   <iframe class="embed-reponsive-item" src="/pdfjs/web/viewer.html?file=<%= report.document.url %>" style="width:100%; height:75vh; border:0" scrolling="no"></iframe>

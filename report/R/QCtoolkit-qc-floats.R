@@ -136,7 +136,7 @@ generate.frame.withtitle <- function(contents, title, subtitles = "", footnote =
     z
 }
 
-generate.multiple.pages <- function(contents, header = "", footer = "", lines = LINESPERPAGE) {
+generate.multiple.pages <- function(contents, header = "", footer = "", lines = opts$lines_per_page) {
     z <- list()
     count <- 1
     z[[count]] <- header

@@ -31,11 +31,13 @@
         <% else %>
           <td><%= ezer_reader.error_code %></td>
         <% end %>
-        <td><%= link_to 'Show', diagnosis_path(ezer_reader.diagnosis, active: 'ezer_readers'), method: :get, remote: true %></td>
+        <td><%= link_to diagnosis_path(ezer_reader.diagnosis, active: 'ezer_readers'), method: :get, remote: true do %><span class="glyphicon glyphicon-collapse-down"></span><% end %></td>
         <% if administrator? %>
-          <td><%= link_to 'Destroy', diagnosis_path(ezer_reader.diagnosis, active: 'ezer_readers', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to diagnosis_path(ezer_reader.diagnosis, active: 'ezer_readers', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %><span class="glyphicon glyphicon-remove"></span><% end %></td>
         <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<%= paginate equipment, remote: true, params: { active: 'ezer_readers' } %>

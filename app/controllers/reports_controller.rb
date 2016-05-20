@@ -30,19 +30,25 @@ class ReportsController < ApplicationController
   # POST /reports.json
   def create
     @report = Report.new(report_params)
-    @report.reagent = Reagent.find_by(number: @report.reagent_number) if @report.reagent_number
+    @report.plate = Plate.find_by(kit: @report.assay_kit, number: @report.reagent) if @report.assay_kit and @report.reagent
   
     respond_to do |format|
+      if @report.plate.nil?
+        @report.errors[:assay_kit] = "Wrong Kit information"
+        @report.errors[:reagent] = "Wrong Reagent information"
+        format.html { render :new }
+        format.json { render json: { message: "Wrong Kit and Reagent information", kit: @report.assay_kit, reagent: @report.reagent }.to_json, status: :unprocessable_entity }      
+      end
+      
       if @report.save
-                
         # remove old duplicated report
-        if (@old_reports = Report.where(equipment: @report.equipment, serial_number: @report.serial_number, date: @report.date, reagent: @report.reagent).where.not(id: @report.id)).size > 0
+        if (@old_reports = Report.where(equipment: @report.equipment, serial_number: @report.serial_number, date: @report.date, plate: @report.plate).where.not(id: @report.id)).size > 0
           destroyed = " This report replaces report #{@old_reports.map { |report| report.id.to_s + ":" + report.document_file_name }.join(", ")}." 
-          @old_reports.each { |report| report.destroy }
+          @old_reports.destroy_all
         else
           destroyed = ''
         end
-
+  
         # transmit report to ezercloud.com
         ReportTransmissionWorker.perform_async(id: @report.id)
         
@@ -50,7 +56,7 @@ class ReportsController < ApplicationController
         format.json { render :show, status: :created, location: @report }
       else
         format.html { render :new }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
+        format.json { render json: e.message, status: :unprocessable_entity }
       end
     end
   end
@@ -87,7 +93,7 @@ class ReportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
-      params.require(:report).permit(:equipment, :serial_number, :date, :document, :reagent_id, :reagent_number)
+      params.require(:report).permit(:equipment, :serial_number, :date, :document, :plate_id, :assay_kit, :reagent)
     end
     
     def json_request?

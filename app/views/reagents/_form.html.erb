@@ -1,0 +1,18 @@
+<%= simple_form_for @reagent do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :equipment %>
+    <%= f.input :name %>
+    <%= f.input :number %>
+    <%= f.input :unit %>
+    <%= f.input :lod, label: 'Lower Limit of Detection' %>
+    <%= f.input :uod, label: 'Upper Limit of Detection' %>
+    <%= f.input :threshold %>
+  </div>
+  <br />
+  <div class="form-actions">
+    <%= link_to "Cancel", reagents_path, class: 'btn btn-default' %>
+    <%= f.button :submit, class: 'pull-right' %>
+  </div>
+<% end %>

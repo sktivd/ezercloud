@@ -38,7 +38,7 @@
         <% end %>
         <td><%= frend.qc_service + " \#" + frend.qc_lot if frend.qc_service and frend.qc_service != "" %></td>
         <% if administrator? %>
-          <td><%= link_to 'Destroy', diagnosis_path(frend.diagnosis, active: 'frends', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to diagnosis_path(frend.diagnosis, active: 'frends', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %><span class="glyphicon glyphicon-remove"></span><% end %></td>
         <% end %>
       </tr>
     <% end %>

@@ -6,7 +6,7 @@
   <% if data %>
     <ul class="dropdown-menu" aria-labelledby=<%= menu_id %>>
       <% ('A'..'Z').each do |alphabet| %>
-        <% data_alpha = data.map { |d| d if d.instance_eval(label).start_with?(alphabet, alphabet.downcase) }.compact %>
+        <% data_alpha = data.map { |d| d if d.instance_eval(label).start_with?(alphabet, alphabet.downcase) }.compact.sort_by{ |d| d.instance_eval(label) } %>
         <% if data_alpha.size > 0 %>
           <li class="dropdown-header"><%= alphabet %></li>
           <% data_alpha.each do |alpha| %>

@@ -11,22 +11,22 @@ class QcmDropdownController < ApplicationController
     if parameters[:type]
       if parameters[:type] == 'equipment'
         @qcm.equipment = parameters[:value]
-        @qcm.assay_kit = nil
-        @qcm.reagent   = nil
+        @qcm.plate     = nil
         session[:qcm_equipment] = parameters[:value]
         session[:qcm_assay_kit] = nil
-        session[:qcm_reagent]   = nil
+        session[:qcm_plate]     = nil
         @assay_kits = AssayKit.where(equipment: session[:qcm_equipment]).order(:device)
-        @reagents = nil
+        @plates     = nil
       elsif parameters[:type] == 'assay_kit'
         @qcm.assay_kit = parameters[:value]
-        @qcm.reagent   = nil
+        @qcm.plate     = nil
         session[:qcm_assay_kit] = parameters[:value]
-        session[:qcm_reagent]   = nil
-        @reagents   = Reagent.where(assay_kit_id: session[:qcm_assay_kit]).order(:name) 
-      elsif parameters[:type] == 'reagent'
-        @qcm.reagent = Reagent.find(parameters[:value])
-        session[:qcm_reagent] = parameters[:value]
+        session[:qcm_plate]     = nil
+        @plates   = Plate.where(assay_kit_id: session[:qcm_assay_kit])
+        STDERR.puts @plates.size
+      elsif parameters[:type] == 'plate'
+        @qcm.plate = Plate.find(parameters[:value])
+        session[:qcm_plate] = parameters[:value]
       end
     end
         
@@ -40,9 +40,9 @@ class QcmDropdownController < ApplicationController
   def set_qcm
     @qcm = QualityControlMaterial.new
     @qcm.equipment    = session[:qcm_equipment] if session[:qcm_equipment]
-    if session[:qcm_reagent]
-      @qcm.reagent    = Reagent.find(session[:qcm_reagent]) 
-      @qcm.assay_kit  = AssayKit.find(@qcm.reagent.assay_kit_id)
+    if session[:qcm_plate]
+      @qcm.plate      = Plate.find(session[:qcm_plate]) 
+      @qcm.assay_kit  = @qcm.plate.assay_kit
     elsif session[:qcm_assay_kit]
       @qcm.assay_kit  = session[:qcm_assay_kit]
     end

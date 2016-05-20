@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323080605) do
+ActiveRecord::Schema.define(version: 20160509123449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,8 +21,9 @@ ActiveRecord::Schema.define(version: 20160323080605) do
     t.string   "manufacturer"
     t.string   "device"
     t.string   "kit"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "diagnosis_ruleset"
   end
 
   create_table "buddis", force: :cascade do |t|
@@ -61,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160323080605) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.string   "user_id"
+    t.string   "diagnosis_tag"
   end
 
   add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id", using: :btree
@@ -183,6 +185,18 @@ ActiveRecord::Schema.define(version: 20160323080605) do
 
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
+  create_table "plates", force: :cascade do |t|
+    t.integer  "assay_kit_id"
+    t.integer  "reagent_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "kit"
+    t.integer  "number"
+  end
+
+  add_index "plates", ["assay_kit_id"], name: "index_plates_on_assay_kit_id", using: :btree
+  add_index "plates", ["reagent_id"], name: "index_plates_on_reagent_id", using: :btree
+
   create_table "quality_control_materials", force: :cascade do |t|
     t.string   "service"
     t.string   "lot"
@@ -191,39 +205,40 @@ ActiveRecord::Schema.define(version: 20160323080605) do
     t.string   "manufacturer"
     t.float    "mean"
     t.float    "sd"
-    t.integer  "reagent_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "plate_id"
   end
 
-  add_index "quality_control_materials", ["reagent_id"], name: "index_quality_control_materials_on_reagent_id", using: :btree
+  add_index "quality_control_materials", ["plate_id"], name: "index_quality_control_materials_on_plate_id", using: :btree
 
   create_table "reagents", force: :cascade do |t|
     t.string   "name"
     t.string   "number"
     t.string   "unit"
-    t.integer  "assay_kit_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "equipment"
+    t.float    "lod"
+    t.float    "uod"
+    t.float    "threshold"
   end
-
-  add_index "reagents", ["assay_kit_id"], name: "index_reagents_on_assay_kit_id", using: :btree
 
   create_table "reports", force: :cascade do |t|
     t.string   "equipment"
     t.string   "serial_number"
     t.date     "date"
     t.datetime "transmitted_at"
-    t.integer  "reagent_id"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.string   "document_file_name"
     t.string   "document_content_type"
     t.integer  "document_file_size"
     t.datetime "document_updated_at"
+    t.integer  "plate_id"
   end
 
-  add_index "reports", ["reagent_id"], name: "index_reports_on_reagent_id", using: :btree
+  add_index "reports", ["plate_id"], name: "index_reports_on_plate_id", using: :btree
 
   create_table "specifications", force: :cascade do |t|
     t.string   "specimen"
@@ -262,8 +277,7 @@ ActiveRecord::Schema.define(version: 20160323080605) do
 
   add_foreign_key "error_codes", "equipment"
   add_foreign_key "notifications", "users"
-  add_foreign_key "quality_control_materials", "reagents"
-  add_foreign_key "reagents", "assay_kits"
-  add_foreign_key "reports", "reagents"
+  add_foreign_key "plates", "assay_kits"
+  add_foreign_key "plates", "reagents"
   add_foreign_key "specifications", "reagents"
 end

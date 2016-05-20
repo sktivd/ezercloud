@@ -1,6 +1,12 @@
 class AssayKit < ActiveRecord::Base
-  has_many :reagents, dependent: :destroy
-  accepts_nested_attributes_for :reagents, reject_if: lambda { |e| e[:name].blank? or e[:number].to_i <= 0 }, allow_destroy: true
+  has_many :reagents, through: :plates
+  has_many :plates, dependent: :destroy
+#  accepts_nested_attributes_for :reagents, reject_if: lambda { |e| e[:name].blank? or e[:number].to_i <= 0 }, allow_destroy: true
+  
+  attr_accessor :reagent_list
+  
+  validates :equipment, :device, :kit, presence: true
+  validates :kit, uniqueness: { scope: [:equipment, :device] }
   
   def self.equipment equipment, equipment_kits
     assay_kits = {}
@@ -12,4 +18,7 @@ class AssayKit < ActiveRecord::Base
     assay_kits
   end
   
+  def reagent_list
+    reagents.map { |reagent| reagent.id }
+  end  
 end

@@ -1,0 +1,15 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to 'Assay Kits', assay_kits_path %></li>
+  <li class="active">Reagent</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      New Reagent
+    </strong>
+  </h3>
+  <p>You register new reagent for target equipment.</p>
+</div>
+
+<%= render partial: 'form' %>

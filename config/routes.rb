@@ -4,8 +4,6 @@ Rails.application.routes.draw do
   resources :images
   resources :buddis
   resources :ezer_readers
-  get 'google_maps/index'
-
   resources :notifications
   resources :reports
   resources :users
@@ -14,6 +12,8 @@ Rails.application.routes.draw do
   resources :laboratories
   resources :quality_control_materials
   resources :assay_kits
+  resources :reagents
+  resources :plates
   resources :frends
   resources :diagnoses
   resources :equipment
@@ -21,7 +21,10 @@ Rails.application.routes.draw do
 #  get    'sessions/new'
 #  get     'sessions/create'
 #  delete  'sessions/destroy'
+
+  # for ajax
   post    'qcm_dropdown' => 'qcm_dropdown#create'
+  post    'ak_dropdown' => 'ak_dropdown#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
