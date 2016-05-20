@@ -2,10 +2,11 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :equipment %>
+    <%= f.input :equipment, collection: all_equipment.map{ |e| e.equipment } %>
     <%= f.input :serial_number %>
     <%= f.input :date %>
-    <%= f.association :reagent %>
+    <%= f.input :assay_kit%>
+    <%= f.input :reagent %>
     <%= f.input :document, as: :file %>
   </div>
 

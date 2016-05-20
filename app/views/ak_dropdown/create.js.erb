@@ -1,0 +1,10 @@
+$('#ak-equipment').html("<%= escape_javascript(render partial: 'ak_dropdown/dropdown', locals: {title: @assay_kit.equipment, data: authorized_equipment, label: 'equipment', value: 'equipment', menu_id: 'equipment'}) %>");
+$('#ak-reagent-checkboxes').html("<%= escape_javascript(render partial: 'ak_dropdown/checkboxes', locals: { form_data: @assay_kit, target: :reagent_list, data: @reagents, label: :label, value: :id, wrapper_classes: 'col-xs-4 ak-reagent-checkbox' }) %>");
+$('#ak-badge').html('0');
+$('#ak-reagent-checkboxes .ak-reagent-checkbox input:checkbox').on('change', function() {
+  var len;
+  len = $('#ak-reagent-checkboxes input[name="assay_kit[reagent_list][]"]:checked').length;
+  return $('#ak-badge').html(len);
+});
+
+

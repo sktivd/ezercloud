@@ -1,0 +1,19 @@
+<div class="dropdown btn-group" id=<%= menu_id + "-frame" %> for=<%= "assay_kit_" + menu_id %>>
+  <button class="btn btn-default form-control dropdown-toggle" type="button" id="<%= menu_id %>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= title %>
+    <span class="caret"></span>
+  </button>
+  <% if data %>
+    <ul class="dropdown-menu" aria-labelledby=<%= menu_id %>>
+      <% ('A'..'Z').each do |alphabet| %>
+        <% data_alpha = data.map { |d| d if d.instance_eval(label).start_with?(alphabet, alphabet.downcase) }.compact.sort_by{ |d| d.instance_eval(label) } %>
+        <% if data_alpha.size > 0 %>
+          <li class="dropdown-header"><%= alphabet %></li>
+          <% data_alpha.each do |alpha| %>
+            <li><%= link_to alpha.instance_eval(label), ak_dropdown_path(ak: {value: alpha.instance_eval(value), type: menu_id}), method: :post, remote: true %></li>
+          <% end %>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

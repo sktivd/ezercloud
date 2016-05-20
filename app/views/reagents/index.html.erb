@@ -1,0 +1,51 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to 'Assay Kits', assay_kits_path %></li>
+  <li class="active">Reagents</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Reagents
+    </strong>
+  </h3>
+  <p>Here you'll see information of reagents for all equipments.</p>
+</div>
+
+<table class="table table-stripe table-hover">
+  <thead>
+    <tr>
+      <th>Equipment</th>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Unit</th>
+      <th>Lower Limit of Detection</th>
+      <th>Upper Limit of Detection Rule</th>
+      <th>Threshold</th>
+      <% if administrator? %>
+        <th colspan="2"></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @reagents.each do |reagent| %>
+      <tr>
+        <td><%= reagent.equipment %></td>
+        <td><%= reagent.name %></td>
+        <td><%= reagent.number %></td>
+        <td><%= reagent.unit %></td>
+        <td><%= reagent.lod %></td>
+        <td><%= reagent.uod %></td>
+        <td><%= reagent.threshold %></td>
+        <% if administrator? %>
+          <td><%= link_to edit_reagent_path(reagent) do %><span class="glyphicon glyphicon-edit"></span><% end %></td>
+          <td><%= link_to reagent, method: :delete, data: { confirm: 'Are you sure?' } do %><span class="glyphicon glyphicon-remove"></span><% end %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Reagent', new_reagent_path, class: 'btn btn-default' %>

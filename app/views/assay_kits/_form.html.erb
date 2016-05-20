@@ -1,18 +1,26 @@
-<%= simple_form_for @assay_kit do |f| %>
-  <%= f.error_notification %>
-
-  <div class="form-inputs">
-    <%= f.input :equipment %>
-    <%= f.input :manufacturer %>
-    <%= f.input :device %>
-    <%= f.input :kit %>
-    <%= f.label :reagents, label: "Reagents" %>
-    <%= f.simple_fields_for :reagents, wrapper: :inline_form do |builder| %>
-      <%= render partial: 'reagent_fields', locals: { f: builder } %>
-    <% end %>
-  </div>
-  <br />
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>
+<div id="ak-form">
+  <%= simple_form_for @assay_kit do |f| %>
+    <%= f.error_notification %>
+  
+    <div class="form-inputs">
+      <%= f.input :equipment, as: :select do %>
+        <div id="ak-equipment">
+          <%= render partial: "ak_dropdown/dropdown", locals: {title: @assay_kit.equipment || "Equipment", data: authorized_equipment, label: "equipment", value: "equipment", menu_id: "equipment"} %>
+        </div>
+      <% end %>
+      <%= f.input :manufacturer %>
+      <%= f.input :device %>
+      <%= f.input :kit %>
+      <%= f.input :diagnosis_ruleset %>
+      <a href="#"><strong>Reagents</strong> <span id="ak-badge" class="badge"><%= @assay_kit.reagent_list.size %></span></a>
+      <div id="ak-reagent-checkboxes" class="row">
+        <%= render partial: "ak_dropdown/checkboxes", locals: { form_data: @assay_kit, target: :reagent_list, data: @reagents, label: :label, value: :id, wrapper_classes: 'col-xs-4 ak-reagent-checkbox' } %>
+      </div>
+    </div>
+    <p></p>
+    <div class="form-actions">
+      <%= link_to 'Cancel', assay_kits_path, class: 'btn btn-default' %>
+      <%= f.button :submit, class: 'btn btn-default pull-right' %>
+    </div>
+  <% end %>
+</div>

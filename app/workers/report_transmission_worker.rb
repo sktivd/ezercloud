@@ -21,7 +21,7 @@ class ReportTransmissionWorker
 
     if @report
       report_uri = URI.parse(Report::REPORT_URI)
-      report_request = Net::HTTP::Post::Multipart.new report_uri.path, "file" => UploadIO.new(File.open(@report.document.path), 'application/pdf', [@report.date.to_s, @report.equipment, @report.serial_number, @report.reagent.number.to_s].join('_') + ".pdf")
+      report_request = Net::HTTP::Post::Multipart.new report_uri.path, "file" => UploadIO.new(File.open(@report.document.path), 'application/pdf', [@report.date.to_s, @report.equipment, @report.serial_number, @report.plate.number.to_s].join('_') + ".pdf")
       report_response = Net::HTTP.start(report_uri.host, report_uri.port, use_ssl: report_uri.scheme == 'https', verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
         http.request(report_request)
       end

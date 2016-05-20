@@ -11,12 +11,39 @@
  * file per style scope.
  *
  *= require sweetalert2
+ *= require bootstrap-datepicker3
  *= require_tree .
  *= require_self
  */
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+#qctoolkit-nav {
+    background-color:        rgba(0,0,0,0.9);
+    border:                  0;
+    box-shadow:              none;
+    z-index:                 999;
+    -webkit-font-smoothing:  antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transition:      background .5s ease-in-out, opacity .5s ease;
+    -moz-transition:         background .5s ease-in-out, opacity .5s ease;
+    transition:              background .5s ease-in-out, opacity .5s ease;
+    background-image:        -webkit-gradient(linear, 50.00% 0.00%, 50.00% 100.00%, color-stop( 0% , rgba(0,0,0,0.00)),color-stop( 100% , rgba(0,0,0,0.00)));
+    background-image:        -webkit-linear-gradient(270deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+    background-image:        linear-gradient(180deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+}
+
+#qctoolkit-nav.affix {
+    top:                0;
+    min-width:          100%;
+    background-color:   rgba(0.2, 0.2, 0.2, 0.8);
+//    background-color: #f8f8f8;
+//    opacity: 0.8;
+    -webkit-transition: background .5s ease-in-out, opacity .5s ease;
+    -moz-transition:    background .5s ease-in-out, opacity .5s ease;
+    transition:         background .5s ease-in-out, opacity .5s ease;
+}
 
 body {
   padding-top: 70px;

@@ -167,7 +167,7 @@ class DiagnosesController < ApplicationController
         params[:diagnosis][:authentication_key] = params[:authentication_key]
         params[:diagnosis][:remote_ip] = request.remote_ip.to_sym
 
-        params.require(:diagnosis).permit(:authentication_key, :remote_ip, :protocol, :version, :equipment, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
+        params.require(:diagnosis).permit(:authentication_key, :remote_ip, :protocol, :version, :equipment, :diagnosis_tag, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
       end
     end
     

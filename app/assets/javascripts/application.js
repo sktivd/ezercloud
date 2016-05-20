@@ -17,5 +17,16 @@
 //= require sweetalert2
 //= require sweet-alert-confirm
 //= require underscore
-//= require gmaps/google    
+//= require gmaps/google
+//= require bootstrap-datepicker
 //= require_tree .
+
+$(window).scroll(function() {
+    if ($("#qctoolkit-nav").offset().top > 80) {
+        $('#qctoolkit-nav').addClass('affix');
+        $(".navbar-fixed-top").addClass("top-nav-collapse");
+    } else {
+        $('#qctoolkit-nav').removeClass('affix');
+        $(".navbar-fixed-top").removeClass("top-nav-collapse");
+    }   
+});

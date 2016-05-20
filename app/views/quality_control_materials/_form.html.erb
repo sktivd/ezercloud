@@ -13,8 +13,8 @@
       <%= f.input :assay_kit, label: false, as: :select do %>
         <%= render partial: "qcm_dropdown/dropdown", locals: {title: @quality_control_material.assay_kit_label || "AssayKit", data: @assay_kits, label: "device", value: "id", menu_id: "assay_kit"} -%>
       <% end %>
-      <%= f.input :reagent, label: false, as: :select do %>
-        <%= render partial: "qcm_dropdown/dropdown", locals: {title: @quality_control_material.reagent_label || "Reagent", data: @reagents, label: "name", value: "id", menu_id: "reagent"} -%>
+      <%= f.input :plate, label: false, as: :select do %>
+        <%= render partial: "qcm_dropdown/dropdown", locals: {title: @quality_control_material.reagent_label || "Reagent", data: @plates, label: "reagent.name", value: "id", menu_id: "plate"} -%>
       <% end %>
     </div>
   </nav>

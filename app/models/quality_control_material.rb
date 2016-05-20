@@ -8,12 +8,13 @@ class QCMValidator < ActiveModel::Validator
 end
 
 class QualityControlMaterial < ActiveRecord::Base
-  belongs_to :reagent  
+  belongs_to :plate
+#  belongs_to :reagent  
 
   attr_accessor :assay_kit, :lower_3sd, :upper_3sd
   
-  validates :equipment, :reagent, :service, :lot, :expire, presence: true
-  validates :lot, uniqueness: { scope: [:reagent, :service] }
+  validates :equipment, :plate, :service, :lot, :expire, presence: true
+  validates :lot, uniqueness: { scope: [:plate, :service] }
   validate :expire, :already_expired?
   validates :mean, :sd, presence: true, unless: :threeSD?
   validates :mean, :sd, numericality: true, if: :mean_and_sd?
@@ -24,11 +25,19 @@ class QualityControlMaterial < ActiveRecord::Base
   SEVICES = ['BIO-RAD', 'CLINIQA']
   
   def assay_kit_label
-    if self.reagent
-      self.reagent.assay_kit.device
+    if self.plate
+      self.plate.assay_kit.device
     elsif self.assay_kit
       AssayKit.find(self.assay_kit).device
     end
+  end
+  
+  def reagent
+    self.plate.reagent if self.plate
+  end
+  
+  def reagent_id
+    self.plate.reagent_id if self.plate
   end
   
   def reagent_label
@@ -36,28 +45,26 @@ class QualityControlMaterial < ActiveRecord::Base
   end
 
   def reagent_unit
-    if self.reagent
-      ' (' + self.reagent.unit + ')'
-    end
+    ' (' + self.reagent.unit + ')' if self.reagent
   end
   
   private
   
-  def threeSD?
-    lower_3sd and upper_3sd
-  end
-
-  def threeSD?
-    lower_3sd and upper_3sd
-  end
-
-  def mean_and_sd?
-    mean and sd
-  end
-  
-  def already_expired?
-    if expire <= Date.today
-      errors.add(:expire, "can't be in the past")
+    def threeSD?
+      lower_3sd and upper_3sd
     end
-  end
+  
+    def threeSD?
+      lower_3sd and upper_3sd
+    end
+  
+    def mean_and_sd?
+      mean and sd
+    end
+    
+    def already_expired?
+      if expire <= Date.today
+        errors.add(:expire, "can't be in the past")
+      end
+    end
 end

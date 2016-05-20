@@ -1,0 +1,5 @@
+<% if @assay_kit.equipment %>
+  <%= simple_fields_for form_data do |f| %>
+    <%= f.input_field target, collection: data, label_method: label, value_method: value, as: :check_boxes, include_hidden: false, item_wrapper_class: wrapper_classes %>
+  <% end %>
+<% end %>

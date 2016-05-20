@@ -1,4 +1,15 @@
-<%= render partial: 'form', layout: 'sf_label', locals: { title: 'Editing Assay Kit' } %>
+<% content_for :breadcrumb do %>
+  <li><%= link_to 'Assay Kits', assay_kits_path %></li>
+  <li class="active">Edit Assay Kit</li>
+<% end %>
 
-<%= link_to 'Show', @assay_kit %> |
-<%= link_to 'Back', assay_kits_path %>
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Edit Assay Kits
+    </strong>
+  </h3>
+  <p>You could edit information of assay kit for target equipments.</p>
+</div>
+
+<%= render partial: 'form' %>

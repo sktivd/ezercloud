@@ -24,7 +24,7 @@ class QualityControlMaterialsController < ApplicationController
     
     session[:qcm_equipment] = @quality_control_material.equipment if @quality_control_material.equipment
     session[:qcm_assay_kit] = @quality_control_material.assay_kit if @quality_control_material.assay_kit
-    session[:qcm_reagent]   = @quality_control_material.reagent_id if @quality_control_material.reagent_id
+    session[:qcm_plate]     = @quality_control_material.plate_id  if @quality_control_material.plate_id
   end
 
   # GET /quality_control_materials/1/edit
@@ -79,18 +79,18 @@ class QualityControlMaterialsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_quality_control_material
       @quality_control_material = QualityControlMaterial.find(params[:id])
-      @quality_control_material.assay_kit = @quality_control_material.reagent.assay_kit_id
+      @quality_control_material.assay_kit = @quality_control_material.plate.assay_kit_id
       @quality_control_material.lower_3sd = @quality_control_material.mean - 3 * @quality_control_material.sd
       @quality_control_material.upper_3sd = @quality_control_material.mean + 3 * @quality_control_material.sd
       
       session[:qcm_equipment] = @quality_control_material.equipment
       session[:qcm_assay_kit] = @quality_control_material.assay_kit
-      session[:qcm_reagent]   = @quality_control_material.reagent_id
+      session[:qcm_plate]     = @quality_control_material.plate_id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def quality_control_material_params
-      params.require(:quality_control_material).permit(:service, :lot, :expire, :equipment, :mean, :sd, :lower_3sd, :upper_3sd, :reagent_id)
+      params.require(:quality_control_material).permit(:service, :lot, :expire, :equipment, :mean, :sd, :lower_3sd, :upper_3sd, :plate_id)
     end
     
     def assign_remained_attributes
@@ -103,7 +103,7 @@ class QualityControlMaterialsController < ApplicationController
       end
     
       @quality_control_material.equipment = session[:qcm_equipment]
-      @quality_control_material.reagent   = Reagent.find(session[:qcm_reagent]) if session[:qcm_reagent]
+      @quality_control_material.plate     = Plate.find(session[:qcm_plate]) if session[:qcm_plate]
     end
 
 end
