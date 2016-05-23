@@ -1,4 +1,5 @@
 $("#detail-<%= @active %>").html("<%= escape_javascript(render partial: @active + '/show', locals: { equipment: @equipment }) %>");
+$("#detail-<%= @active %>").collapse('show');
 $("body").scrollspy({ 
     target: "#navbar-<%= @active %>",
     offset: 100

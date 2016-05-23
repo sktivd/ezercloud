@@ -13,9 +13,9 @@ u = User.create(name: "reagent", password: "22221111", full_name: "Reagent Manag
 
 # Equipment
 
-e = Equipment.create(equipment: 'FREND', manufacturer: 'NanoEnTek', klass: 'Frend', db: 'frends', tests: 3, prefix: 'test_')
-e = Equipment.create(equipment: 'BUDDI', manufacturer: 'NanoEnTek', klass: 'Buddi', db: 'buddis', tests: 6, prefix: 'test_')
-e = Equipment.create(equipment: 'EzerReader', manufacturer: 'Unknown', klass: 'EzerReader', db: 'ezer_readers', tests: 6, prefix: 'test_')
+e_frend = Equipment.create(equipment: 'FREND', manufacturer: 'NanoEnTek', klass: 'Frend', db: 'frends', tests: 3, prefix: 'test_')
+e_buddi = Equipment.create(equipment: 'BUDDI', manufacturer: 'NanoEnTek', klass: 'Buddi', db: 'buddis', tests: 6, prefix: 'test_')
+e_ezer_reader = Equipment.create(equipment: 'EzerReader', manufacturer: 'Unknown', klass: 'EzerReader', db: 'ezer_readers', tests: 6, prefix: 'test_')
 
 # Assay kits & QC materials
 
