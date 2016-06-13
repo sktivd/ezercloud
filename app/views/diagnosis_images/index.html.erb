@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Images</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Protocol</th>
+      <th>Version</th>
+      <th>Tag</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @diagnosis_images.each do |diagnosis_image| %>
+      <tr>
+        <td><%= diagnosis_image.protocol %></td>
+        <td><%= diagnosis_image.version %></td>
+        <td><%= diagnosis_image.tag %></td>
+        <td><%= link_to 'Show', diagnosis_image %></td>
+        <td><%= link_to 'Edit', edit_diagnosis_image_path(diagnosis_image) %></td>
+        <td><%= link_to 'Destroy', diagnosis_image, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Image', new_diagnosis_image_path %>

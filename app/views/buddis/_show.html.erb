@@ -90,7 +90,7 @@
           <% end %>
         </section>
         
-        <% if @buddi.images.size > 0 %>
+        <% if @buddi.diagnosis_images.size > 0 %>
         <section id="buddi-images" class="section">
           <h4>@images</h4>
           <div class="row thumbnail-base">
@@ -98,7 +98,7 @@
               <%= link_to image_tag(@buddi.image_window.image_file.url, alt: @buddi.image_window.tag), "#buddi-images", class: "thumbnail" %>
             </div>
             <div class="thumbnails">
-              <% @buddi.images.each do |image| %>
+              <% @buddi.diagnosis_images.each do |image| %>
               <%= link_to image_tag(image.image_file.url(:thumbnail), alt: image.tag), "#buddi-images", class: "img-thumbnail" %>
             <% end %>
             </div>            
@@ -162,7 +162,7 @@
         <nav id="navbar-buddis">
           <ul id="affix-buddis" class="nav nav-pills nav-stacked hidden-xs affix-top" data-spy="affix">
             <li><a href="#buddi-diagnosis">Diagnosis</a></li>
-            <% if @buddi.images.size > 0 %>
+            <% if @buddi.diagnosis_images.size > 0 %>
             <li><a href="#buddi-images">Images</a></li>
             <% end %>
             <li><a href="#buddi-equipment">Equipment</a></li>

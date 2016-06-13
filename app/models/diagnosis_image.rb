@@ -1,4 +1,4 @@
-class Image < ActiveRecord::Base
+class DiagnosisImage < ActiveRecord::Base
   belongs_to :imagable, polymorphic: true
 
   attr_accessor :authentication_key, :remote_ip, :equipment, :anchor

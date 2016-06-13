@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  resources :images
+  resources :diagnosis_images
   resources :buddis
   resources :ezer_readers
   resources :notifications

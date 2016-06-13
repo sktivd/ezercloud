@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  protect_from_forgery
+  skip_before_action :verify_authenticity_token, if: :json_request?
   skip_before_action :authorize
     
   def new
@@ -31,4 +33,9 @@ class SessionsController < ApplicationController
     redirect_to login_path, notice: "Logged out"
   end
     
+  private
+  
+    def json_request?
+      request.format.json?
+    end
 end

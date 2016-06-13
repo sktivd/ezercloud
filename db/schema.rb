@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160509123449) do
+ActiveRecord::Schema.define(version: 20160612015029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,23 @@ ActiveRecord::Schema.define(version: 20160509123449) do
 
   add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id", using: :btree
 
+  create_table "diagnosis_images", force: :cascade do |t|
+    t.string   "protocol"
+    t.integer  "version"
+    t.string   "tag"
+    t.string   "hash_code"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "image_file_file_name"
+    t.string   "image_file_content_type"
+    t.integer  "image_file_file_size"
+    t.datetime "image_file_updated_at"
+    t.integer  "diagnosis_imagable_id"
+    t.string   "diagnosis_imagable_type"
+  end
+
+  add_index "diagnosis_images", ["diagnosis_imagable_type", "diagnosis_imagable_id"], name: "d_imagable", using: :btree
+
   create_table "equipment", force: :cascade do |t|
     t.string   "equipment"
     t.string   "manufacturer"
@@ -74,8 +91,9 @@ ActiveRecord::Schema.define(version: 20160509123449) do
     t.string   "db"
     t.integer  "tests"
     t.string   "prefix"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "mappable",     default: false
   end
 
   create_table "error_codes", force: :cascade do |t|
@@ -139,23 +157,6 @@ ActiveRecord::Schema.define(version: 20160509123449) do
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
   end
-
-  create_table "images", force: :cascade do |t|
-    t.string   "protocol"
-    t.integer  "version"
-    t.string   "tag"
-    t.string   "hash_code"
-    t.integer  "imagable_id"
-    t.string   "imagable_type"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "image_file_file_name"
-    t.string   "image_file_content_type"
-    t.integer  "image_file_file_size"
-    t.datetime "image_file_updated_at"
-  end
-
-  add_index "images", ["imagable_type", "imagable_id"], name: "index_images_on_imagable_type_and_imagable_id", using: :btree
 
   create_table "laboratories", force: :cascade do |t|
     t.string   "ip_address"
