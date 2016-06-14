@@ -80,7 +80,7 @@
           </div>
         </section>
         
-        <% if @ezer_reader.images.size > 0 %>
+        <% if @ezer_reader.diagnosis_images.size > 0 %>
         <section id="ezer_reader-images" class="section">
           
           <h4>@images</h4>
@@ -89,7 +89,7 @@
               <%= link_to image_tag(@ezer_reader.image_window.image_file.url, alt: @ezer_reader.image_window.tag), "#ezer_reader-images", class: "thumbnail" %>
             </div>
             <div class="thumbnails">
-              <% @ezer_reader.images.each do |image| %>
+              <% @ezer_reader.diagnosis_images.each do |image| %>
               <%= link_to image_tag(image.image_file.url(:thumbnail), alt: image.tag), "#ezer_reader-images", class: "img-thumbnail" %>
             <% end %>
             </div>            
@@ -178,7 +178,7 @@
         <nav id="navbar-ezer_readers">
           <ul id="affix-ezer_readers" class="nav nav-pills nav-stacked hidden-xs affix-top" data-spy="affix">
             <li><a href="#ezer_reader-diagnosis">Diagnosis</a></li>
-            <% if @ezer_reader.images.size > 0 %>
+            <% if @ezer_reader.diagnosis_images.size > 0 %>
             <li><a href="#ezer_reader-images">Images</a></li>
             <% end %>
             <li><a href="#ezer_reader-equipment">Equipment</a></li>

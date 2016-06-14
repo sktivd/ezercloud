@@ -7,8 +7,8 @@ $("body").scrollspy({
 $("#affix-<%= @active %>").affix({
   offset: {
     top: 203,
-    bottom: function () {
-      return (this.bottom = $('.footer').outerHeight(true) + 135)
+    bottom: function() {
+      return $("#container-<%= @active %>").outerHeight() + $('footer').outerHeight() + 100
     }
   }
 });

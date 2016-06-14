@@ -17,9 +17,8 @@
 //= require sweetalert2
 //= require sweet-alert-confirm
 //= require underscore
-//= require gmaps/google
 //= require bootstrap-datepicker
-//= require_tree .
+//= require_tree ./sitewide
 
 $(window).scroll(function() {
     if ($("#qctoolkit-nav").offset().top > 80) {

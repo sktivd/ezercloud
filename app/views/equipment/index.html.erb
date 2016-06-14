@@ -14,12 +14,14 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr id="equipment-tableheader">
-      <th><a role="button" data-toggle="collapse" data-parent="#accordion" href="#equipment-collapse" aria-expanded="false" aria-controls="equipment-collapse">Equipment</a></th>
+      <th><%= link_to "#equipment-collapse", role: 'button', data: { toggle: 'collapse', parent: '#accordion'}, aria: { expanded: 'false', controls: 'equipment-collapse' } do %><span class="glyphicon glyphicon-collapse-down"></span><% end %></th>
+      <th>Equipment</th>
       <th>Manufacturer</th>
       <th>Klass</th>
       <th>DB name</th>
       <th>Number of Tests</th>
       <th>Variable Prefix</th>
+      <th>Mappable</th>
       <% if administrator? %>
         <th colspan="2"></th>
       <% end %>
@@ -28,7 +30,7 @@
       <th></th>
       <th>Error code</th>
       <th>Level</th>
-      <th colspan="3">Description</th>
+      <th colspan="6">Description</th>
       <% if administrator? %>
         <th colspan="2"></th>
       <% end %>
@@ -37,12 +39,14 @@
   <tbody>
     <% @equipment.each do |equipment| %>
       <tr id="<%= "equipment-" + equipment.equipment %>">
-        <td><a role="button" data-toggle="collapse" class="collapser" href="<%= "#equipment-collapse_" + equipment.id.to_s %>" aria-expanded="false" aria-controls="<%= "equipment-collapse_" + equipment.id.to_s %>"><%= equipment.equipment %></a></td>
+        <td><%= link_to "#equipment-collapse_" + equipment.id.to_s, role: 'button', class: 'collapser', aria: { expanded: 'false', controls: "equipment-collapse_" + equipment.id.to_s } do %><span class="glyphicon glyphicon-collapse-down"></span><% end %></td>
+        <td><%= equipment.equipment %></td>
         <td><%= equipment.manufacturer %></td>
         <td><%= equipment.klass %></td>
         <td><%= equipment.db %></td>
         <td><%= equipment.tests %></td>
         <td><%= equipment.prefix %></td>
+        <td><%= equipment.mappable %></td>
         <% if administrator? %>
           <td><%= link_to 'Edit', edit_equipment_path(equipment) %></td>
           <td><%= link_to 'Destroy', equipment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -53,7 +57,7 @@
           <td></td>
           <td><%= error_code.error_code %></td>
           <td><%= error_code.level %></td>
-          <td colspan="3"><%= error_code.description %></td>
+          <td colspan="4"><%= error_code.description %></td>
           <% if administrator? %>
             <th colspan="2"></th>
           <% end %>

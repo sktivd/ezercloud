@@ -1,43 +1,45 @@
 <div id="detail-buddis" class="collapse .col-xs-12">
 </div>
 
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Measured</th>
-      <th>IP address</th>
-      <th>Location</th>
-      <th>Serial number</th>
-      <th>Kit</th>
-      <th>Results</th>
-      <% if administrator? %>
-        <th colspan="2"></th>
-      <% else %>
-        <th colspan="1"></th>
-      <% end %>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% equipment.each do |buddi| %>
+<div id="container-buddis">
+  <table class="table table-striped table-hover">
+    <thead>
       <tr>
-        <td><%= buddi.diagnosis.measured_at.to_date %></td>
-        <td><%= buddi.diagnosis.ip_address %></td>
-        <td><%= buddi.diagnosis.location %></td>
-        <td><%= buddi.serial_number %></td>
-        <td><%= buddi.kit + ":" + buddi.lot %></td>
-        <% if buddi.processed %>
-          <td><%= buddi.ratio_data %></td>
-        <% else %>
-          <td><%= buddi.error_code %></td>
-        <% end %>
-        <td><%= link_to diagnosis_path(buddi.diagnosis, active: 'buddis'), method: :get, remote: true do %><span class="glyphicon glyphicon-collapse-down"></span><% end %></td>
+        <th>Measured</th>
+        <th>IP address</th>
+        <th>Location</th>
+        <th>Serial number</th>
+        <th>Kit</th>
+        <th>Results</th>
         <% if administrator? %>
-          <td><%= link_to diagnosis_path(buddi.diagnosis, active: 'buddis', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %><span class="glyphicon glyphicon-remove"></span><% end %></td>
+          <th colspan="2"></th>
+        <% else %>
+          <th colspan="1"></th>
         <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= paginate equipment, remote: true, params: { active: 'buddies' } %>
+    </thead>
+  
+    <tbody>
+      <% equipment.each do |buddi| %>
+        <tr>
+          <td><%= buddi.diagnosis.measured_at.to_date %></td>
+          <td><%= buddi.diagnosis.ip_address %></td>
+          <td><%= buddi.diagnosis.location %></td>
+          <td><%= buddi.serial_number %></td>
+          <td><%= buddi.kit + ":" + buddi.lot %></td>
+          <% if buddi.processed %>
+            <td><%= buddi.ratio_data %></td>
+          <% else %>
+            <td><%= buddi.error_code %></td>
+          <% end %>
+          <td><%= link_to diagnosis_path(buddi.diagnosis, active: 'buddis'), method: :get, remote: true do %><span class="glyphicon glyphicon-collapse-down"></span><% end %></td>
+          <% if administrator? %>
+            <td><%= link_to diagnosis_path(buddi.diagnosis, active: 'buddis', page: page), method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %><span class="glyphicon glyphicon-remove"></span><% end %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <%= paginate equipment, remote: true, params: { active: 'buddies' } %>
+</div>

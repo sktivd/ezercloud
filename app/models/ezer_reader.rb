@@ -1,8 +1,8 @@
 class EzerReader < ActiveRecord::Base
   include EquipmentUtils
   include NotificationUtils
-  has_one  :diagnosis, as: :diagnosable, dependent: :delete
-  has_many :images,    as: :imagable,    dependent: :delete_all
+  has_one  :diagnosis,        as: :diagnosable,        dependent: :delete
+  has_many :diagnosis_images, as: :diagnosis_imagable, dependent: :delete_all
 
   VERSION = 1
 
@@ -14,7 +14,7 @@ class EzerReader < ActiveRecord::Base
 #  end
   
   def image_window
-    images.find_by(tag: 'window') || images[0]
+    diagnosis_images.find_by(tag: 'window') || images[0]
   end
     
 end

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Protocol:</strong>
+  <%= @diagnosis_image.protocol %>
+</p>
+
+<p>
+  <strong>Version:</strong>
+  <%= @diagnosis_image.version %>
+</p>
+
+<p>
+  <strong>Tag:</strong>
+  <%= @diagnosis_image.tag %>
+</p>
+
+<%= link_to 'Edit', edit_diagnosis_image_path(@diagnosis_image) %> |
+<%= link_to 'Back', diagnosis_images_path %>
