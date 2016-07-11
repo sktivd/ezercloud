@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160612015029) do
+ActiveRecord::Schema.define(version: 20160701075959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,10 +59,11 @@ ActiveRecord::Schema.define(version: 20160612015029) do
     t.string   "order_number"
     t.integer  "diagnosable_id"
     t.string   "diagnosable_type"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.string   "user_id"
     t.string   "diagnosis_tag"
+    t.string   "decision",         default: "Suspended"
   end
 
   add_index "diagnoses", ["diagnosable_type", "diagnosable_id"], name: "index_diagnoses_on_diagnosable_type_and_diagnosable_id", using: :btree

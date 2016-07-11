@@ -18,10 +18,12 @@ class RenameImagesToDiagnosisImages < ActiveRecord::Migration
         dir.up do
           image.diagnosis_imagable_id   = image.imagable_id
           image.diagnosis_imagable_type = image.imagable_type
+          image.save
         end
         dir.down do
           image.imagable_id   = image.diagnosis_imagable_id
           image.imagable_type = image.diagnosis_imagable_type
+          image.save
         end
       end
     end

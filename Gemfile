@@ -66,6 +66,13 @@ gem 'kaminari'
 gem 'gmaps4rails'
 gem 'geocoder'
 
+# Enhanced Markerclusterer
+#gem 'e_markerclusterer', path: '/Users/skon/iCloudDocs/SK/Sources/QCtoolkit/e_markerclusterer'
+gem 'e_markerclusterer'
+
+# OpenStreetMap?
+gem 'leaflet-rails'
+
 # asset-pipeline
 gem 'underscore-rails'
 
@@ -83,6 +90,9 @@ gem 'autoprefixer-rails'
 #       Please make sure that it is not already in your Gemfile before uncommenting it.
 # gem 'sass-rails'
 gem 'bootstrap-datepicker-rails'
+
+# javascript charts
+#gem 'amcharts.rb'
 
 # user registration with secure
 gem 'recaptcha', :require => 'recaptcha/rails'
