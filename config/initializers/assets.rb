@@ -9,9 +9,8 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
-Rails.application.config.assets.precompile += %w( pie_markerclusterer/markerclusterer.js pie_markerclusterer/data.json pie_markerclusterer/*.png )
 
-%w( account_validations assay_kits diagnoses diagnosis_images equipment google_maps laboratories notifications quality_control_materials reagents reports responses session specifications users ).each do |controller|
+%w( account_validations assay_kits diagnoses diagnosis_images equipment google_maps laboratories notifications quality_control_materials reagents reports responses sessions specifications users ).each do |controller|
   Rails.application.config.assets.precompile += ["#{controller}.coffee", "#{controller}.js", "#{controller}.scss", "#{controller}.css"]
 end
 
