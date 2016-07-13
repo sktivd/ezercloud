@@ -2,6 +2,11 @@
 
 ## Skynet 0.2
 
+EzerReader:
+* EzerReader's user_comment is worked as Diagnosis decision. There are four types of decision, 'Positive'(/^[pP]/), 'Negative'(/^[nN]/), 'Suspended'(/^[sS]/), and 'Invalid'(others).
+
+---
+
 DB:
 * New instance variable, 'decision', is added to Diagnosis to keep diagnosis decision measured by equipment or a health worker.
 
