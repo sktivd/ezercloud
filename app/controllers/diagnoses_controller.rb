@@ -82,6 +82,7 @@ class DiagnosesController < ApplicationController
     @equipment = new_equipment(params[:equipment], params[:data].to_json)
     if @equipment
       @equipment.diagnosis = @diagnosis 
+      @diagnosis.decision = @equipment.decision
     else
       @diagnosis.errors.add(:data_for_equipment, "is not generated.")
     end
