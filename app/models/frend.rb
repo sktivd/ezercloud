@@ -26,7 +26,7 @@ class Frend < ActiveRecord::Base
   def notification    
     if test_type == 1
       notifications = []
-      assay_kit = AssayKit.find_by(kit: kit)
+      assay_kit = AssayKit.find_by(equipment: 'Frend', kit: kit)
       if assay_kit
         assay_kit.plates.each do |plate|
           if (test_id.split(':', 3) - ['0']).include?(plate.reagent.number) and plate.quality_control_materials.find_by(service: qc_service, lot: qc_lot).nil?

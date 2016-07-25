@@ -1,6 +1,7 @@
 // Place all the styles related to the google_maps controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//= require bootstrap-slider
 
 #map-fullscreen {
   position: absolute;
@@ -29,7 +30,12 @@
   margin-left: 20px;
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
-  width: 300px;
+  width: 200px;
+}
+
+#map-assaylist {
+  margin-right: 15px;
+  width: 135px;
 }
 
 #map-input:focus {
@@ -48,4 +54,25 @@
 
 #target {
   width: 345px;
+}
+
+#time-slider {
+  margin-bottom: 15px;
+  margin-right: 20px;
+}
+
+#time-slider .slider-selection {
+	background: #EEE;
+}
+
+#time-slider .slider-track-high {
+  background: #EEE;
+}
+
+#time-slider .slider-tick {
+  background: #CCC;
+}
+
+#time-slider .slider-handle {
+  background: #444
 }

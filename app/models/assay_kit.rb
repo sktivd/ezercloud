@@ -5,7 +5,7 @@ class AssayKit < ActiveRecord::Base
   
   attr_accessor :reagent_list
   
-  validates :equipment, :device, :kit, presence: true
+  validates :equipment, :device, :kit, :target, presence: true
   validates :kit, uniqueness: { scope: [:equipment, :device] }
   
   def self.equipment equipment, equipment_kits

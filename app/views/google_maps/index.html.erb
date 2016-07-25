@@ -5,11 +5,18 @@
   <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
 <% end %>
 
-
 <%= content_tag :div, id: "map-fullscreen" do %>
-  <%= content_tag :div, id:"map-data", data: { markers: @diagnosis_markers, labels: @diagnosis_labels } do %>
+  <%= content_tag :div, id: "map-data", data: { markers: @diagnosis_markers, labels: @diagnosis_labels } do %>
   <% end %>
-  <input id="map-input" class="map-controls" type="text" placeholder="Search Box"></input>
+  <input id="map-input" class="map-controls" type="text" placeholder="Search Place"></input>
+  <div id="map-assaylist" class="panel-group" role="tablist" aria-multiselectable="true">
+    <%= render partial: 'assaylist', locals: { type: 'assay', title: 'Assays', active: true, data: @gmap_assays } %>
+    <%= render partial: 'assaylist', locals: { type: 'equipment', title: 'Equipment', active: false, data: @gmap_equipment } %>
+  </div>
+  <input id="map-timeslider" data-slider-id='time-slider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="<%= @current_timescale %>" data-slider-ticks-snap-bounds="10" data-slider-ticks="<%= @available_timescale %>" data-slider-ticks-labels="<%= @available_timescale.map { |v| @time_labels[v] } %>" />
   <div id="map-canvas" style='width: 100%; height: 100%'></div>
 <% end %>
 
+  ticks: [0, 1, 2, 3, 4, 5, 6, 7]
+  ticks_labels: ['1d', '1w', '1m', '1q', '6m', '1y', '2y', 'whole']
+  ticks_snap_bounds: 10
