@@ -85,6 +85,7 @@ gem 'sinatra', require: nil
 # For form
 gem 'simple_form'
 gem 'bootstrap-sass'
+gem 'bootstrap-slider-rails'
 gem 'autoprefixer-rails'
 # NOTE: The sass-rails gem is included with new Rails applications by default.
 #       Please make sure that it is not already in your Gemfile before uncommenting it.

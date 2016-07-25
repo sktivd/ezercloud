@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+  <%= content_tag :div, id: 'map-' + type + '-heading', class: 'panel-heading', role: 'tab' do %>
+    <p class="panel-title">
+      <%= link_to '#map-' + type + '-list', class: active ? '' : 'collapsed', role: 'button', data: { toggle: 'collapse', parent: '#map-assaylist' }, aria: { expanded: active ? 'true' : 'false', controls: 'map-' + type + '-list' } do %>
+        <%= title %> <span id=<%= 'map-' + type + '-badge' %> class="badge"><%= data.size %></span>
+      <% end %>
+    </p>
+  <% end %>
+  <%= content_tag :div, id: 'map-' + type + '-list', class: 'panel-collapse collapse' + (active ? ' in' : ''), role: 'tabpanel', aria: { labelledby: 'map-' + type + '-heading' } do %>
+    <div class="panel-body">
+      <div class="checkbox">
+        <% data.each do |f| %>
+          <label>
+            <input type="checkbox" name=<%= f %> head=<%= type %> checked>
+            <%= f %>
+          </label>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
