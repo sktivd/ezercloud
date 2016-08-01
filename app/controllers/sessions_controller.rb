@@ -24,6 +24,7 @@ class SessionsController < ApplicationController
       end
     else
       # keep redirect_to information
+      #redirect_to login_path(redirect_to: session[:redirect_to]), turbolinks:false, notice: "User name or password is incorrect."
       redirect_to login_path(redirect_to: session[:redirect_to]), notice: "User name or password is incorrect."
     end
   end

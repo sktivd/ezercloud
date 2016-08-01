@@ -11,6 +11,7 @@ module EquipmentUtils
     end
     
     def decision
+      'Suspended'
     end
     
     def tag
