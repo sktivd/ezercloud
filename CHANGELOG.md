@@ -2,6 +2,14 @@
 
 ## Skynet 0.2
 
+######2016. 8. 1
+Google Map (app/assets/javascripts/google_maps.coffee, app/views/google_maps/index.html.erb):
+* Grid size is increased (30 -> 50).
+* Turbolinks should be disabled for full page refresh, which enables to show Google map (as expected?).
+
+Buddi (app/models/buddi.rb):
+* Default value of instance 'decision' is 'Influenza'.
+
 ###### 2016. 7. 25
 Application (app/views/layouts/application.html.erb):
 * A bug of not refreshing would be removed by adding '''<%= yield :scripts %>'''

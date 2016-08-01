@@ -11,7 +11,7 @@ google.charts.load 'current', 'packages': [ 'corechart' ]
 
 gmapHandler = Gmaps.build('Google',
   markers: clusterer:
-    gridSize: 30
+    gridSize: 50
     maxZoom: 25
     styles: [
       {

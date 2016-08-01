@@ -68,7 +68,7 @@ gem 'geocoder'
 
 # Enhanced Markerclusterer
 #gem 'e_markerclusterer', path: '/Users/skon/iCloudDocs/SK/Sources/QCtoolkit/e_markerclusterer'
-gem 'e_markerclusterer', '~> 0.0.4'
+gem 'e_markerclusterer', '~> 0.0.5'
 
 # OpenStreetMap?
 gem 'leaflet-rails'
