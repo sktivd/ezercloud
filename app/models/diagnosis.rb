@@ -1,5 +1,7 @@
 class Diagnosis < ActiveRecord::Base
   belongs_to :diagnosable, polymorphic: true
+  geocoded_by :ip_address
+  after_validation :geocode, if: ->(obj){ obj.latitude.nil? or obj.longitude.nil? }
   
   attr_accessor :authentication_key, :remote_ip, :year, :month, :day, :hour, :minute, :second, :time_zone, :data
   
