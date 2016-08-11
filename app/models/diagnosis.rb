@@ -1,6 +1,7 @@
 class Diagnosis < ActiveRecord::Base
   belongs_to :diagnosable, polymorphic: true
-  geocoded_by :ip_address
+
+  geocoded_by :location_or_ip_address
   after_validation :geocode, if: ->(obj){ obj.latitude.nil? or obj.longitude.nil? }
   
   attr_accessor :authentication_key, :remote_ip, :year, :month, :day, :hour, :minute, :second, :time_zone, :data
@@ -48,6 +49,18 @@ class Diagnosis < ActiveRecord::Base
     
     def self.read
       self.order(:created_at).reverse_order
+    end
+    
+    def location_or_ip_address
+      geocode_by_location   = Geocoder.search(location)
+      geocode_by_ip_address = Geocoder.search(ip_address)
+      if geocode_by_location.size > 0
+        self.latitude  = geocode_by_location[0].latitude
+        self.longitude = geocode_by_location[0].longitude
+      else
+        self.latitude  = geocode_by_ip_address[0].latitude
+        self.longitude = geocode_by_ip_address[0].longitude
+      end
     end
   
 end
