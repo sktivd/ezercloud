@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809022703) do
+ActiveRecord::Schema.define(version: 20160811005835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(version: 20160809022703) do
     t.string   "ratio_data"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.string   "measured_points"
+    t.text     "point_intensities"
   end
 
   create_table "diagnoses", force: :cascade do |t|
