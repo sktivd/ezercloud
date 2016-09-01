@@ -2,6 +2,13 @@
 
 ## Skynet 0.2
 
+######2016. 9. 1
+System
+* Devise gem has been applied in whole system.
+* Devise_invitable gem gem has been applied, which subscription is allowed only forinvited user.
+* Authorize and rollify gem has been applied in whole system.
+* Lecacy codes are kept with deprecated tag to prevent unrecognized error occurring.
+
 ######2016. 8. 1
 Google Map (app/assets/javascripts/google_maps.coffee, app/views/google_maps/index.html.erb):
 * Grid size is increased (30 -> 50).

@@ -8,6 +8,8 @@ class QCMValidator < ActiveModel::Validator
 end
 
 class QualityControlMaterial < ActiveRecord::Base
+  resourcify
+  
   belongs_to :plate
 #  belongs_to :reagent  
 
@@ -49,10 +51,6 @@ class QualityControlMaterial < ActiveRecord::Base
   end
   
   private
-  
-    def threeSD?
-      lower_3sd and upper_3sd
-    end
   
     def threeSD?
       lower_3sd and upper_3sd

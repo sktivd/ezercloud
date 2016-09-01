@@ -19,7 +19,20 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-#qctoolkit-nav {
+.spacer5 { height: 5px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer10 { height: 10px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer15 { height: 15px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer20 { height: 20px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer25 { height: 25px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer30 { height: 30px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer35 { height: 35px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer40 { height: 40px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer45 { height: 45px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer50 { height: 50px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer100 { height: 100px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+
+#ezercloud-nav {
     background-color:        rgba(0,0,0,0.9);
     border:                  0;
     box-shadow:              none;
@@ -34,10 +47,10 @@
     background-image:        linear-gradient(180deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
 }
 
-#qctoolkit-nav.affix {
+#ezercloud-nav.affix {
     top:                0;
     min-width:          100%;
-    background-color:   rgba(0.2, 0.2, 0.2, 0.8);
+    background-color:   rgba(0.2, 0.2, 0.2, 0.7);
 //    background-color: #f8f8f8;
 //    opacity: 0.8;
     -webkit-transition: background .5s ease-in-out, opacity .5s ease;
@@ -73,4 +86,8 @@ body {
 
 .footer-links li:first-child {
   padding-left: 0;
+}
+
+.navbar-nav.navbar-right:last-child {
+  margin-right: 0px;
 }

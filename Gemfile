@@ -31,7 +31,8 @@ source 'https://rails-assets.org' do
 end
 #gem 'sweet-alert-rails-confirm'
 #gem 'sweet-alert'
-gem 'sweet-alert-confirm'
+#gem 'sweet-alert-confirm'
+gem 'rails-sweetalert2-confirm'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -94,6 +95,16 @@ gem 'bootstrap-datepicker-rails'
 
 # javascript charts
 #gem 'amcharts.rb'
+
+# authentication
+gem 'devise', '~> 4.2.0'
+gem 'devise-bootstrap-views'
+gem 'devise_invitable', '~> 1.7.0'
+gem 'authority'
+gem 'rolify'
+
+# transparent encryption for ActiveRecord
+gem 'crypt_keeper'
 
 # user registration with secure
 gem 'recaptcha', :require => 'recaptcha/rails'

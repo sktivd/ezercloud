@@ -15,17 +15,19 @@
 //= require bootstrap
 //= require turbolinks
 //= require sweetalert2
-//= require sweet-alert-confirm
+//= require rails-sweetalert2-confirm
 //= require underscore
 //= require bootstrap-datepicker
 //= require_tree ./sitewide
 
 $(window).scroll(function() {
-    if ($("#qctoolkit-nav").offset().top > 80) {
-        $('#qctoolkit-nav').addClass('affix');
+    if ($("#ezercloud-nav").offset().top > 80) {
+        $('#ezercloud-nav').addClass('affix');
         $(".navbar-fixed-top").addClass("top-nav-collapse");
     } else {
-        $('#qctoolkit-nav').removeClass('affix');
+        $('#ezercloud-nav').removeClass('affix');
         $(".navbar-fixed-top").removeClass("top-nav-collapse");
     }   
 });
+
+$('#navbar-account-menu').dropdown();

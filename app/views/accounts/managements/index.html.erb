@@ -1,0 +1,51 @@
+<% content_for :breadcrumb do %>
+  <li>Account</li>
+  <li class="active">Management</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Management account
+    </strong>
+  </h3>
+  <p>Managable account list</p>
+</div>
+
+<%= link_to 'Invite an e-mail', new_account_invitation_path, class: 'btn btn-default', role: 'button' %>
+<hr/>
+
+<table class="table table-stripe table-hover">
+  <thead>
+    <tr>
+      <th>E-mail</th>
+      <th>Name</th>
+      <th>Administrator</th>
+      <th>Created at</th>
+      <th>Confirmed</th>
+      <th>Locked</th>
+      <th colspan="2" style="margin: 0; padding: 2px; width: 150px;">
+        <div class="input-group" style="padding: 0; margin: 0; width: 100%; line-height: 1;">
+          <input id="account-search-field" type="text" class="form-control" placeholder="Search for..."></input>
+          <span class="input-group-btn"><button id="account-search" class="btn btn-default" type="button">Go!</button></span>
+        </div>        
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @accounts.each do |account| %>
+      <tr>
+        <td><%= account.email %></td>
+        <td><%= account.name %></td>
+        <td><%= account.admin ? "Yes" : "No" %></td>
+        <td><%= in_seconds Time.now - account.created_at %></td>        
+        <td><%= account.confirmed? ? "Yes" : "No" %></td>
+        <td><%= account.locked_at? ? account.locked_at : "No" %></td>
+        <td class="text-center"><%= link_to account_path(account), method: :get do %><span class="glyphicon glyphicon-collapse-down"></span><% end %></td>
+        <td class="text-right"><%= link_to account_path(account, page: @page), method: :delete, data: { confirm: 'Are you sure?' } do %><span class="glyphicon glyphicon-remove"></span><% end %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @accounts, remote: true %>

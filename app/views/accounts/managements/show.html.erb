@@ -1,0 +1,57 @@
+<% content_for :breadcrumb do %>
+  <li>Account</li>
+  <li class="active"><%= @account.email %></li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      <%= @account.email %>'s profile
+    </strong>
+  </h3>
+  <p>Welcome, <%= (@account.name if @account.name != "") || @account.email %>.</p>
+</div>
+
+<div class="row">
+  <div class="col-lg-4 col-md-6 col-xs-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Profile</h3>
+      </div>
+      <div class="panel-body">
+        Your account was created at <strong><%= in_seconds(Time.now - @account.created_at) %></strong> ago.
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <dl class="dl-horizontal">
+            <dt>Administrator</dt>
+            <dd><%= @account.admin %></dd>
+            <dt>Covered Areas</dt>
+            <% @account.areas.each do |area| %>
+              <dd><%= ('All' if area == '*') || area %></dd>
+            <% end %>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 col-xs-12">
+    <div class="panel panel-danger">
+      <div class="panel-heading bg-info">Roles</div>
+      <div class="panel-body"></div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-6 col-xs-12">
+    <div class="panel panel-warning">
+      <div class="panel-heading bg-info">Devies</div>
+      <div class="panel-body"></div>
+    </div>
+  </div>  
+</div>
+
+<%= link_to 'Change a profile', edit_account_path(@account), class: 'btn btn-default btn-xs', role: 'button' %>
+<% if current_account.id == @account.id %>
+  <%= link_to 'Change a password', edit_account_registration_path, class: 'btn btn-default btn-xs', role: 'button' %>
+<% end %>
+<%= link_to 'Delete an account', account_registration_path, data: { confirm: "Are you sure?" }, method: :delete, class: 'btn btn-default btn-xs btn-danger pull-right', role: 'button' %>
+

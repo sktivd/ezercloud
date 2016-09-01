@@ -2,11 +2,15 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :notification_type %>
-    <%= f.input :sent_at %>
-    <%= f.input :notified_at %>
-    <%= f.input :reaction_type %>
-    <%= f.input :content %>
+    <%= f.input :follow %>
+    <%= f.input :tag %>
+    <%= f.input :url %>
+    <%= f.input :data %>
+    <%= f.input :mailer%>
+    <%= f.input :every %>
+    <%= f.input :user_id %>
+    <%= f.input :redirect_path%>
+    <%= f.input :expired_at %>
   </div>
 
   <div class="form-actions">

@@ -1,0 +1,28 @@
+<% content_for :breadcrumb do %>
+  <li>Account</li>
+  <li class="active">Unlock account</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Unlock your account?
+    </strong>
+  </h3>
+  <p>You will receive unlock informations in your e-mail address.</p>
+</div>
+
+<%= simple_form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+  <%= f.error_notification %>
+  <%= f.full_error :unlock_token %>
+
+  <div class="form-inputs">
+    <%= f.input :email, required: true, autofocus: true %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Resend unlock instructions" %>
+  </div>
+<% end %>
+
+<%= render "accounts/shared/links" %>

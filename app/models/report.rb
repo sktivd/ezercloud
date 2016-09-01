@@ -1,4 +1,6 @@
 class Report < ActiveRecord::Base
+  resourcify
+  
 #  belongs_to :reagent
   belongs_to :plate
   

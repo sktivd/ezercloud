@@ -1,6 +1,7 @@
 class Buddi < ActiveRecord::Base
   include EquipmentUtils
   include NotificationUtils
+  
   has_one  :diagnosis,        as: :diagnosable,        dependent: :delete
   has_many :diagnosis_images, as: :diagnosis_imagable, dependent: :delete_all
 
@@ -14,6 +15,10 @@ class Buddi < ActiveRecord::Base
 #  end
 
   # tag: result/original
+  def tag
+    'Influenza'
+  end
+  
   def image_window
     diagnosis_images.find_by(tag: 'result') || images[0]
   end

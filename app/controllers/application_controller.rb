@@ -3,37 +3,38 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :authorize
+  #before_action :authorize
+  before_action :authenticate_account!
   
-  helper_method :current_user, :logged_in?, :administrator?, :all_equipment, :authorized_equipment
+  helper_method :administrator?, :all_equipment, :authorized_equipment
     
   protected
   
+#    def current_user
+#      @current_user ||= User.find_by(id: session[:user_id])
+#    end
+
     def current_user
-      @current_user ||= User.find_by(id: session[:user_id])
-    end
-    
-    def logged_in?
-      current_user != nil
+      current_account
     end
     
     def authorize
       if not logged_in?
         redirect_to login_path(redirect_to: params), notice: notice || "Please log in"
-      elsif not current_user.authorized
+      elsif not current_account.authorized
         redirect_to authorize_path, notice: notice || "Account should be confirmed"
       end
     end
     
     def allow_only_to privilege
       # super users are always allowed!
-      unless current_user.privilege_super or current_user.instance_eval("privilege_" + privilege.to_s)
+      unless current_account.privilege_super or current_account.instance_eval("privilege_" + privilege.to_s)
         redirect_to root_path, method: :get, notice: "Not allowed!"
       end
     end
     
     def administrator?
-      current_user and current_user.privilege_super
+      current_account and current_account.admin
     end
     
     def all_equipment
@@ -41,7 +42,7 @@ class ApplicationController < ActionController::Base
     end
     
     def authorized_equipment
-      @authorized_equipment ||= search_authorized_equipment_of current_user
+      @authorized_equipment ||= search_authorized_equipment_of current_account
     end
     
     rescue_from ActionController::InvalidAuthenticityToken do 

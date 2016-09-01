@@ -18,6 +18,30 @@ Rails.application.routes.draw do
   resources :diagnoses
   resources :equipment
 
+  devise_for :accounts, controllers: {
+    confirmations:      'accounts/confirmations',
+    #omniauth_callbacks: 'accounts/omniauth_callbacks',
+    invitations:        'accounts/invitations', 
+    passwords:          'accounts/passwords',
+    #registrations:      'accounts/registrations',
+    sessions:           'accounts/sessions',
+    unlocks:            'accounts/unlocks'
+  }
+  
+  devise_scope :account do
+    get 'accounts',                       to: 'accounts/managements#index',    as: :accounts
+    get 'accounts/managements/:id',       to: 'accounts/managements#show',     as: :account
+    get 'accounts/managements/:id/edit',  to: 'accounts/managements#edit',     as: :edit_account
+    patch 'accounts/managements/:id',     to: 'accounts/managements#update'
+    put 'accounts/managements/:id',       to: 'accounts/managements#update'   
+    delete 'accounts/managements/:id',    to: 'accounts/managements#destroy',  as: :destroy_account
+                                                                               
+    get 'accounts/registrations/edit',    to: 'accounts/registrations#edit',   as: :edit_account_registration
+    patch 'accounts/registrations',       to: 'accounts/registrations#update', as: :account_registration
+    put 'accounts/registrations',         to: 'accounts/registrations#update'
+    delete 'accounts/registrations',      to: 'accounts/registrations#destroy'
+  end
+    
 #  get    'sessions/new'
 #  get     'sessions/create'
 #  delete  'sessions/destroy'
@@ -33,17 +57,17 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root 'diagnoses#index'
 
-  controller :sessions do
-    get     'login'         => :new
-    post    'login'         => :create
-    delete  'logout'        => :destroy
-  end
-  
-  controller :account_validations do
-    get     'authorize'     => :inform
-    post    'authorize'     => :resend
-    get     'authorize/:id' => :confirm
-  end
+#  controller :sessions do
+#    get     'login'         => :new
+#    post    'login'         => :create
+#    delete  'logout'        => :destroy
+#  end
+# 
+#  controller :account_validations do
+#    get     'authorize'     => :inform
+#    post    'authorize'     => :resend
+#    get     'authorize/:id' => :confirm
+#  end
 
   controller :google_maps do
     get     'maps'    => :index

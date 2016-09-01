@@ -1,4 +1,6 @@
 class Plate < ActiveRecord::Base
+  resourcify
+  
   belongs_to :assay_kit
   belongs_to :reagent
   has_many :quality_control_materials, dependent: :destroy

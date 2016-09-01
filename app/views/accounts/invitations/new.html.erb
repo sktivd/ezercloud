@@ -1,0 +1,23 @@
+<% content_for :breadcrumb do %>
+  <li>Account</li>
+  <li class="active">Invitation</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      <%= t "devise.invitations.new.header" %>
+    </strong>
+  </h3>
+  <p>Please input an e-mail address for new account</p>
+</div>
+
+<%= simple_form_for resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post} do |f| %>
+  <%= devise_error_messages! %>
+
+<% resource.class.invite_key_fields.each do |field| -%>
+  <%= f.input field %>
+<% end -%>
+
+<%= f.button :submit, t("devise.invitations.new.submit_button") %>
+<% end %>

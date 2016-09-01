@@ -1,4 +1,6 @@
 class Reagent < ActiveRecord::Base
+  resourcify
+  
   has_many :assay_kits, through: :plates
   has_many :plates
   has_one :specification
