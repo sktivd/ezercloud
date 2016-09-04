@@ -1,5 +1,12 @@
   Note: This is in reverse chronological order, so newer entries are added to the top.
 
+## Skynet 0.3
+
+######2016. 9. 4
+
+* Skynet 0.3 is branched.
+* Repository is transfered to BitBucket.
+
 ## Skynet 0.2
 
 ######2016. 9. 1
@@ -8,6 +15,14 @@ System
 * Devise_invitable gem gem has been applied, which subscription is allowed only forinvited user.
 * Authorize and rollify gem has been applied in whole system.
 * Lecacy codes are kept with deprecated tag to prevent unrecognized error occurring.
+
+Buddi
+* location information is set as Address, which is used to search Geolocation.
+
+geocoder
+* IP geolocation is received to call Maxmind(https://www.maxmind.com), which requires a fee by call.
+* Geolocation information will be kept for 30 days in cache.
+
 
 ######2016. 8. 1
 Google Map (app/assets/javascripts/google_maps.coffee, app/views/google_maps/index.html.erb):
