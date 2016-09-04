@@ -6,6 +6,7 @@
 
 * Skynet 0.3 is branched.
 * Repository is transfered to BitBucket.
+* SourceTree security token is generated in BitBucket.
 
 ## Skynet 0.2
 
