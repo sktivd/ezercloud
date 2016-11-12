@@ -2,6 +2,10 @@
 
 ## Skynet 0.3
 
+######2016. 11. 11
+* User and Specification MVC and relatives were removed. Account replaces User totally, which is based on Devise gem.
+* account_validations and sessions controllers were removed.
+
 ######2016. 9. 4
 
 * Skynet 0.3 is branched.

@@ -1,7 +1,0 @@
-<%= simple_form_for :login, url: login_path, wrapper: :inline_form, method: :post, html: { class: 'form-inline' } do |f| %>
-  <%= f.error_notification %>
-
-    <%= f.input :name, placeholder: 'Enter User ID' %>
-    <%= f.input :password, placeholder: 'Password' %>
-    <%= f.button :submit, 'Login' %>
-<% end %>
