@@ -1,11 +1,13 @@
 class DiagnosisImagesController < ApplicationController
-  protect_from_forgery
-  skip_before_action :verify_authenticity_token, if: :html_request?
-  skip_before_action :authorize, only: [:create]
-  before_action only: [:new, :update, :edit, :destroy] do
-    allow_only_to :super
-  end
 
+  skip_before_action :verify_authenticity_token, if: :html_request?, only: [:create]
+  skip_before_action :authenticate_account!, only: [:create]
+  before_action only: [:new, :create], unless: :json_request? do
+    redirect_to root_path, notice: "Artifical diagnosis creation is prohibited!"
+  end
+  before_action only: [:new, :update, :edit, :destroy] do
+    authorize Diagnosis, :manage?
+  end
   before_action :set_diagnosis_image, only: [:show, :edit, :update, :destroy]
 
   # GET /diagnosis_images
@@ -106,4 +108,5 @@ class DiagnosisImagesController < ApplicationController
     def html_request?
       request.format.html?
     end 
+    
 end
