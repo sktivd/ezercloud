@@ -72,8 +72,8 @@ gem 'gmaps4rails'
 gem 'geocoder'
 
 # Enhanced Markerclusterer
-gem 'e_markerclusterer', path: '/Users/skon/Documents/SK/Sources/QCtoolkit/e_markerclusterer'
-#gem 'e_markerclusterer', '~> 0.0.6'
+#gem 'e_markerclusterer', path: '/Users/skon/Documents/SK/Sources/QCtoolkit/e_markerclusterer'
+gem 'e_markerclusterer', '~> 0.0.6'
 
 # OpenStreetMap?
 gem 'leaflet-rails'
