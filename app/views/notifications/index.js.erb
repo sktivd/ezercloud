@@ -1,0 +1,2 @@
+$("#notification-table").html("<%= escape_javascript(render partial: 'notification_table', locals: { notifications: @notifications }) %>");
+$('[data-toggle="tooltip"]').tooltip();

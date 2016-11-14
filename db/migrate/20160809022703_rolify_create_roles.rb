@@ -3,6 +3,9 @@ class RolifyCreateRoles < ActiveRecord::Migration
     create_table(:roles) do |t|
       t.string :name
       t.references :resource, :polymorphic => true
+      t.date :from
+      t.date :to
+      t.string :location
 
       t.timestamps
     end

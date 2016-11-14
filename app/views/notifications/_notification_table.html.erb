@@ -1,0 +1,60 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <% if @see_all %>
+        <th>Owner</th>
+      <% end %>
+      <th>Message</th>
+      <th>Expired</th>
+      <th>Notified</th>
+      <% if @manager %>
+        <th></th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <% datetime = DateTime.now %>
+  <tbody>
+    <% notifications.each do |notification| %>
+      <tr>
+        <% if @see_all %><td><%= notification.account.email %></td><% end %>
+        <td>
+          <%= strip_tags(notification.message) %>
+        </td>
+        <td><%= datetime > notification.expired_at ? 'Expired' : notification.expired_at %></td>
+        <%= content_tag :td, class: 'text-center', id: 'notification-' + notification.id.to_s do %>  
+          <% if notification.notified_at %>
+            <span class="glyphicon glyphicon-ok"><span>
+          <% elsif datetime <= notification.expired_at %>
+            <% if notification.follow == 'responses' and notification.url %>
+              <%= link_to notification.url do %>
+                <span class="glyphicon glyphicon-play-circle"></span>
+              <% end %>
+            <% elsif notification.follow == 'notices' %>
+              <%= link_to notification_notify_path(id: notification.id), method: :post, remote: true do %>
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+              <% end %>
+            <% end %>            
+          <% end %>
+        <% end %>
+        <% if @manager %>
+          <td>
+            <%= link_to notification, method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <span class="glyphicon glyphicon-remove-circle"></span>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @manager %>
+  <% if @see_all %>
+    <%= paginate @notifications, params: { see_all: true }, remote: true %>
+  <% else %>  
+    <%= paginate @notifications, remote: true %>    
+  <% end %>
+<% else %>  
+  <%= paginate @notifications, remote: true %>
+<% end %>

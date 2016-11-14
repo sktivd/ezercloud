@@ -2,6 +2,22 @@
 
 ## Skynet 0.3
 
+######2016. 11. 14
+Role
+* Rollify gem has been applied, which includes creating, requesting, applying, and removing roles.
+* accounts/management_controller shows aquired roles. 
+
+Device & DeviceLicense
+* Device class manages collected devices information, and Accounts with related DeviceLicense can only access measurement data.
+* accounts/management_controller shows aquired device_licenses.
+* Device could be registered automatically after related measurement data has been registered.
+
+Notification
+* Bootstrap css has been applied to HTML email.
+* Notification structure has been totally renewal. Follow is clearly devided two types, :responses and :notices. :responses means to require replying by additional system like email (or SMS). :notices means only noticable message.
+* double updates on controllers was moved to model framework. before_save and after_save callback enable double updates.
+* error message will be sent by exceptions (not complete yet), which needs more update to work perfectly.
+
 ######2016. 11. 11
 * User and Specification MVC and relatives were removed. Account replaces User totally, which is based on Devise gem.
 * account_validations and sessions controllers were removed.

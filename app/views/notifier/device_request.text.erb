@@ -1,0 +1,16 @@
+<%= @data[:name] ? @data[:name] + ' (' + @data[:email] + ')' : @data[:email] %> has requested to register a device.
+
+<%= @notification.message.sub("\n", "</p><p>").html_safe %>
+    
+Requested Device--------------
+      
+* Equipment: <%= Equipment.find(@data[:equipment_id]).equipment %>
+* Serial number: <%= @data[:serial_number] %>
+* Activation from: <%= @data[:activated_at] %>
+  
+Permit or Decline (<%= @notification.url %>)
+
+EzerCloud, 
+SK telecom
+  
+(This notification will be expired at <%= @notification.expired_at %>. This mail is automatically generated. Please do not reply.)

@@ -18,6 +18,8 @@
 //= require rails-sweetalert2-confirm
 //= require underscore
 //= require bootstrap-datepicker
+//= require moment
+//= require bootstrap-datetimepicker
 //= require_tree ./sitewide
 
 $(window).scroll(function() {

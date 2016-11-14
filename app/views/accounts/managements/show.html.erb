@@ -13,10 +13,13 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-4 col-md-6 col-xs-12">
+  <%= content_tag :div, class: @account.has_role?(:admin) ? "col-xs-12" : "col-md-4 col-xs-12" do %>
     <div class="panel panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Profile</h3>
+        <h3 class="panel-title" style="display: inline">Profile</h3>
+        <%= link_to edit_account_path(@account), class: 'btn btn-default btn-xs btn-success pull-right', role: 'button' do %>
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        <% end %>
       </div>
       <div class="panel-body">
         Your account was created at <strong><%= in_seconds(Time.now - @account.created_at) %></strong> ago.
@@ -25,31 +28,93 @@
         <li class="list-group-item">
           <dl class="dl-horizontal">
             <dt>Administrator</dt>
-            <dd><%= @account.admin %></dd>
-            <dt>Covered Areas</dt>
-            <% @account.areas.each do |area| %>
-              <dd><%= ('All' if area == '*') || area %></dd>
-            <% end %>
+            <dd><%= @account.has_role? :admin %></dd>
           </dl>
         </li>
       </ul>
     </div>
-  </div>
-  <div class="col-lg-4 col-md-6 col-xs-12">
-    <div class="panel panel-danger">
-      <div class="panel-heading bg-info">Roles</div>
-      <div class="panel-body"></div>
+  <% end %>
+  <div class="col-md-8 col-xs-12">
+    <div class="row no-gutter">
+      <% unless @account.has_role? :admin %>
+        <div class="col-xs-12">
+          <div class="panel panel-danger">
+            <div class="panel-heading bg-info">
+              <h3 class="panel-title" style="display: inline">Roles</h3>
+              <%= link_to accounts_roles_new_path(params: { account: { id: @account.id } }), class: 'btn btn-default btn-xs btn-danger pull-right', role: 'button' do %>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              <% end %>
+            </div>
+            <div class="panel-body">
+              <table class="table">
+                <thead>
+                  <th>Role</th>
+                  <th>Model</th>
+                  <th>Location</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th></th>
+                </thead>
+                <tbody>
+                  <% @account.roles.each do |role| %>
+                    <tr>
+                      <td><%= role.name %></td>
+                      <td><%= role.resource_type %></td>
+                      <td><%= role.location %></td>
+                      <td><%= role.from %></td>
+                      <td><%= role.to %></td>
+                      <td>
+                        <%= link_to accounts_roles_destroy_path(id: role.id), method: :delete, data: { confirm: 'Are you sure?' } do %>
+                          <span class="glyphicon glyphicon-remove-circle"></span>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="panel panel-warning">
+            <div class="panel-heading bg-info">
+              <h3 class="panel-title" style="display: inline">Devices</h3>
+              <%= link_to accounts_devices_new_path(params: { account: { id: @account.id } }), class: 'btn btn-default btn-xs btn-warning pull-right', role: 'button' do %>
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              <% end %>
+            </div>
+            <div class="panel-body">
+              <table class="table">
+                <thead>
+                  <th>Device</th>
+                  <th>Serial number</th>
+                  <th>Activated from</th>
+                  <th>To</th>
+                </thead>
+                <tbody>
+                  <% @account.devices.each do |device| %>
+                    <tr>
+                      <td><%= device.device.equipment.equipment %></td>
+                      <td><%= device.device.serial_number %></td>
+                      <td><%= device.activated_at.to_date %></td>
+                      <td><%= device.deactivated_at.to_date if device.deactivated_at %></td>
+                      <td>
+                        <%= link_to accounts_roles_destroy_path(id: device.id), method: :delete, data: { confirm: 'Are you sure?' } do %>
+                          <span class="glyphicon glyphicon-remove-circle"></span>
+                        <% end %>
+                      </td>  
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
-  <div class="col-lg-4 col-md-6 col-xs-12">
-    <div class="panel panel-warning">
-      <div class="panel-heading bg-info">Devies</div>
-      <div class="panel-body"></div>
-    </div>
-  </div>  
 </div>
 
-<%= link_to 'Change a profile', edit_account_path(@account), class: 'btn btn-default btn-xs', role: 'button' %>
 <% if current_account.id == @account.id %>
   <%= link_to 'Change a password', edit_account_registration_path, class: 'btn btn-default btn-xs', role: 'button' %>
 <% end %>

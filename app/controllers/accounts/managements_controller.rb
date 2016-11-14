@@ -2,7 +2,10 @@ class Accounts::ManagementsController < ApplicationController
   include TimeMethods
   
   helper_method :in_seconds, :devise_mapping
-  
+
+  before_action only: [:index] do
+    authorized_to? :manager, Account
+  end
   before_action :set_account, only: [:show, :edit, :update, :destroy]
   before_action :account_params, only: [:update]
   
@@ -17,10 +20,17 @@ class Accounts::ManagementsController < ApplicationController
 
   # GET /accounts/managements/:id/edit
   def edit
+    @account.admin = @account.has_role? :admin
   end
 
   # PATCH/PUT /accounts/managements/:id
   def update
+    if params[:account][:admin]
+      @account.add_role :admin unless @account.has_role? :admin
+    else
+      @account.remove_role :admin if @account.has_role? :admin
+    end
+    
     respond_to do |format|
       if current_account.valid_password?(params[:account][:current_password]) and @account.update(account_params)
         format.html { redirect_to @account, notice: 'Account was successfully updated.' }
@@ -50,22 +60,15 @@ class Accounts::ManagementsController < ApplicationController
   
     # If you have extra params to permit, append them to the sanitizer.
     def configure_account_update_parameters
-      devise_parameter_sanitizer.permit(:account_update, keys: [:name, :admin, :cover_area])
+      devise_parameter_sanitizer.permit(:account_update, keys: [:name])
     end
 
     def set_account
       @account = Account.find(params[:id])
-      @account.area_fields = @account.areas.join("\n")
     end
     
     def account_params
-      STDERR.puts params
-      if administrator?
-        params[:account][:cover_area] = params[:account][:area_fields].tr("\n", "|")
-        params.require(:account).permit(:name, :admin, :cover_area)
-      else
-        params.require(:account).permit(:name)
-      end
+      params.require(:account).permit(:name)
     end 
     
 end

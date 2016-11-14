@@ -1,13 +1,13 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :devices
+  resources :people
   resources :diagnosis_images
   resources :buddis
   resources :ezer_readers
   resources :notifications
   resources :reports
-  resources :users
-  resources :specifications
   resources :error_codes
   resources :laboratories
   resources :quality_control_materials
@@ -27,25 +27,33 @@ Rails.application.routes.draw do
     sessions:           'accounts/sessions',
     unlocks:            'accounts/unlocks'
   }
-  
+    
   devise_scope :account do
-    get 'accounts',                       to: 'accounts/managements#index',    as: :accounts
-    get 'accounts/managements/:id',       to: 'accounts/managements#show',     as: :account
-    get 'accounts/managements/:id/edit',  to: 'accounts/managements#edit',     as: :edit_account
-    patch 'accounts/managements/:id',     to: 'accounts/managements#update'
-    put 'accounts/managements/:id',       to: 'accounts/managements#update'   
-    delete 'accounts/managements/:id',    to: 'accounts/managements#destroy',  as: :destroy_account
-                                                                               
-    get 'accounts/registrations/edit',    to: 'accounts/registrations#edit',   as: :edit_account_registration
-    patch 'accounts/registrations',       to: 'accounts/registrations#update', as: :account_registration
-    put 'accounts/registrations',         to: 'accounts/registrations#update'
-    delete 'accounts/registrations',      to: 'accounts/registrations#destroy'
+    get 'accounts',                      to: 'accounts/managements#index',    as: :accounts
+    get 'accounts/managements/:id',      to: 'accounts/managements#show',     as: :account
+    get 'accounts/managements/:id/edit', to: 'accounts/managements#edit',     as: :edit_account
+    patch 'accounts/managements/:id',    to: 'accounts/managements#update'
+    put 'accounts/managements/:id',      to: 'accounts/managements#update'   
+    delete 'accounts/managements/:id',   to: 'accounts/managements#destroy',  as: :destroy_account
+                                                                              
+    get 'accounts/registrations/edit',   to: 'accounts/registrations#edit',   as: :edit_account_registration
+    patch 'accounts/registrations',      to: 'accounts/registrations#update', as: :account_registration
+    put 'accounts/registrations',        to: 'accounts/registrations#update'
+    delete 'accounts/registrations',     to: 'accounts/registrations#destroy'
+    
+    get 'accounts/roles/new',            to: 'accounts/roles#new'
+    get 'accounts/roles/get_fields',     to: 'accounts/roles#get_fields'
+    post 'accounts/roles/propose',       to: 'accounts/roles#propose'
+    post 'accounts/roles/grant',         to: 'accounts/roles#grant'
+    post 'accounts/roles/destroy',         to: 'accounts/roles#destroy'
+    get 'accounts/devices/new',          to: 'accounts/devices#new'
+    get 'accounts/devices/autocomplete_sn', to: 'accounts/devices#autocomplete_sn'
+    post 'accounts/devices/propose',     to: 'accounts/devices#propose'
+    post 'accounts/devices/grant',       to: 'accounts/devices#grant'
+    post 'accounts/devices/decline',       to: 'accounts/devices#decline'
+    delete 'accounts/devices/:id',       to: 'accounts/devices#destroy'
   end
     
-#  get    'sessions/new'
-#  get     'sessions/create'
-#  delete  'sessions/destroy'
-
   # for ajax
   post    'qcm_dropdown' => 'qcm_dropdown#create'
   post    'ak_dropdown' => 'ak_dropdown#create'
@@ -54,20 +62,15 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
-  root 'diagnoses#index'
-
-#  controller :sessions do
-#    get     'login'         => :new
-#    post    'login'         => :create
-#    delete  'logout'        => :destroy
-#  end
-# 
-#  controller :account_validations do
-#    get     'authorize'     => :inform
-#    post    'authorize'     => :resend
-#    get     'authorize/:id' => :confirm
-#  end
+  #root 'diagnoses#index'
+  devise_scope :account do
+    authenticated :account do
+      root 'welcome#index'
+    end
+    unauthenticated :account do
+      root 'welcome#index', as: :unauthenticated_root
+    end
+  end
 
   controller :google_maps do
     get     'maps'    => :index
@@ -78,11 +81,14 @@ Rails.application.routes.draw do
     mount Sidekiq::Web, at: '/sidekiq'
 
     #  Letter Opener Web
-    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+    #mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
   
   # Notification response
   get '/responses/:id', to: 'responses#contact', as: 'response'
+  
+  # Notified
+  post '/notifications/notify/:id', to: 'notifications#notify', as: :notification_notify
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

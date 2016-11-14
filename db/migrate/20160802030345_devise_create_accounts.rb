@@ -8,10 +8,6 @@ class DeviseCreateAccounts < ActiveRecord::Migration
       # Profile
       t.string   :name,             null: false, default: ""
 
-      ## Admin
-      t.boolean  :admin,            null: false, default: false
-      t.text     :cover_area,       null: false, default: "*"
-
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at

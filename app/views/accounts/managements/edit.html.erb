@@ -23,8 +23,7 @@
     <%= f.input :name %>
     
     <% if administrator? %>
-      <%= f.input :admin, label: '<strong>Administrator?</strong>'.html_safe %>
-      <%= f.input :area_fields, label: 'Covered areas', as: :text, hint: 'Covered area for each line' %>
+      <%= f.input :admin, label: '<strong>Administrator?</strong>'.html_safe, as: :boolean %>
     <% end %>
 
     <hr>

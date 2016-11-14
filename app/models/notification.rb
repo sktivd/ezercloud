@@ -1,10 +1,13 @@
 class Notification < ActiveRecord::Base
-  belongs_to :user
+  resourcify
   
-  validates :tag, uniqueness: { scope: [:user] }
-    
-  TYPES = { notice: 0, response: 1, account_validation: 2, undefined: 99 }
-  RESPONSE = ["Notice", "Response", "Account Validation", "Undefined"]
+  belongs_to :account
+  
+  serialize :query, Hash
+  serialize :data,  Hash
+  
+  RESPONSE = { notices: "Notice", responses: "Response", undefined: "Undefined" }
+  AVAILABLE_NOTIFICATION_TYPES = [:notices, :responses]
   
   if Rails.env == 'production'
     SCHEME = 'https'
@@ -16,23 +19,20 @@ class Notification < ActiveRecord::Base
     PORT = 3000
   end
   
+  validates :follow, :tag, presence: true
+  validates :follow, inclusion: { in: AVAILABLE_NOTIFICATION_TYPES.map { |v| v.to_s }, message: "following response is invalid" }
+  validates :tag, uniqueness: { scope: [:account] }
+
+  before_save do
+    self.authentication_key = Digest::SHA256.hexdigest(self.to_s) if authentication_key.nil?
+  end
+  after_save :update_url, if: -> obj{ obj.url.nil? and obj.redirect_path and obj.query }
+    
   def uri
-    URI.parse(url)
+    URI.parse(url) if url
   end
-  
-  def set_url parameters
-    controller = case follow
-    when TYPES[:response], TYPES[:account_validation] 
-      "/responses/"
-    else 
-      "/"
-    end
-    query = Rack::Utils.build_nested_query({authentication_key: authentication_key, redirect_path: redirect_path}.merge(parameters))
-    uri = URI::HTTP.new(SCHEME, nil, HOSTNAME, PORT, nil, controller + id.to_s, nil, query, nil)
-    self.url = uri.to_s
-  end
-  
-  def parameters
+    
+  def query_parameters
     (Rack::Utils.parse_nested_query uri.query).deep_symbolize_keys
   end
     
@@ -40,7 +40,20 @@ class Notification < ActiveRecord::Base
     parameters[:path]
   end
     
-  def email
+  def send_email
     NotificationEmailWorker.perform_async(id: id)
-  end  
+  end
+  
+  def send_message
+  end
+  
+  private
+    
+    def update_url
+      formatted_query = Rack::Utils.build_nested_query({ authentication_key: authentication_key, redirect_path: redirect_path }.merge(query))
+      # scheme, userinfo, host, port, registry, path, opaque, query, fragment
+      uri = URI::HTTP.new(SCHEME, nil, HOSTNAME, PORT, nil, '/' + follow + '/' + id.to_s, nil, formatted_query, nil)
+
+      self.update(url: uri.to_s)
+    end  
 end

@@ -11,23 +11,19 @@
 #
 
 class RenameImagesToDiagnosisImages < ActiveRecord::Migration    
-  def change
-    add_reference :images, :diagnosis_imagable, polymorphic: true, index: { name: 'd_imagable' }
-    reversible do |dir|
+  def up
+    if ActiveRecord::Base.connection.data_source_exists? 'images'
+      add_reference :images, :diagnosis_imagable, polymorphic: true, index: { name: 'd_imagable' }
       Image.all.each do |image|
-        dir.up do
-          image.diagnosis_imagable_id   = image.imagable_id
-          image.diagnosis_imagable_type = image.imagable_type
-          image.save
-        end
-        dir.down do
-          image.imagable_id   = image.diagnosis_imagable_id
-          image.imagable_type = image.diagnosis_imagable_type
-          image.save
-        end
+        image.diagnosis_imagable_id   = image.imagable_id
+        image.diagnosis_imagable_type = image.imagable_type
+        image.save!
       end
+      remove_reference :images, :imagable, polymorphic: true, index: true
+      rename_table :images, :diagnosis_images
     end
-    remove_reference :images, :imagable, polymorphic: true, index: true
-    rename_table :images, :diagnosis_images
   end
+  
+  def down
+  end  
 end

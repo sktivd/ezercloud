@@ -1,0 +1,27 @@
+<%= @data[:name] ? @data[:name] + ' (' + @data[:email] + ')' : @data[:email] %> has requested a role.
+
+<%= @notification.message.sub("\n", "</p><p>").html_safe %>
+    
+Requested Role--------------
+      
+* Role: <%= Account::ROLES[@data[:role].to_sym] %>
+<% if @data[:field] %>
+* Field: <%= @data[:field] %>
+<% end %>
+
+<% if (@data[:from] and @data[:from] != '') or (@data[:to] and @data[:to] != '') or @data[:location] %>
+-OPTIONAL-
+  <% if (@data[:from] and @data[:from] != '') or (@data[:to] and @data[:to] != '') %>
+. Period : <%= @data[:from] + ' ~ ' + @data[:to] %></p>
+  <% end %>
+  <% if @data[:location] and @data[:location] != '' %>
+. Location : <%= @data[:location] %>
+  <% end %>
+<% end %>
+  
+Permit or Decline (<%= @notification.url %>)
+
+EzerCloud, 
+SK telecom
+  
+(This mail is automatically generated. Please do not reply.)

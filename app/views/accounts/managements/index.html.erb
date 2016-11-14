@@ -37,7 +37,7 @@
       <tr>
         <td><%= account.email %></td>
         <td><%= account.name %></td>
-        <td><%= account.admin ? "Yes" : "No" %></td>
+        <td><%= account.has_role?(:admin) ? "Yes" : "No" %></td>
         <td><%= in_seconds Time.now - account.created_at %></td>        
         <td><%= account.confirmed? ? "Yes" : "No" %></td>
         <td><%= account.locked_at? ? account.locked_at : "No" %></td>

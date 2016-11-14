@@ -1,0 +1,18 @@
+To. <%= @data[:name] ? @data[:name] + ' (' + @data[:email] + ')' : @data[:email] %>
+
+<%= @notification.message.sub("\n", "</p><p>").html_safe %>
+
+We are really sorry, but requested device was not registered.
+Message from Administrator:
+  <%= @data[:note].sub("\n", "</p><p>").html_safe %>
+    
+Declined Device--------------
+      
+* Equipment: <%= Equipment.find(@data[:equipment_id]).equipment %>
+* Serial number: <%= @data[:serial_number] %>
+* Activation from: <%= @data[:activated_at] %>
+
+EzerCloud, 
+SK telecom
+  
+(This mail is automatically generated. Please do not reply.)

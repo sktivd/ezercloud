@@ -1,0 +1,30 @@
+To. <%= @data[:name] ? @data[:name] + ' (' + @data[:email] + ')' : @data[:email] %>
+
+<%= @notification.message.sub("\n", "</p><p>").html_safe %>
+
+
+We are really sorry, but requested role was declined.
+Message from Administrator:
+  <%= @data[:note].sub("\n", "</p><p>").html_safe %></p>
+
+Requested Role--------------
+      
+* Role: <%= Account::ROLES[@data[:role].to_sym] %>
+<% if @data[:field] %>
+* Field: <%= @data[:field] %>
+<% end %>
+
+<% if (@data[:from] and @data[:from] != '') or (@data[:to] and @data[:to] != '') or @data[:location] %>
+-OPTIONAL-
+  <% if (@data[:from] and @data[:from] != '') or (@data[:to] and @data[:to] != '') %>
+. Period : <%= @data[:from] + ' ~ ' + @data[:to] %></p>
+  <% end %>
+  <% if @data[:location] and @data[:location] != '' %>
+. Location : <%= @data[:location] %>
+  <% end %>
+<% end %>
+
+EzerCloud, 
+SK telecom
+  
+(This mail is automatically generated. Please do not reply.)

@@ -11,7 +11,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.datetime :sent_at
       t.datetime :notified_at
       t.datetime :expired_at, null: false
-      t.references :user, index: true, foreign_key: true, null: false
+#      t.references :user, index: true, foreign_key: true, null: false
 
       t.timestamps null: false
     end

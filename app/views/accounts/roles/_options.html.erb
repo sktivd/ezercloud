@@ -1,0 +1,9 @@
+<p>OPTIONAL</p>
+<%= f.label 'Period', required: false %>
+<div class="input-daterange input-group" id="privilege_period">
+  <%= f.input :from, as: :string, input_html: { class: "input-sm form-control" }, label: false, required: false, inline_label: 'from' %>
+  <span class="input-group-addon">to</span>
+  <%= f.input :to, as: :string, input_html: { class: "input-sm form-control" }, label: false, required: false %>
+</div>
+<div class="spacer15"></div>
+<%= f.input :location, as: :string, required: false %>

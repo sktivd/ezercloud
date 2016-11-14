@@ -1,0 +1,42 @@
+<% content_for :breadcrumb do %>
+  <li><%= link_to 'Account', account_path(current_account.id) %></li>
+  <li class="active">Device</li>
+<% end %>
+
+<div class='alert alert-info fade in' data-alert='alert'>
+  <h3>
+    <strong>
+      Register a device
+    </strong>
+  </h3>
+  <p>Register <%= @account.name || @account.email %>'s device</p>
+</div>
+
+<%= simple_form_for @device_license, url: current_account.has_role?(:admin) ? accounts_devices_grant_path(params: { account: { id: @account.id } }) : accounts_devices_propose_path(params: { account: { id: @account.id } }), data: { account_id: @account.id } do |f| %>
+  <%= f.error_notification %>
+  
+  <div class="form-inputs">
+    <%= f.hidden_field :tag, value: @device_license.tag %>
+    <%= f.input :equipment_id, collection: Equipment.all, label_method: :equipment, value_method: :id, label: 'Equipment', include_blank: false %>
+    <%= f.input :serial_number, label: 'Serial number', required: true %>
+    <%= f.input :activated_at, label: 'Activation from', wrapper: :vertical_input_group, wrapper_html: { id: 'activated_at' } do %>
+      <%= f.input_field :activated_at, class: 'form-control', as: :string, value: DateTime.now %>
+      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+    <% end %>
+    <% if current_account.is_admin? %>
+      <hr>
+      <%= f.input :note, as: :string, hint: "Message to #{@account.email}" %>
+    <% end %>
+  </div>
+  
+  <div class="form-actions">
+    <% if current_account.has_role?(:admin) %>
+      <%= f.button :submit, "Accept", name: "accept" %>
+      <%= f.button :submit, "Decline", name: "decline" %>
+      <%= link_to "Cancel", root_path, { class: 'btn btn-default pull-right', role: 'button' } %>
+    <% else %>
+      <%= f.button :submit, "Request" %>
+      <%= link_to "Back", :back, { class: 'btn btn-default pull-right', role: 'button' } %>
+    <% end %>
+  </div>
+<% end %>

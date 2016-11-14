@@ -11,33 +11,16 @@
   <p>Notification DB</p>
 </div>
 
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Following</th>
-      <th>Tag</th>
-      <th>Message</th>
-      <th>Notified</th>
-      <th>Expired</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
+<% if policy(Notification).manage? %>
+  <% if @see_all %>
+    <%= link_to 'See your notifications only?', notifications_path, class: 'btn btn-default' %>
+  <% else %>
+    <%= link_to 'See all notifications?', notifications_path(see_all: true), class: 'btn btn-default' %>
+  <% end %>
+<% end %>
 
-  <tbody>
-    <% @notifications.each do |notification| %>
-      <tr>
-        <td><%= Notification::RESPONSE[notification.follow] %></td>
-        <td><%= notification.tag %></td> 
-        <td><%= truncate(strip_tags(notification.message), length: 20) %><button type="button" class="btn btn-default btn-lg btn-xs" data-toggle="popover" title="Message" data-content="<%= notification.message %>">F</button></td>
-        <td><%= notification.notified_at %></td>
-        <td><%= notification.expired_at %></td>
-        <td><%= link_to 'Detail', notification %></td>
-        <td><%= link_to 'Destroy', notification, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<p class="vspace05">
 
-<br>
-
-<%= link_to 'New Notification', new_notification_path %>
+<div id='notification-table'>
+  <%= render partial: 'notification_table', locals: { notifications: @notifications } %>
+</div>

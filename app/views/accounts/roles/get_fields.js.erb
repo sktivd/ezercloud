@@ -1,0 +1,12 @@
+<% if @selections[:option] %>
+  $('#role_options').prop('disabled', false);
+<% else %>
+  $('#role_options').prop('disabled', true);
+<% end %>
+
+$('#role_field').html("<%= escape_javascript(render partial: 'fields', locals: { fields: @selections[:fields] }) %>");
+<% if @selections[:fields].size > 0 %>
+  $('#role_field').prop('disabled', false);
+<% else %>
+  $('#role_field').prop('disabled', true);
+<% end %>

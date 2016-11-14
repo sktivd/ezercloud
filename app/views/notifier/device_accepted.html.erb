@@ -1,0 +1,52 @@
+<%= javascript_include_tag 'emails' %>
+<%= stylesheet_link_tag 'emails' %>
+
+<style>
+@media (min-width: 960px) {
+    .container{
+        max-width: 800px;
+    }
+}
+</style>
+
+<div class="container">
+  <div class='alert alert-info fade in' data-alert='alert'>
+    <h3>
+      <strong>
+        To. <%= @data[:name] ? @data[:name] + ' (' + @data[:email] + ')' : @data[:email] %>
+      </strong>
+    </h3>
+    <p><%= @notification.message.sub("\n", "</p><p>").html_safe %></p>
+  </div>
+  
+  <p><span class="glyphicon glyphicon-ok"></span> Congratulation! Enjoy EzerCloud.</p>
+  <% if @data[:note] %>
+    <blockquote>
+      <p><%= @data[:note].sub("\n", "</p><p>").html_safe %></p>
+    </blockquote>
+  <% end %>
+  
+  <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Registered device</div>
+      
+    <!-- List group -->
+    <ul class="list-group">
+      <li class="list-group-item">
+        <dl>
+          <dt>Equipment</dt>
+          <dd><%= Equipment.find(@data[:equipment_id]).equipment %></dd>
+          <dt>Serial number</dt>
+          <dd><%= @data[:serial_number] %></dd>
+          <dt>Activation from</dt>
+          <dd><%= @data[:activated_at] %></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+  
+  <hr style="width: 25%; margin-left: 0">
+  <h4>EzerCloud, SK telecom</h4>
+  
+  <p class="small text-muted">This mail is automatically generated. Please do not reply.</p>
+</div>

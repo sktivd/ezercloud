@@ -10,9 +10,13 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-%w( accounts/* account_validations assay_kits devise/* diagnoses diagnosis_images equipment google_maps laboratories notifications quality_control_materials reagents reports responses specifications users ).each do |controller|
+%w( accounts/* assay_kits devise/* diagnoses diagnosis_images equipment google_maps laboratories notifications people quality_control_materials reagents reports responses specifications welcome ).each do |controller|
   Rails.application.config.assets.precompile += ["#{controller}.coffee", "#{controller}.js", "#{controller}.scss", "#{controller}.css"]
 end
+
+# Email
+
+Rails.application.config.assets.precompile += [ 'emails.scss', 'emails.coffee' ]
 
 ## AmCharts
 #%w( amcharts funnel gantt gauge pie radar serial xy ).each do |chart|
