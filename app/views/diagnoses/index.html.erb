@@ -14,22 +14,20 @@
 <div>
 
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="<%= 'active' if @active == 'diagnoses' %>"><%= link_to Diagnosis, "#tab-diagnoses", role: "tab", aria: { controls: "tab-diagnoses"}, data: { toggle: "tab" } %></li>
+  <%= content_tag :ul, class: 'nav nav-tabs', role: 'tablist' do %>
     <% authorized_equipment.each do |equipment| %>
-      <li role="presentation" class="<%= 'active' if @active == equipment.db %>"><%= link_to equipment.equipment, "\#tab-#{equipment.db}", role: "tab", aria: { controls: "tab-#{equipment.db}" }, data: { toggle: "tab" } %></li>
+      <%= content_tag :li, role: 'presentation', class: @active == equipment.db ? 'active' : nil do %>
+        <%= link_to equipment.equipment, "\#tab-#{equipment.db}", role: "tab", aria: { controls: "tab-#{equipment.db}" }, data: { toggle: "tab" } %></li>
+      <% end %>
     <% end %>
-  </ul>
+  <% end %>
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in <%= 'active' if @active == 'diagnoses' %>" id="tab-diagnoses">
-      <%= render partial: 'diagnoses/index', locals: { equipment: @diagnoses } %>
-    </div>
     <% authorized_equipment.each do |equipment| %>
-      <div role="tabpanel" class="tab-pane fade <%= 'active' if @active == equipment.db %>" id="tab-<%= equipment.db %>">
+      <%= content_tag :div, role: 'tabpanel', class: 'tab-pane fade' + (@active == equipment.db ? ' active in' : ''), id: "tab-#{equipment.db}" do %>
         <%= render partial: equipment.db + '/index', locals: { equipment: @equipment_list[equipment.db], assay_kits: @assay_kit_list[equipment.db], reagents: @reagent_list[equipment.db], page: @page } %>
-      </div>
+      <% end %>
     <% end %>
   </div>
 

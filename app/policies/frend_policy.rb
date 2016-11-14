@@ -1,0 +1,3 @@
+class FrendPolicy < MachinePolicy
+  
+end

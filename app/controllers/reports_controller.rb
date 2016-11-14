@@ -2,7 +2,9 @@ class ReportsController < ApplicationController
   protect_from_forgery
 #  skip_before_action :verify_authenticity_token, if: :json_request?
   skip_before_action :verify_authenticity_token, if: :from_local?
-  skip_before_action :authorize, only: [:create]
+  before_action except: [:create] do
+    authorize Report, :manage?
+  end
 
   before_action :set_report, only: [:show, :edit, :update, :destroy]
 

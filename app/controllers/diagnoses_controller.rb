@@ -1,11 +1,17 @@
 class DiagnosesController < ApplicationController
   include NotificationMethods
   
-  protect_from_forgery
-  skip_before_action :verify_authenticity_token, if: :json_request?
-  skip_before_action :authorize, only: [:create]
+  skip_before_action :verify_authenticity_token, if: :json_request?, only: [:create]
+  skip_before_action :authenticate_account!, only: [:create]
+  before_action only: [:new, :create], unless: :json_request? do
+    redirect_to root_path, notice: "Artifical diagnosis creation is prohibited!"
+  end
   before_action only: [:new, :update, :edit, :destroy] do
-    allow_only_to :super
+    authorize Diagnosis, :manage?
+  end
+  before_action :set_equipment_class, only: [:create]
+  before_action only: [:index] do 
+    authorize Diagnosis, :index?
   end
 
   before_action :set_diagnosis, only: [:show, :edit, :update, :destroy]
@@ -15,29 +21,24 @@ class DiagnosesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @active = params[:active] || 'diagnoses'
+        @active = params[:active] || authorized_equipment.first.db
         @page = params[:page] || '1'
         
-        @diagnoses = Diagnosis.read.page(@page).per(20)
         @equipment_list = {}
         @assay_kit_list = {}
         @reagent_list   = {}
         authorized_equipment.each do |equipment|
-          @equipment_list[equipment.db] = Object.const_get(equipment.klass).read.page(@page).per(20)
+          @equipment_list[equipment.db] = policy_scope(Object.const_get(equipment.klass)).read.page(@page).per(20)
           @assay_kit_list[equipment.db] = AssayKit.equipment equipment.equipment, @equipment_list[equipment.db].map { |equipment| equipment.kit }.uniq
         end
       end
       format.js do
-        @active = params[:active] || 'diagnoses'
+        @active = params[:active] || authorized_equipment.first.db
         @page = params[:page] || '1'
         
-        if @active == 'diagnoses'
-          @equipment_value = Diagnosis.read.page(@page).per(20)
-        else
-          active_equipment = Equipment.find_by(db: @active)
-          @equipment_value = Object.const_get(active_equipment.klass).read.page(@page).per(20)
-          @assay_kits = AssayKit.equipment active_equipment.equipment, @equipment_value.map { |equipment| equipment.kit }.uniq
-        end
+        active_equipment = Equipment.find_by(db: @active)
+        @equipment_value = policy_scope(Object.const_get(active_equipment.klass)).read.page(@page).per(20)
+        @assay_kits = AssayKit.equipment active_equipment.equipment, @equipment_value.map { |equipment| equipment.kit }.uniq
       end
       format.json do
         params[:equipment] = "FREND"  if params[:equipment].nil?
@@ -54,6 +55,9 @@ class DiagnosesController < ApplicationController
     end
   end
 
+  def new
+  end
+  
   # GET /diagnoses/1
   # GET /diagnoses/1.json
   def show
@@ -66,88 +70,67 @@ class DiagnosesController < ApplicationController
     end
   end
 
-  # GET /diagnoses/new
-  def new
-    @diagnosis = Diagnosis.new
-  end
-
-#  # GET /diagnoses/1/edit
-#  def edit
-#  end
-
   # JSON only
   # POST /diagnoses.json
   def create
-    @diagnosis = Diagnosis.new(diagnosis_params)
-    @equipment = new_equipment(params[:equipment], params[:data].to_json)
-    if @equipment
-      @equipment.diagnosis     = @diagnosis 
-      @diagnosis.decision      = @equipment.decision
-      @diagnosis.diagnosis_tag = @equipment.tag
-    else
-      @diagnosis.errors.add(:data_for_equipment, "is not generated.")
-    end
+    Diagnosis.transaction do
+      begin
+        respond_to do |format|
+          @equipment = @equipment_class.create! equipment_params          
+          @diagnosis = @equipment.build_diagnosis diagnosis_params
+          @diagnosis.device        = @equipment.device   unless @diagnosis.device
+          @diagnosis.decision      = @equipment.decision unless @diagnosis.decision
+          @diagnosis.diagnosis_tag = @equipment.tag      unless @diagnosis.diagnosis_tag
+          @diagnosis.save!
 
-    respond_to do |format|
-      if @equipment and @diagnosis.save 
-        if @equipment.save
-#          @equipment.notification
-          send_email_notification @equipment.notification
-          
+          STDERR.puts @equipment.notification
+          send_notification @equipment.notification
           format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
           format.json { render :created, status: :created, location: @diagnosis }
-        else
-          @diagnosis.delete
-          @diagnosis.errors.add(:response, "fail")
-          @diagnosis.errors.add(:data, @equipment.errors)
-          format.html { render :new }
-          format.json { render json: @diagnosis.errors, status: :unprocessable_entity }          
         end
-      else
+      rescue ActiveRecord::RecordInvalid => invalid
         @diagnosis.errors.add(:response, "fail")
-        format.html { render :new }
-        format.json { render json: @diagnosis.errors, status: :unprocessable_entity }
+        @diagnosis.errors.add(:data, @equipment.errors)
+        respond_to do |format|
+          format.html { redirect_to :new }
+          format.json { render json: @diagnosis.errors, status: :unprocessable_entity  }
+        end
+      rescue NotificationError => e
+        respond_to do |format|
+          format.html { redirect_to root_path, notice: e.msg }
+          format.json { render json: e.errors, status: :unprocessable_entity  }
+        end
       end
     end
   end
-
-#  # PATCH/PUT /diagnoses/1
-#  # PATCH/PUT /diagnoses/1.json
-#  def update
-#    respond_to do |format|
-#      if @diagnosis.update(diagnosis_params)
-#        format.html { redirect_to @diagnosis, notice: 'Diagnosis was successfully updated.' }
-#        format.json { render :show, status: :ok, location: @diagnosis }
-#      else
-#        format.html { render :edit }
-#        format.json { render json: @diagnosis.errors, status: :unprocessable_entity }
-#      end
-#    end
-#  end
-
+  
   # DELETE /diagnoses/1
   # DELETE /diagnoses/1.json
   def destroy
     @page = params[:page] || "1"
     
-    equipment_name = all_equipment.find { |equipment| equipment.klass == @diagnosis.diagnosable_type }.equipment
-    Object.const_get(@diagnosis.diagnosable_type).find(@diagnosis.diagnosable_id).delete
-    @diagnosis.delete
-    respond_to do |format|
-      format.html { redirect_to diagnoses_url(page: @page), notice: "Diagnosis (#{equipment_name}) was successfully removed." }
-      format.js do
-        @active = params[:active] || "diagnoses"
-        @notice = "Diagnosis (#{equipment_name}) was successfully removed."
-        if @active == 'diagnoses'
-          @equipment_value = Diagnosis.read.page(@page).per(20)
-        else
-          @diagnoses = Diagnosis.read.page(@page).per(20)
-          active_equipment = Equipment.find_by(db: @active)
-          @equipment_value = Object.const_get(active_equipment.klass).read.page(@page).per(20)
-          @assay_kits = AssayKit.equipment active_equipment.equipment, @equipment_value.map { |equipment| equipment.kit }.uniq
+    equipment_name = @diagnosis.measurement.equipment.equipment
+    Diagnosis.transaction do
+      begin
+        @diagnosis.measurement.delete
+        @diagnosis.delete
+        respond_to do |format|
+          format.html { redirect_to diagnoses_url(page: @page), notice: "A measurement (#{equipment_name}) was successfully removed." }
+          format.js do
+            @active = params[:active] || authorized_equipment.first.db
+            @notice = "A measurement (#{equipment_name}) was successfully removed."
+            active_equipment = Equipment.find_by(db: @active)
+            @equipment_value = policy_scope(Object.const_get(active_equipment.klass)).read.page(@page).per(20)
+            @assay_kits = AssayKit.equipment active_equipment.equipment, @equipment_value.map { |equipment| equipment.kit }.uniq
+          end
+          format.json { head :no_content }
+        end
+      rescue ActiveRecord::RecordNotDestroyed => invalid
+        respond_to do |format|
+          format.html { redirect_to diagnoses_url(page: @page), notice: "A measurement (#{equipment_name}) was not removed!" }
+          format.json { head :no_content }
         end
       end
-      format.json { head :no_content }
     end
   end
 
@@ -156,21 +139,19 @@ class DiagnosesController < ApplicationController
     def set_diagnosis
       @diagnosis = Diagnosis.find(params[:id])
     end
-    
-    def measured_time
-      DateTime.new(* Diagnosis::DATETIME_FIELDS.map { |field| params[field].to_i }, params[Diagnosis::TIMEZONE_FIELD])
-    rescue
+        
+    def equipment_params
+      params.require(:data).permit(@equipment_class::PARAMETERS)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diagnosis_params
-      if params[:diagnosis]
-        params[:diagnosis][:measured_at] = measured_time
-        params[:diagnosis][:authentication_key] = params[:authentication_key]
-        params[:diagnosis][:remote_ip] = request.remote_ip.to_sym
-
-        params.require(:diagnosis).permit(:authentication_key, :remote_ip, :protocol, :version, :equipment, :diagnosis_tag, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician)
-      end
+      params[:remote_ip] = request.remote_ip.to_sym
+      params.permit(:authentication_key, :remote_ip, :protocol, :version, :user_id, :equipment, :decision, :diagnosis_tag, :measured_at, :elapsed_time, :ip_address, :location, :latitude, :longitude, :sex, :age_band, :order_number, :technician, :person, :year, :month, :day, :hour, :minute, :second, :time_zone)
+    end
+    
+    def set_equipment_class
+      @equipment_class = Object.const_get(Equipment.find_by(equipment: params[:equipment]).klass)
     end
     
     def new_equipment(name, data)

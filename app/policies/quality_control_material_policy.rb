@@ -1,0 +1,2 @@
+class QualityControlMaterialPolicy < ApplicationPolicy  
+end

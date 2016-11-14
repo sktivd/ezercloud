@@ -180,7 +180,6 @@ $('#map-timeslider').slider
 gmapTimeSlider = document.getElementById('time-slider')
 gmap.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push gmapTimeSlider
 
-
 # marker selection
 gmapMarkerRedraw = ->
   days = [1, 7, 30, 90, 180, 365, 730, Infinity]

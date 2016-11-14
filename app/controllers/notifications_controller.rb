@@ -1,10 +1,21 @@
-class NotificationsController < ApplicationController
-  before_action :set_notification, only: [:show, :edit, :update, :destroy]
+class NotificationsController < ApplicationController 
+  before_action :set_notification, only: [:show, :edit, :update, :destroy, :notify]
 
   # GET /notifications
   # GET /notifications.json
   def index
-    @notifications = Notification.order(:created_at).reverse_order
+    @page = params[:page] || '1'
+    if policy(Notification).manage?
+      @manager = true
+      if params[:see_all]
+        @notifications = Notification.order(:created_at).reverse_order.page(@page).per(10)
+        @see_all = true
+      else
+        @notifications = Notification.where(account_id: current_account.id).order(:created_at).reverse_order.page(@page).per(10)
+      end        
+    else
+      @notifications = Notification.where(account_id: current_account.id).order(:created_at).reverse_order.page(@page).per(10)
+    end
   end
 
   # GET /notifications/1
@@ -59,6 +70,10 @@ class NotificationsController < ApplicationController
       format.html { redirect_to notifications_url, notice: 'Notification was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+  
+  def notify
+    @notification.update(notified_at: DateTime.now)  
   end
 
   private

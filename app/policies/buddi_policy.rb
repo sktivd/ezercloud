@@ -1,0 +1,3 @@
+class BuddiPolicy < ApplicationPolicy
+  
+end

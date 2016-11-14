@@ -3,6 +3,22 @@
 ## Skynet 0.3
 
 ######2016. 11. 14
+System
+* All types migration errors were removed on clean (empty) DB (should be careful for DB migration fail), which does not guarantee DB migration on used DB (durty DB?).
+* Welcome page is prepared for front page (before and after login).
+
+Pundit
+* Authorization 
+* Roll settings are connected with rollify gem.
+
+Diagnosis
+* Pubdit policy is applied with :data_manager
+* device owner could access own measurements.
+
+Google Map/AssayKit/QualityControlMaterial/Report
+* Pubdit policy is applied with :data_manager.
+* device owner could access surviallence map only for own measurements (not yet).
+
 Role
 * Rollify gem has been applied, which includes creating, requesting, applying, and removing roles.
 * accounts/management_controller shows aquired roles. 
@@ -11,6 +27,7 @@ Device & DeviceLicense
 * Device class manages collected devices information, and Accounts with related DeviceLicense can only access measurement data.
 * accounts/management_controller shows aquired device_licenses.
 * Device could be registered automatically after related measurement data has been registered.
+* Pubdit policy is applied with :device_manager
 
 Notification
 * Bootstrap css has been applied to HTML email.

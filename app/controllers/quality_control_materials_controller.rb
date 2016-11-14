@@ -1,6 +1,6 @@
 class QualityControlMaterialsController < ApplicationController
-  before_action only: [:new, :create, :update, :edit] do
-    allow_only_to :reagent
+  before_action do
+    authorize QualityControlMaterial, :manage?
   end
   before_action :set_quality_control_material, only: [:edit, :update, :destroy]
 

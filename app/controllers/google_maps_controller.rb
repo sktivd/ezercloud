@@ -1,10 +1,25 @@
 class GoogleMapsController < ApplicationController
   before_action only: [:index] do
-    allow_only_to :monitoring
+    authorize Diagnosis, :map?
   end
   
   def index
-    @diagnosis = Diagnosis.read
+    if current_account.is_admin?
+      # administrators only access whole diagnosis data.
+      @diagnosis = Diagnosis.all
+
+      # full time scale    
+      @available_timescale = [0, 1, 2, 3, 4, 5, 6, 7]
+      @current_timescale   = 1
+      @time_labels         = ['D', 'W', 'M', 'Q', 'H', 'Y', '2', 'w']
+    else
+      @diagnosis = Diagnosis.where(measured_at: 2.years.ago..DateTime.now)
+
+      # full time scale    
+      @available_timescale = [0, 1, 2, 3, 4, 5, 6]
+      @current_timescale   = 1
+      @time_labels         = ['D', 'W', 'M', 'Q', 'H', 'Y', '2']
+    end
     @gmap_assays = Set.new
     @gmap_equipment = Set.new
     
@@ -27,11 +42,6 @@ class GoogleMapsController < ApplicationController
       'Invalid' => '#00FF66',
       'Suspended' => '#7F7F7F'
     }
-    
-    # full time scale
-    @available_timescale = [0, 1, 2, 3, 4, 5, 6, 7]
-    @current_timescale   = 1
-    @time_labels         = ['D', 'W', 'M', 'Q', 'H', 'Y', '2', 'w']
   end
     
 end

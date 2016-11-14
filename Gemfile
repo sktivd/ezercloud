@@ -3,8 +3,11 @@ source 'https://rubygems.org'
 # rails assets
 gem 'bundler', '>= 1.8.4'
 
+# import bulk records
+gem 'activerecord-import'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.2'
+gem 'rails', '5.0.0.1'
 ## Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use postgresql as the database for Active Record
@@ -23,6 +26,7 @@ gem 'multipart-post'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 
 # SweetAlert
@@ -48,7 +52,7 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'unicorn'
 
 # Mailer
-gem 'letter_opener_web', '~> 1.2.0', :group => :development
+#gem 'letter_opener_web', '~> 1.2.0', :group => :development
 gem 'premailer-rails'
 gem 'nokogiri'
 
@@ -68,8 +72,8 @@ gem 'gmaps4rails'
 gem 'geocoder'
 
 # Enhanced Markerclusterer
-#gem 'e_markerclusterer', path: '/Users/skon/iCloudDocs/SK/Sources/QCtoolkit/e_markerclusterer'
-gem 'e_markerclusterer', '~> 0.0.5'
+gem 'e_markerclusterer', path: '/Users/skon/Documents/SK/Sources/QCtoolkit/e_markerclusterer'
+#gem 'e_markerclusterer', '~> 0.0.6'
 
 # OpenStreetMap?
 gem 'leaflet-rails'
@@ -92,6 +96,17 @@ gem 'autoprefixer-rails'
 #       Please make sure that it is not already in your Gemfile before uncommenting it.
 # gem 'sass-rails'
 gem 'bootstrap-datepicker-rails'
+gem 'country_select'
+
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
+
+# real-time search
+#gem 'elasticsearch-model', git: 'git://github.com/elasticsearch/elasticsearch-rails.git'
+#gem 'elasticsearch-rails', git: 'git://github.com/elasticsearch/elasticsearch-rails.git'
+#gem 'elasticsearch-model'
+#gem 'elasticsearch-rails'
+gem 'searchkick'
 
 # javascript charts
 #gem 'amcharts.rb'
@@ -100,11 +115,12 @@ gem 'bootstrap-datepicker-rails'
 gem 'devise', '~> 4.2.0'
 gem 'devise-bootstrap-views'
 gem 'devise_invitable', '~> 1.7.0'
-gem 'authority'
+#gem 'authority'
+gem 'pundit'
 gem 'rolify'
 
 # transparent encryption for ActiveRecord
-gem 'crypt_keeper'
+gem "attr_encrypted", "~> 3.0.0"
 
 # user registration with secure
 gem 'recaptcha', :require => 'recaptcha/rails'
@@ -123,6 +139,9 @@ group :development, :test do
   gem 'capistrano-rvm', '~> 0.1'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
+  
+  #
+  gem 'rack-mini-profiler'
 end
 
 group :production do

@@ -1,0 +1,2 @@
+class AssayKitPolicy < ApplicationPolicy  
+end

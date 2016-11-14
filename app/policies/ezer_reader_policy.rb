@@ -1,0 +1,3 @@
+class EzerReaderPolicy < ApplicationPolicy
+  
+end
