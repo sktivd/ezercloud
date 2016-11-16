@@ -1,14 +1,15 @@
 class Accounts::DevicesController < ApplicationController
   include NotificationMethods
   
-  before_action :set_account, only: [:new, :propose, :grant, :decline]
+  before_action :set_account, only: [:new, :propose, :grant, :terminate]
   before_action except: [:autocomplete_sn] do
     authorize @account, :manage?
   end
-  before_action :set_device_license, only: [:new, :propose, :grant, :decline]
+  before_action :new_device_license, only: [:new, :propose, :grant]
+  before_action :set_device_license, only: [:terminate]
   
   def new
-    if @device_license.tag and Notification.find_by(tag: 'DeviceGrant_' + @device_license.tag.split('_')[1])
+    if @device_license.tag && Notification.find_by(tag: 'DeviceGrant_' + @device_license.tag.split('_')[1])
       redirect_to root_path, notice: 'Registering device had already processed!'
     end
   end
@@ -39,7 +40,7 @@ class Accounts::DevicesController < ApplicationController
   end
   
   def grant
-    tag = @device_license.tag ? 'DeviceGrant_' + @device_license.tag.split('_')[1] : 'DeviceGrant_' + Digest::SHA256.hexdigest([@account.id, @device_license, Date.today].join)
+    tag = (@device_license.tag && @device_license.tag.size > 0) ? 'DeviceGrant_' + @device_license.tag.split('_')[1] : 'DeviceGrant_' + Digest::SHA256.hexdigest([@account.id, @device_license, Date.today].join)
     if Notification.find_by(tag: tag)
       redirect_to root_path, notice: 'Requested device had already processed!'
     end
@@ -73,10 +74,10 @@ class Accounts::DevicesController < ApplicationController
     end
   end
   
-  def decline    
+  def terminate    
     respond_to do |format|
       if @device_license.update(deactivated_at: DateTime.now)
-        format.html { redirect_to account_path(current_account.id), notice: 'Device was successfully deactivated.' }
+        format.html { redirect_to account_path(@account), notice: 'Device was successfully terminated.' }
         format.json { head :no_content }
       end
     end
@@ -112,8 +113,12 @@ class Accounts::DevicesController < ApplicationController
       params.require(:device_license).permit(:tag, :equipment_id, :serial_number, :activated_at, :note) if params[:device_license]
     end
     
-    def set_device_license
+    def new_device_license
       @device_license = @account.devices.build(device_license_params)
+    end
+    
+    def set_device_license
+      @device_license = DeviceLicense.find(params[:device_license][:id])
     end
         
 end

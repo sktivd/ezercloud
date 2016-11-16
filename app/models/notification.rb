@@ -26,7 +26,7 @@ class Notification < ActiveRecord::Base
   before_save do
     self.authentication_key = Digest::SHA256.hexdigest(self.to_s) if authentication_key.nil?
   end
-  after_save :update_url, if: -> obj{ obj.url.nil? and obj.redirect_path and obj.query }
+  after_save :update_url, if: -> obj{ obj.url.nil? && obj.redirect_path && obj.query }
     
   def uri
     URI.parse(url) if url

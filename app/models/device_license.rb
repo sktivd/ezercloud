@@ -14,7 +14,7 @@ class DeviceLicense < ActiveRecord::Base
   end
 
   def get_device
-    device || Device.find_by(equipment_id: equipment_id, serial_number: serial_number) if equipment_id and serial_number
+    device || Device.find_by(equipment_id: equipment_id, serial_number: serial_number) if equipment_id && serial_number
   end
     
   private

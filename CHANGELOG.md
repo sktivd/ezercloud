@@ -2,6 +2,32 @@
 
 ## Skynet 0.3
 
+######2016. 11. 16
+System
+* bootstrap-datepicker-rails gem was replaced by boostrap-datetimepicker-rails gem.
+* jquery javascript was replaced by jquery3.
+* all (almost) 'and' and 'or' were replaced by '&&' and '||' operators, respectively. 'and' and 'or' operators were strictly recommanded to be banned to clearify ruby coding style.
+* addition blocks, :before_header and :after_footer were added in application layout.
+
+Account/Device
+* the bug that process performed with null device_license instance was fixed.
+* test nil for null tag on @device_license (not nil but '') was fixed when an administrator grants directly.
+* decline action name was changed to terminate (deactivate).
+* redirection page was changed to modified account (for administrator) after termination.
+
+Account/Management
+* bugs on routes to remove roles or to terminate devices were fixed.
+
+Account/Role
+* bootstrap-datepicker was replaced by bootstrap-datetimepicker.
+* the bug that process performed with null role instance was fixed.
+* test nil for null tag on @@role (not nil but '') was fixed when an administrator grants directly.
+* redirection page was changed to modified account (for administrator) after destroy.
+* Google Place should be loaded syncronously to work with other google place based javascripts correctly and reloaded every time without caching. To archive, asyncronous (with deferred) javascript loading was removed and turbolinks were disabled (link with data: { turbolinks: false } parameter).
+
+Google Map
+* Google Map and Google Place should be loaded syncronously to work with other google map/place based javascripts correctly and reloaded every time without caching. To archive, asyncronous (with deferred) javascript loading was removed and turbolinks were disabled (link with data: { turbolinks: false } parameter).
+
 ######2016. 11. 14
 System
 * All types migration errors were removed on clean (empty) DB (should be careful for DB migration fail), which does not guarantee DB migration on used DB (durty DB?).

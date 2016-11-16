@@ -1,5 +1,5 @@
 <% content_for :header do %>
-  <%= javascript_include_tag "https://maps.google.com/maps/api/js?v=3&key=AIzaSyDk8p2C8Mns_FP3hdAEb4sdK9ZAtqKk0cA&libraries=geometry,places&language=&hl=&region=", async: Rails.env.production?, defer: Rails.env.production?, 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag "https://maps.google.com/maps/api/js?v=3&key=AIzaSyDk8p2C8Mns_FP3hdAEb4sdK9ZAtqKk0cA&libraries=geometry,places&language=&hl=&region=" %>
 <% end %>
 
 <% content_for :breadcrumb do %>
@@ -28,7 +28,7 @@
       <%= f.input :field, collection: (Account::FIELDS[@role.role] if @role.role) || [], label: 'Field', disabled: @role.field.nil?, as: :select, required: true %>
     </div>        
     <hr />
-    <% if @role.from or @role.to or @role.location %>
+    <% if @role.from || @role.to || @role.location %>
       <fieldset id="role_options">
     <% else %>
       <fieldset id="role_options" disabled>

@@ -94,7 +94,7 @@ class QualityControlMaterialsController < ApplicationController
     end
     
     def assign_remained_attributes
-      if @quality_control_material.lower_3sd.nil? and @quality_control_material.mean
+      if @quality_control_material.lower_3sd.nil? && @quality_control_material.mean
         @quality_control_material.lower_3sd = @quality_control_material.mean - 3 * @quality_control_material.sd
         @quality_control_material.upper_3sd = @quality_control_material.mean + 3 * @quality_control_material.sd
       else

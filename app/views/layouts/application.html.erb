@@ -4,6 +4,8 @@
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <title>EzerCloud, health information recorder</title>
   <%= stylesheet_link_tag 'application', params[:controller], media: 'all', 'data-turbolinks-track' => true %>
+  <%= yield :before_header %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= yield :header %>
   <%= csrf_meta_tags %>
 </head>
@@ -30,7 +32,7 @@
                   <li><%= link_to "Diagnoses", diagnoses_path %></li>
                 <% end %>
                 <% if policy(Diagnosis).map? %>
-                  <li><%= link_to "Map-based Monitoring", maps_path %></li>
+                  <li><%= link_to "Map-based Monitoring", maps_path, data: { turbolinks: false } %></li>
                 <% end %>
                 <% if policy(Report).index? %>
                   <li><%= link_to "Reports", reports_path %></li>
@@ -115,7 +117,8 @@
       </ul>
     </div>
   </footer>
-  <%= javascript_include_tag 'application', params[:controller], 'data-turbolinks-track' => true %>
   <%= yield :footer %>
+  <%= javascript_include_tag params[:controller], 'data-turbolinks-track' => true %>
+  <%= yield :after_footer %>
 </body>
 </html>

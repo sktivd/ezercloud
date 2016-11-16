@@ -10,14 +10,13 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery3
 //= require jquery_ujs
 //= require bootstrap
 //= require turbolinks
 //= require sweetalert2
 //= require rails-sweetalert2-confirm
 //= require underscore
-//= require bootstrap-datepicker
 //= require moment
 //= require bootstrap-datetimepicker
 //= require_tree ./sitewide

@@ -23,12 +23,12 @@ class Frend < ActiveRecord::Base
 #  validates :internal_qc_laser_power_test, :internal_qc_laseralignment_test, :internal_qc_calculated_ratio_test, :internal_qc_test, presence: true, if: :internal_qc? 
 
   def test_names
-    test_id.split(":", 3).map { |value| Reagent.find_by(number: value).name if value and value != "" and value != "0" }.compact
+    test_id.split(":", 3).map { |value| Reagent.find_by(number: value).name if value && value != "" && value != "0" }.compact
   end
   
   def test_values
     available_id = test_id.split(":")
-    test_result.split(":", 3).map.with_index { |value, index| "%.2f" % value.to_f if available_id[index] and available_id[index] != "" and available_id[index] != "0" }.compact
+    test_result.split(":", 3).map.with_index { |value, index| "%.2f" % value.to_f if available_id[index] && available_id[index] != "" && available_id[index] != "0" }.compact
   end
 
   def notification    
@@ -37,7 +37,7 @@ class Frend < ActiveRecord::Base
       assay_kit = AssayKit.find_by(equipment: 'FREND', kit: kit)
       if assay_kit
         assay_kit.plates.each do |plate|
-          if (test_id.split(':', 3) - ['0']).include?(plate.reagent.number) and plate.quality_control_materials.find_by(service: qc_service, lot: qc_lot).nil?
+          if (test_id.split(':', 3) - ['0']).include?(plate.reagent.number) && plate.quality_control_materials.find_by(service: qc_service, lot: qc_lot).nil?
             Account.with_role(:data_manager, QualityControlMaterial).each do |account|
               notification_params.append(follow: :responses, tag: ['F', plate.id, qc_service[0], qc_lot].join, message: "Unregistered Quality Control material has been tested.\nPlease input QC material information!", every: 1.day, expired_at: 3.day.from_now, data: { equipment: 'FREND', assay_kit: AssayKit.find_by(kit: kit).device, reagent: plate.reagent.name, qc_service: qc_service, qc_lot: qc_lot, date: diagnosis.measured_at }, account: account, redirect_path: '/quality_control_materials/new', query: { quality_control_material: { equipment: 'FREND', plate_id: plate.id, service: qc_service, lot: qc_lot, expire: qc_expire } }, mailer: "new_qcmaterial")
             end

@@ -3,14 +3,15 @@ class Accounts::RolesController < ApplicationController
   
   helper_method :devise_mapping
   
-  before_action :set_account, only: [:new, :get_fields, :propose, :grant, :decline]
+  before_action :set_account, only: [:new, :get_fields, :propose, :grant, :destroy]
   before_action do
     authorize @account, :manage?
   end
-  before_action :set_role, only: [:new, :propose, :grant, :destroy]
+  before_action :new_role, only: [:new, :propose, :grant]
+  before_action :set_role, only: [:destroy]
   
   def new
-    if @role.tag and Notification.find_by(tag: 'RoleGrant_' + @role.tag.split('_')[1])
+    if @role.tag && Notification.find_by(tag: 'RoleGrant_' + @role.tag.split('_')[1])
       redirect_to root_path, notice: 'Requested role had already processed!'
     end
   end
@@ -50,7 +51,7 @@ class Accounts::RolesController < ApplicationController
   end
   
   def grant
-    tag = @role.tag ? 'RoleGrant_' + @role.tag.split('_')[1] : 'RoleGrant_' + Digest::SHA256.hexdigest([@account.id, @role, Date.today].join)
+    tag = (@role.tag && @role.tag.size > 0) ? 'RoleGrant_' + @role.tag.split('_')[1] : 'RoleGrant_' + Digest::SHA256.hexdigest([@account.id, @role, Date.today].join)
     if Notification.find_by(tag: tag)
       redirect_to root_path, notice: 'Requested role had already processed!'
     end
@@ -89,9 +90,9 @@ class Accounts::RolesController < ApplicationController
   end
   
   def destroy
-    @account.remove_role @role.name.to_sym, Object.const_get(@role.resource_type)
+    @account.remove_role @role.name, Object.const_get(@role.resource_type)
     respond_to do |format|
-      format.html { redirect_to account_path(current_account.id), notice: 'Role was successfully removed.' }
+      format.html { redirect_to account_path(@account), notice: 'Role was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -106,9 +107,12 @@ class Accounts::RolesController < ApplicationController
       params.require(:role).permit(:tag, :role, :field, :from, :to, :location, :note) if params[:role]
     end
     
-    def set_role
+    def new_role
       @role = Role.new(role_params)
       @role.role = @role.role.to_sym if @role.role
     end
     
+    def set_role
+      @role = Role.find(params[:role][:id])
+    end
 end

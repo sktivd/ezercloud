@@ -32,7 +32,7 @@ class ReportsController < ApplicationController
   # POST /reports.json
   def create
     @report = Report.new(report_params)
-    @report.plate = Plate.find_by(kit: @report.assay_kit, number: @report.reagent) if @report.assay_kit and @report.reagent
+    @report.plate = Plate.find_by(kit: @report.assay_kit, number: @report.reagent) if @report.assay_kit && @report.reagent
   
     respond_to do |format|
       if @report.plate.nil?

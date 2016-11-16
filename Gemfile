@@ -95,7 +95,7 @@ gem 'autoprefixer-rails'
 # NOTE: The sass-rails gem is included with new Rails applications by default.
 #       Please make sure that it is not already in your Gemfile before uncommenting it.
 # gem 'sass-rails'
-gem 'bootstrap-datepicker-rails'
+#gem 'bootstrap-datepicker-rails'
 gem 'country_select'
 
 gem 'momentjs-rails', '>= 2.9.0'

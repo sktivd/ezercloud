@@ -13,12 +13,12 @@ Requested Role--------------
 * Field: <%= @data[:field] %>
 <% end %>
 
-<% if (@data[:from] and @data[:from] != '') or (@data[:to] and @data[:to] != '') or @data[:location] %>
+<% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') || @data[:location] %>
 -OPTIONAL-
-  <% if (@data[:from] and @data[:from] != '') or (@data[:to] and @data[:to] != '') %>
+  <% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') %>
 . Period : <%= @data[:from] + ' ~ ' + @data[:to] %></p>
   <% end %>
-  <% if @data[:location] and @data[:location] != '' %>
+  <% if @data[:location] && @data[:location] != '' %>
 . Location : <%= @data[:location] %>
   <% end %>
 <% end %>

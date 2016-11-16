@@ -45,13 +45,12 @@ Rails.application.routes.draw do
     get 'accounts/roles/get_fields',     to: 'accounts/roles#get_fields'
     post 'accounts/roles/propose',       to: 'accounts/roles#propose'
     post 'accounts/roles/grant',         to: 'accounts/roles#grant'
-    post 'accounts/roles/destroy',         to: 'accounts/roles#destroy'
+    delete 'accounts/roles/destroy',     to: 'accounts/roles#destroy'
     get 'accounts/devices/new',          to: 'accounts/devices#new'
     get 'accounts/devices/autocomplete_sn', to: 'accounts/devices#autocomplete_sn'
     post 'accounts/devices/propose',     to: 'accounts/devices#propose'
     post 'accounts/devices/grant',       to: 'accounts/devices#grant'
-    post 'accounts/devices/decline',       to: 'accounts/devices#decline'
-    delete 'accounts/devices/:id',       to: 'accounts/devices#destroy'
+    delete 'accounts/devices/terminate', to: 'accounts/devices#terminate'
   end
     
   # for ajax

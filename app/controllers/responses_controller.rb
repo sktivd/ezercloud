@@ -24,7 +24,7 @@ class ResponsesController < ApplicationController
       if @notification.account != current_account
         redirect_to root_path, notice: "Different with notified account..."
       end
-      if @notification.authentication_key == (params[:authentication_key]) and @notification.redirect_path == params[:redirect_path]
+      if @notification.authentication_key == (params[:authentication_key]) && @notification.redirect_path == params[:redirect_path]
         if @notification.expired_at < DateTime.now
           redirect_to root_path, notice: "Notification has been already expired!"
         end

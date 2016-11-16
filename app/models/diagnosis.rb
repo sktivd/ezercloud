@@ -37,7 +37,7 @@ class Diagnosis < ActiveRecord::Base
   validate  :check_measured_time
 
   geocoded_by :location_or_ip_address
-  after_validation :geocode, if: ->(obj){ obj.latitude.nil? or obj.longitude.nil? }
+  after_validation :geocode, if: ->(obj){ obj.latitude.nil? || obj.longitude.nil? }
   
   def measurement
     Object.const_get(diagnosable_type).find(diagnosable_id)
@@ -52,7 +52,7 @@ class Diagnosis < ActiveRecord::Base
     end
     
     def check_measured_time
-      if measured_at and (measured_at.year < MIN_YEAR or measured_at.year > MAX_YEAR)
+      if measured_at && (measured_at.year < MIN_YEAR || measured_at.year > MAX_YEAR)
         errors.add(:measured_at, measured_at.year.to_s + "is out of allowed year [" + MIN_YEAR.to_s + ", " + MAX_YEAR.to_s + "]")
       end
     end

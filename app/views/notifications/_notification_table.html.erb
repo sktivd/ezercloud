@@ -26,7 +26,7 @@
           <% if notification.notified_at %>
             <span class="glyphicon glyphicon-ok"><span>
           <% elsif datetime <= notification.expired_at %>
-            <% if notification.follow == 'responses' and notification.url %>
+            <% if notification.follow == 'responses' && notification.url %>
               <%= link_to notification.url do %>
                 <span class="glyphicon glyphicon-play-circle"></span>
               <% end %>

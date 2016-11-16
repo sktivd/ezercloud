@@ -41,7 +41,7 @@
           <div class="panel panel-danger">
             <div class="panel-heading bg-info">
               <h3 class="panel-title" style="display: inline">Roles</h3>
-              <%= link_to accounts_roles_new_path(params: { account: { id: @account.id } }), class: 'btn btn-default btn-xs btn-danger pull-right', role: 'button' do %>
+              <%= link_to accounts_roles_new_path(account: { id: @account.id }), class: 'btn btn-default btn-xs btn-danger pull-right', data: { turbolinks: false }, role: 'button' do %>
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
               <% end %>
             </div>
@@ -49,7 +49,7 @@
               <table class="table">
                 <thead>
                   <th>Role</th>
-                  <th>Model</th>
+                  <th>Field</th>
                   <th>Location</th>
                   <th>From</th>
                   <th>To</th>
@@ -58,13 +58,13 @@
                 <tbody>
                   <% @account.roles.each do |role| %>
                     <tr>
-                      <td><%= role.name %></td>
+                      <td><%= Account::ROLES[role.name.to_sym] %></td>
                       <td><%= role.resource_type %></td>
                       <td><%= role.location %></td>
                       <td><%= role.from %></td>
                       <td><%= role.to %></td>
                       <td>
-                        <%= link_to accounts_roles_destroy_path(id: role.id), method: :delete, data: { confirm: 'Are you sure?' } do %>
+                        <%= link_to accounts_roles_destroy_path(account: { id: @account.id }, role: { id: role.id} ), method: :delete, data: { confirm: 'Are you sure?' } do %>
                           <span class="glyphicon glyphicon-remove-circle"></span>
                         <% end %>
                       </td>
@@ -79,7 +79,7 @@
           <div class="panel panel-warning">
             <div class="panel-heading bg-info">
               <h3 class="panel-title" style="display: inline">Devices</h3>
-              <%= link_to accounts_devices_new_path(params: { account: { id: @account.id } }), class: 'btn btn-default btn-xs btn-warning pull-right', role: 'button' do %>
+              <%= link_to accounts_devices_new_path(account: { id: @account.id }), class: 'btn btn-default btn-xs btn-warning pull-right', role: 'button' do %>
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
               <% end %>
             </div>
@@ -99,7 +99,7 @@
                       <td><%= device.activated_at.to_date %></td>
                       <td><%= device.deactivated_at.to_date if device.deactivated_at %></td>
                       <td>
-                        <%= link_to accounts_roles_destroy_path(id: device.id), method: :delete, data: { confirm: 'Are you sure?' } do %>
+                        <%= link_to accounts_devices_terminate_path(account: { id: @account.id }, device_license: { id: device.id }), method: :delete, data: { confirm: 'Are you sure?' } do %>
                           <span class="glyphicon glyphicon-remove-circle"></span>
                         <% end %>
                       </td>  

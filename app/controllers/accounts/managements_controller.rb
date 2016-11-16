@@ -32,7 +32,7 @@ class Accounts::ManagementsController < ApplicationController
     end
     
     respond_to do |format|
-      if current_account.valid_password?(params[:account][:current_password]) and @account.update(account_params)
+      if current_account.valid_password?(params[:account][:current_password]) && @account.update(account_params)
         format.html { redirect_to @account, notice: 'Account was successfully updated.' }
         format.json { render :show, status: :ok, location: @laboratory }
       else

@@ -53,11 +53,11 @@ class QualityControlMaterial < ActiveRecord::Base
   private
   
     def threeSD?
-      lower_3sd and upper_3sd
+      lower_3sd && upper_3sd
     end
   
     def mean_and_sd?
-      mean and sd
+      mean && sd
     end
     
     def already_expired?
