@@ -2,6 +2,10 @@
 
 ## Skynet 0.3
 
+######2016. 11. 17
+Diagnosis
+* diagnosis validation requires remote_ip, which checks connected client IP. This validation is always failed because remote_ip is nil in migration.
+
 ######2016. 11. 16
 System
 * bootstrap-datepicker-rails gem was replaced by boostrap-datetimepicker-rails gem.

@@ -21,15 +21,19 @@ class CreateDevices < ActiveRecord::Migration
         Device.ar_import devices
       end
     end
+    say_with_time 'Reindex devices' do
+      Device.reindex
+    end
 
     Diagnosis.reset_column_information
     say_with_time 'make association between :devices and :diagnoses' do
       Equipment.all.each do |equipment|
-        Object.const_get(equipment.klass).reset_column_information
+        M = Object.const_get(equipment.klass)
+        M.reset_column_information
         Device.where(equipment: equipment).find_each do |device|
-          Object.const_get(equipment.klass).includes(:diagnosis).where(serial_number: device.serial_number).find_each do |e|
+          M.includes(:diagnosis).where(serial_number: device.serial_number).find_each do |e|
             e.update(device: device)
-            e.diagnosis.update_attributes(device: device)
+            e.diagnosis.update(device: device)
           end
         end
       end

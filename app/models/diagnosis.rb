@@ -22,11 +22,11 @@ class Diagnosis < ActiveRecord::Base
   # VERSION 1 is deprecated
   VERSIONS = [1, 2]
   MIN_YEAR = 2014
-  MAX_YEAR = 2030
+  MAX_YEAR = 2099
 
   before_validation :set_measured_at, if: -> obj{ obj.measured_at.nil? }
   
-  validates :equipment, :measured_at, :remote_ip, presence: true
+  validates :equipment, :measured_at, presence: true
   validates :protocol, presence: true, inclusion: { in: PROTOCOL, message: "invalid" }
   validates :version,  presence: true, numericality: true, inclusion: { in: VERSIONS, message: "invalid" }
 
@@ -46,15 +46,11 @@ class Diagnosis < ActiveRecord::Base
   private
   
     def check_authentication_key
-      if authentication_key != AUTHENTICATION_KEYS[remote_ip]
-        errors.add(:authentication, "invalid")
-      end
+      errors.add(:authentication, "invalid") if remote_ip and authentication_key != AUTHENTICATION_KEYS[remote_ip]
     end
     
     def check_measured_time
-      if measured_at && (measured_at.year < MIN_YEAR || measured_at.year > MAX_YEAR)
-        errors.add(:measured_at, measured_at.year.to_s + "is out of allowed year [" + MIN_YEAR.to_s + ", " + MAX_YEAR.to_s + "]")
-      end
+      errors.add(:measured_at, measured_at.year.to_s + "is out of allowed year [" + MIN_YEAR.to_s + ", " + MAX_YEAR.to_s + "]") if (measured_at.year < MIN_YEAR || measured_at.year > MAX_YEAR)
     end
     
     def set_measured_at
