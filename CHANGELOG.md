@@ -6,6 +6,9 @@
 Diagnosis
 * diagnosis validation requires remote_ip, which checks connected client IP. This validation is always failed because remote_ip is nil in migration.
 
+Pundit
+* EzerReaderPolicy and BuddiPolicy should be inherited from MachinePolicy.
+
 ######2016. 11. 16
 System
 * bootstrap-datepicker-rails gem was replaced by boostrap-datetimepicker-rails gem.

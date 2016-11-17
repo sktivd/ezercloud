@@ -1,3 +1,3 @@
-class EzerReaderPolicy < ApplicationPolicy
+class EzerReaderPolicy < MachinePolicy
   
 end

@@ -1,3 +1,3 @@
-class BuddiPolicy < ApplicationPolicy
+class BuddiPolicy < MachinePolicy
   
 end
