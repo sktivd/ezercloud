@@ -1,7 +1,7 @@
 # EzerCloud
 
 Welcome to EzerCloud!
-This server is based on ruby-on-rails (RoR) Web framework and serves data collection/surveillance/analytics for health data transferred from various health device like FREND, BUDDI, and EzerReader and for surveys data from online survey system like Commcare HQ.
+This server is based on ruby-on-rails (RoR) web framework and serves data collection/surveillance/analytics for health data transferred from various health device like FREND, BUDDI, and EzerReader and for surveys data from online survey system like Commcare HQ.
 
 ## Requirements
 
