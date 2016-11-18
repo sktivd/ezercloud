@@ -1,4 +1,7 @@
 class DevicesController < ApplicationController
+  before_action except: [:create] do
+    authorize Equipment, :manage?
+  end
   before_action :set_device, only: [:show, :edit, :update, :destroy]
 
   # GET /devices

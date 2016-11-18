@@ -1,4 +1,7 @@
 class ErrorCodesController < ApplicationController
+  before_action do
+    authorize Equipment, :manage?
+  end
   before_action :set_error_code, only: [:show, :edit, :update, :destroy]
 
   # GET /error_codes

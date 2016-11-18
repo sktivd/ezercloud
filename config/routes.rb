@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   resources :devices
   resources :people
   resources :diagnosis_images
-  resources :buddis
-  resources :ezer_readers
+#  resources :buddis
+#  resources :ezer_readers
   resources :notifications
   resources :reports
   resources :error_codes
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :assay_kits
   resources :reagents
   resources :plates
-  resources :frends
+#  resources :frends
   resources :diagnoses
   resources :equipment
 

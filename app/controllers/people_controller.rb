@@ -1,4 +1,15 @@
 class PeopleController < ApplicationController
+  
+  before_action only: [:new, :create], unless: :json_request? do
+    redirect_to root_path, notice: "Artifical person creation is prohibited!"
+  end
+  before_action only: [:new, :update, :edit, :destroy] do
+    authorize Diagnosis, :manage?
+  end
+  before_action only: [:index] do 
+    authorize Person, :index?
+  end
+  
   before_action :set_person, only: [:show, :edit, :update, :destroy]
 
   # GET /people

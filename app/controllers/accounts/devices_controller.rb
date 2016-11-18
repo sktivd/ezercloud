@@ -34,7 +34,7 @@ class Accounts::DevicesController < ApplicationController
     end
   rescue NotificationError => e
     respond_to do |format|
-      format.html { redirect_to account_path(current_account), notice: e.msg }
+      format.html { redirect_to account_path(current_account), notice: e.message }
       format.json { render json: e.errors, status: :unprocessable_entity  }
     end    
   end
@@ -69,7 +69,7 @@ class Accounts::DevicesController < ApplicationController
     end    
   rescue NotificationError => e
     respond_to do |format|
-      format.html { redirect_to account_path(current_account), notice: e.msg }
+      format.html { redirect_to account_path(current_account), notice: e.message }
       format.json { render json: e.errors, status: :unprocessable_entity  }
     end
   end

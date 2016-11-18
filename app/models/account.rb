@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   # previliges
   ROLES   = { viewer: 'Data Viewer', monitorer: 'Surveillance Monitorer', data_manager: 'Data Manager', device_manager: 'Device Manager' }
   FIELDS  = { viewer:  ['DiagnosisResult', 'PersonsHealth'], monitorer: ['DiagnosisResult'], data_manager: ['DiagnosisResult', 'PersonsHealth', 'Assay', 'QC', 'Notification', 'Report'], device_manager: ['Equipment'] }
-  MODELS  = { DiagnosisResult: [Diagnosis], PersonsHealth: [Person], Equipment: [Equipment, Device, DeviceLicense], Assay: [AssayKit, Reagent, Plate], QC: [Laboratory, QualityControlMaterial], Notification: [Notification], Report: [Report] }
+  MODELS  = { DiagnosisResult: [Diagnosis], PersonsHealth: [Person], Equipment: [Equipment, Device, DeviceLicense, ErrorCode], Assay: [AssayKit, Reagent, Plate], QC: [Laboratory, QualityControlMaterial], Notification: [Notification], Report: [Report] }
   OPTIONS = { viewer:  true, monitorer: false, data_manager: false, device_manager: false }
   
   def is_admin?

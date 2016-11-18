@@ -75,31 +75,36 @@ class DiagnosesController < ApplicationController
   def create
     Diagnosis.transaction do
       begin
-        respond_to do |format|
-          @equipment = @equipment_class.create! equipment_params          
-          @diagnosis = @equipment.build_diagnosis diagnosis_params
-          @diagnosis.device        = @equipment.device   unless @diagnosis.device
-          @diagnosis.decision      = @equipment.decision unless @diagnosis.decision
-          @diagnosis.diagnosis_tag = @equipment.tag      unless @diagnosis.diagnosis_tag
-          @diagnosis.save!
+        @equipment = @equipment_class.create! equipment_params          
+        @diagnosis = @equipment.build_diagnosis diagnosis_params
+        @diagnosis.device        = @equipment.device   unless @diagnosis.device
+        @diagnosis.decision      = @equipment.decision unless @diagnosis.decision
+        @diagnosis.diagnosis_tag = @equipment.tag      unless @diagnosis.diagnosis_tag
+        @diagnosis.save!
 
-          STDERR.puts @equipment.notification
-          send_notification @equipment.notification
-          format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
-          format.json { render :created, status: :created, location: @diagnosis }
-        end
-      rescue ActiveRecord::RecordInvalid => invalid
-        @diagnosis.errors.add(:response, "fail")
-        @diagnosis.errors.add(:data, @equipment.errors)
-        respond_to do |format|
-          format.html { redirect_to :new }
-          format.json { render json: @diagnosis.errors, status: :unprocessable_entity  }
-        end
-      rescue NotificationError => e
-        respond_to do |format|
-          format.html { redirect_to root_path, notice: e.msg }
-          format.json { render json: e.errors, status: :unprocessable_entity  }
-        end
+        send_notification @equipment.notification
+        
+        @error_type = :none
+      rescue ActiveRecord::RecordInvalid
+        @errors = @diagnosis.errors
+        @errors.add(:response, 'fail')
+        @errors.add(:data, @equipment.errors)
+        @error_type = :on_create
+      rescue NotificationError
+        @error_type = :on_notification
+      end
+    end
+    respond_to do |format|
+      case @error_type
+      when :none
+        format.html { redirect_to @equipment, notice: 'Diagnosis was successfully created.' }
+        format.json { render :created, status: :created, location: @diagnosis }
+      when :on_create
+        format.html { redirect_to :new }
+        format.json { render json: @diagnosis.errors, status: :unprocessable_entity  }
+      when :on_notification
+        format.html { redirect_to root_path, notice: 'Diagnosis was successfully created.' + 'But, ' + e.message }
+        format.json { render :created, status: :created, location: @diagnosis }
       end
     end
   end
@@ -151,7 +156,8 @@ class DiagnosesController < ApplicationController
     end
     
     def set_equipment_class
-      @equipment_class = Object.const_get(Equipment.find_by(equipment: params[:equipment]).klass)
+      @equipment_class = Object.const_get(Equipment.find_by(equipment: params[:equipment]).klass) if params[:equipment] and params[:equipment].size > 0
+      render json: { response: 'fail', equipment: 'invalid' }, status: :unprocessable_entity if @equipment_class.nil?
     end
     
     def new_equipment(name, data)

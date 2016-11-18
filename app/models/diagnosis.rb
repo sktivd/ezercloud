@@ -7,7 +7,7 @@ class Diagnosis < ActiveRecord::Base
   belongs_to :device
   
   attr_accessor :authentication_key, :remote_ip, :year, :month, :day, :hour, :minute, :second, :time_zone, :data
-  attr_encrypted :person, key: :encryption_key
+  attr_encrypted :technician, :person, key: :encryption_key
   
   AUTHENTICATION_KEYS = {
     "1.234.62.144": "c049e9b8285c7837a0a25f1a91454dc131af2be5c7b92a8ea7aac12d9a749654d0fd61265cbacfb74c376e779dfb356b9865194695f1159dc7453eb742748362",
@@ -26,7 +26,8 @@ class Diagnosis < ActiveRecord::Base
 
   before_validation :set_measured_at, if: -> obj{ obj.measured_at.nil? }
   
-  validates :equipment, :measured_at, presence: true
+  validates :equipment, presence: true, allow_blank: false
+  validates :measured_at, presence: true
   validates :protocol, presence: true, inclusion: { in: PROTOCOL, message: "invalid" }
   validates :version,  presence: true, numericality: true, inclusion: { in: VERSIONS, message: "invalid" }
 

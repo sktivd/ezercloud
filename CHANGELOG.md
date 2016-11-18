@@ -2,6 +2,28 @@
 
 ## Skynet 0.3
 
+######2016. 11. 18
+System
+* bootstrap-datetimepicker gem replaced bootstrap-datepicker3 gem.
+
+Device/Equipment/ErrorCode/Laboratory
+* accounts with :data_manager or :device_manager are only accesible.
+
+Diagnosis
+* techinican instance variable is also securely stored.
+* equipment instance variable should not be blank and creation request for invalid equipment returns fail.
+* tranaction acts on a single database connection. For example, there is a redirection, transaction does not work correctly. In this situation, ActiveRecord::Rollback should be called manually. As a solution, we divided DB creation section and redirection section and applied transaction to DB creation section.
+
+Notification
+* NotificationError initialization bugs were fixed.
+* a bug to generate exception was removed when there is no information, which should be ignored without any exception.
+
+Person
+* authorization should be required like Diagnosis (need validation).
+
+Buddi/EzerReader/Frend
+* devices should be accesible by diagnoses_controller only.
+
 ######2016. 11. 17
 Diagnosis
 * diagnosis validation requires remote_ip, which checks connected client IP. This validation is always failed because remote_ip is nil in migration.

@@ -1,4 +1,7 @@
 class EquipmentController < ApplicationController
+  before_action except: [:create] do
+    authorize Equipment, :manage?
+  end
   before_action :set_equipment, only: [:show, :edit, :update, :destroy]
 
   # GET /equipment

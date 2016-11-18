@@ -1,5 +1,9 @@
 class LaboratoriesController < ApplicationController
+  before_action do
+    authorize QualityControlMaterial, :manage?
+  end
   before_action :set_laboratory, only: [:show, :edit, :update, :destroy]
+  
 
   # GET /laboratories
   # GET /laboratories.json

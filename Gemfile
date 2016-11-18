@@ -120,7 +120,11 @@ gem 'pundit'
 gem 'rolify'
 
 # transparent encryption for ActiveRecord
-gem "attr_encrypted", "~> 3.0.0"
+gem 'attr_encrypted', '~> 3.0.0'
+gem 'encryption_migrator'
+
+# Surveys
+gem 'commcare_api'
 
 # user registration with secure
 gem 'recaptcha', :require => 'recaptcha/rails'
