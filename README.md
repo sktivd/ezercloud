@@ -14,7 +14,7 @@ We are developing on PostgresSQL DBMS. Although other DBMS could be applicable, 
 
 4. Ruby (>= 2.3.1) and RoR 5.0.0.1
 
-### Optional requirement
+#### Optional requirement
 
 1. R (>=3.3.2)
 
