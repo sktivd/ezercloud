@@ -2,9 +2,6 @@ class DiagnosisImagesController < ApplicationController
 
   skip_before_action :verify_authenticity_token, if: :html_request?, only: [:create]
   skip_before_action :authenticate_account!, only: [:create]
-  before_action only: [:new, :create], unless: :json_request? do
-    redirect_to root_path, notice: "Artifical diagnosis creation is prohibited!"
-  end
   before_action only: [:new, :update, :edit, :destroy] do
     authorize Diagnosis, :manage?
   end

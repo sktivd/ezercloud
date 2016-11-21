@@ -2,6 +2,11 @@
 
 ## Skynet 0.3
 
+######2016. 11. 21
+
+DiagnosisImage
+* wrong validation step was removed.
+
 ######2016. 11. 18
 System
 * bootstrap-datetimepicker gem replaced bootstrap-datepicker3 gem.
