@@ -129,6 +129,11 @@ gem 'commcare_api'
 # user registration with secure
 gem 'recaptcha', :require => 'recaptcha/rails'
 
+# barcode & QR code
+gem 'barby'
+gem 'has_barcode', git: 'git://github.com/kulte/has_barcode.git'
+gem 'rqrcode'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

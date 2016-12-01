@@ -26,25 +26,39 @@
     <!-- List group -->
     <ul class="list-group">
       <li class="list-group-item">
-        <p>Role: <%= Account::ROLES[@data[:role].to_sym] %></p>
-        <% if @data[:field] %>
-          <p>Field: <%= @data[:field] %></p>
-        <% end %>
-        <% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') || @data[:location] %>
+        <dl>
+          <dt>Role</dt>
+          <dd><%= Account::ROLES[@data[:role].to_sym] %></dd>
+          <dt>Field</dt>
+          <dd><%= @data[:field] %></dd>
+        </dl>
+        <% if @data[:role] == "viewer" %>
           <hr />
-          <p>OPTIONAL</p>
-          <% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') %>
-            <p>Period : <%= @data[:from] + ' ~ ' + @data[:to] %></p>
-          <% end %>
-          <% if @data[:location] && @data[:location] != '' %>
-            <p>Location : <%= @data[:location] %> </p>
-          <% end %>
+          <p>ACCESSIBILITY</p>
+          <dl>
+            <dt>Period</dt>
+            <dd>
+              <% if @data[:from].nil? && @data[:to].nil? %>
+                Unlimited
+              <% elsif @data[:to].nil? %>
+                From <%= @data[:from].to_s %>
+              <% elsif @data[:from].nil? %>
+                From <%= @data[:to].to_s %>
+              <% else %>
+                (<%= @data[:from].to_s + " - " + @data[:to].to_s %>)
+              <% end %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>Location</dt>
+            <dd><%= (@data[:location] if @data[:location]) || "Any place" %></dd>
+          </dl>
         <% end %>
       </li>
     </ul>
   </div>
   
-  <p><%= link_to 'Permit or Decline' , @notification.url, class: 'btn btn-default', role: 'button' %></p>
+  <p><%= link_to 'Permit or Decline', @notification.url, class: 'btn btn-default', role: 'button' %></p>
   
   <hr style="width: 25%; margin-left: 0">
   <h4>EzerCloud, SK telecom</h4>

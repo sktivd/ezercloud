@@ -50,9 +50,7 @@
                 <thead>
                   <th>Role</th>
                   <th>Field</th>
-                  <th>Location</th>
-                  <th>From</th>
-                  <th>To</th>
+                  <th>Accessible Period & Location</th>
                   <th></th>
                 </thead>
                 <tbody>
@@ -60,12 +58,21 @@
                     <tr>
                       <td><%= Account::ROLES[role.name.to_sym] %></td>
                       <td><%= role.resource_type %></td>
-                      <td><%= role.location %></td>
-                      <td><%= role.from %></td>
-                      <td><%= role.to %></td>
+                      <td>
+                        <% if role.from.nil? && role.to.nil? %>
+                          Unlimited
+                        <% elsif role.to.nil? %>
+                          <%= "From " + role.from.strftime("%F") %>
+                        <% elsif role.from.nil? %>
+                          <%= "To " + role.to.strftime("%F") %>
+                        <% else %>
+                          <%= "(" + role.from.strftime("%F")+ " - " + role.to.strftime("%F") + ")" %>
+                        <% end %>
+                        <%= (role.location and role.location.size > 0 if role.location) || "Any place" %>
+                      </td>
                       <td>
                         <%= link_to accounts_roles_destroy_path(account: { id: @account.id }, role: { id: role.id} ), method: :delete, data: { confirm: 'Are you sure?' } do %>
-                          <span class="glyphicon glyphicon-remove-circle"></span>
+                          <span class="glyphicon glyphicon-remove-sign"></span>
                         <% end %>
                       </td>
                     </tr>
@@ -88,8 +95,9 @@
                 <thead>
                   <th>Device</th>
                   <th>Serial number</th>
-                  <th>Activated from</th>
-                  <th>To</th>
+                  <th>Available from</th>
+                  <th>Expired</th>
+                  <th></th>
                 </thead>
                 <tbody>
                   <% @account.devices.each do |device| %>
@@ -97,10 +105,10 @@
                       <td><%= device.device.equipment.equipment %></td>
                       <td><%= device.device.serial_number %></td>
                       <td><%= device.activated_at.to_date %></td>
-                      <td><%= device.deactivated_at.to_date if device.deactivated_at %></td>
+                      <td><%= (device.deactivated_at.to_date if device.deactivated_at) || 'No' %></td>
                       <td>
                         <%= link_to accounts_devices_terminate_path(account: { id: @account.id }, device_license: { id: device.id }), method: :delete, data: { confirm: 'Are you sure?' } do %>
-                          <span class="glyphicon glyphicon-remove-circle"></span>
+                          <span class="glyphicon glyphicon-remove-sign"></span>
                         <% end %>
                       </td>  
                     </tr>

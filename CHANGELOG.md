@@ -2,8 +2,36 @@
 
 ## Skynet 0.3
 
-######2016. 11. 21
+######2016. 11. 24
+System
+* QR code & Barcode generator gems were added.
+* controller routes would be limited only to permitted pages gradually.
 
+Commcare
+* Commcare model was added to store survey data from CommcareHQ.
+* lib/taks/commcare.rake will perform a task to contact and take new surveys periodically. Currenty 'Student Survey' forms would be taken. 
+
+CommcareImage
+* images will be stored from CommcareHQ surveys.
+
+Diagnosis
+* subject_id was added to make a link to a subject (Person model) to be taken an examine. If there is not subject information yet, new subject will be made automatically.
+* when user_id exists and links to an account, the account will be checked whether owned device_licent is issued or not about this device. new device_license will be issued automatically if device_license is not issued.
+
+Person
+* Person model is set up in detail.
+* the title of view pages were located in 'Health Records'.
+
+Buddi/EzerCloud/Frend
+* Reindexing device information will be performed after new device is registered, which is utilized to search serial numbers of devices quickly.
+
+Account/Management, Account/Role
+* some view pages were renewed to show preciser information.
+
+
+
+
+######2016. 11. 21
 DiagnosisImage
 * wrong validation step was removed.
 

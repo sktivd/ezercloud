@@ -2,8 +2,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   resources :devices
-  resources :people
-  resources :diagnosis_images
+#  resources :diagnosis_images
 #  resources :buddis
 #  resources :ezer_readers
   resources :notifications
@@ -52,6 +51,18 @@ Rails.application.routes.draw do
     post 'accounts/devices/grant',       to: 'accounts/devices#grant'
     delete 'accounts/devices/terminate', to: 'accounts/devices#terminate'
   end
+  
+  post 'diagnosis_images',     to: 'diagnosis_images#create'
+  get  'diagnosis_images/:id', to: 'diagnosis_images#show'
+  
+  # people controller
+  get    'people/search', to: 'people#search'
+  post   'people/person', to: 'people#person'
+  post   'people',        to: 'people#create'
+  delete 'people',        to: 'people#destroy'
+  get    'people/:id',    to: 'people#show',   as: :person
+  get    'people',        to: 'people#index',  as: :people_index_path
+#  resources :people
     
   # for ajax
   post    'qcm_dropdown' => 'qcm_dropdown#create'

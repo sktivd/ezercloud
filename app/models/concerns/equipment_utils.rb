@@ -24,6 +24,7 @@ module EquipmentUtils
     
       def map_device
         self.device = Device.find_or_create_by(serial_number: serial_number, equipment: Equipment.find_by(klass: self.class.to_s))
+        Device.reindex if device.created_at > DateTime.now - 10.minutes
       end
     
   end

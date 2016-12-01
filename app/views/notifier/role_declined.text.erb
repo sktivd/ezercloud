@@ -10,18 +10,20 @@ Message from Administrator:
 Requested Role--------------
       
 * Role: <%= Account::ROLES[@data[:role].to_sym] %>
-<% if @data[:field] %>
 * Field: <%= @data[:field] %>
-<% end %>
 
-<% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') || @data[:location] %>
--OPTIONAL-
-  <% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') %>
-. Period : <%= @data[:from] + ' ~ ' + @data[:to] %></p>
-  <% end %>
-  <% if @data[:location] && @data[:location] != '' %>
-. Location : <%= @data[:location] %>
-  <% end %>
+<% if @data[:role] == "viewer" %>
+-ACCESSIBILITY-
+. Period: <% if @data[:from].nil? && @data[:to].nil? %>
+Unlimited
+<% elsif @data[:to].nil? %>
+From <%= @data[:from].to_s %>
+<% elsif @data[:from].nil? %>
+From <%= @data[:to].to_s %>
+<% else %>
+(<%= @data[:from].to_s + " - " + @data[:to].to_s %>)
+<% end %>
+. Location: <%= (@data[:location] if @data[:location]) || "Any place" %>
 <% end %>
 
 EzerCloud, 

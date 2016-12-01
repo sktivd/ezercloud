@@ -19,13 +19,6 @@
     <p><%= @notification.message.sub("\n", "</p><p>").html_safe %></p>
   </div>
 
-  <p><span class="glyphicon glyphicon-remove"></span> We are really sorry, but requested role was declined.</p>
-  <% if @data[:note] %>
-    <blockquote>
-      <p><%= @data[:note].sub("\n", "</p><p>").html_safe %></p>
-    </blockquote>
-  <% end %>
-    
   <div class="panel panel-default">
     <!-- Default panel contents -->
     <div class="panel-heading">Requested Role</div>
@@ -33,19 +26,33 @@
     <!-- List group -->
     <ul class="list-group">
       <li class="list-group-item">
-        <p>Role: <%= Account::ROLES[@data[:role].to_sym] %></p>
-        <% if @data[:field] %>
-          <p>Field: <%= @data[:field] %></p>
-        <% end %>
-        <% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') || @data[:location] %>
+        <dl>
+          <dt>Role</dt>
+          <dd><%= Account::ROLES[@data[:role].to_sym] %></dd>
+          <dt>Field</dt>
+          <dd><%= @data[:field] %></dd>
+        </dl>
+        <% if @data[:role] == "viewer" %>
           <hr />
-          <p>OPTIONAL</p>
-          <% if (@data[:from] && @data[:from] != '') || (@data[:to] && @data[:to] != '') %>
-            <p>Period : <%= @data[:from] + ' ~ ' + @data[:to] %></p>
-          <% end %>
-          <% if @data[:location] && @data[:location] != '' %>
-            <p>Location : <%= @data[:location] %> </p>
-          <% end %>
+          <p>ACCESSIBILITY</p>
+          <dl>
+            <dt>Period</dt>
+            <dd>
+              <% if @data[:from].nil? && @data[:to].nil? %>
+                Unlimited
+              <% elsif @data[:to].nil? %>
+                From <%= @data[:from].to_s %>
+              <% elsif @data[:from].nil? %>
+                From <%= @data[:to].to_s %>
+              <% else %>
+                (<%= @data[:from].to_s + " - " + @data[:to].to_s %>)
+              <% end %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>Location</dt>
+            <dd><%= (@data[:location] if @data[:location]) || "Any place" %></dd>
+          </dl>
         <% end %>
       </li>
     </ul>

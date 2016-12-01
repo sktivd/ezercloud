@@ -33,7 +33,7 @@
     <% else %>
       <fieldset id="role_options" disabled>
     <% end %>
-      <%= render partial: "options", locals: { f: f } %>
+      <%= render partial: "accessiblity", locals: { f: f } %>
     </fieldset>
     <% if current_account.has_role?(:admin) %>
       <%= f.input :note, as: :string, label: "To. " + @account.email %>

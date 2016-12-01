@@ -5,6 +5,7 @@ class Diagnosis < ActiveRecord::Base
   
   belongs_to :diagnosable, polymorphic: true
   belongs_to :device
+  belongs_to :subject, class_name: Person, foreign_key: 'subject_id'
   
   attr_accessor :authentication_key, :remote_ip, :year, :month, :day, :hour, :minute, :second, :time_zone, :data
   attr_encrypted :technician, :person, key: :encryption_key
@@ -25,6 +26,8 @@ class Diagnosis < ActiveRecord::Base
   MAX_YEAR = 2099
 
   before_validation :set_measured_at, if: -> obj{ obj.measured_at.nil? }
+  before_validation :set_subject, if: -> obj{ obj.person }
+  before_validation :set_device_license, if: -> obj{ obj.user_id }
   
   validates :equipment, presence: true, allow_blank: false
   validates :measured_at, presence: true
@@ -60,6 +63,20 @@ class Diagnosis < ActiveRecord::Base
     
     def self.read
       self.order(:created_at).reverse_order
+    end
+    
+    def set_subject
+      @person = Person.find_person(person)
+      if @person.nil?
+        @person = Person.create version: Person::PERMITTED_VERSION.last, person: person
+      end
+      self.subject = @person
+    end
+    
+    def set_device_license
+      @account = Account.find_by(user_id: user_id)
+      @device_license = @account.devices.find_by("device_id = ? AND activated_at <= ? AND (deactivated_at IS NULL OR deactivated_at >= ?)", device.id, measured_at, measured_at)
+      @account.devices.create(device: device, activated_at: measured_at) if @device_license.nil?
     end
     
     def location_or_ip_address
