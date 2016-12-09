@@ -2,7 +2,13 @@
 
 ## Skynet 0.3
 
-######2016. 11. 24
+######2016. 12. 9
+Diagnosis
+* a bug that the transaction to save a diagnosis and a measurement had not worked correctly was corrected. In transaction routine, 'raise ActiveRecord::Rollback' should be called to roll back.
+* routines to set additional variables were moved to Diagnosis model.
+* a device_license registration should be skipped when user_id is not related with account.
+
+######2016. 12. 1
 System
 * QR code & Barcode generator gems were added.
 * controller routes would be limited only to permitted pages gradually.
@@ -27,9 +33,6 @@ Buddi/EzerCloud/Frend
 
 Account/Management, Account/Role
 * some view pages were renewed to show preciser information.
-
-
-
 
 ######2016. 11. 21
 DiagnosisImage

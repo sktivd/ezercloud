@@ -77,9 +77,6 @@ class DiagnosesController < ApplicationController
       begin
         @equipment = @equipment_class.create! equipment_params          
         @diagnosis = @equipment.build_diagnosis diagnosis_params
-        @diagnosis.device        = @equipment.device   unless @diagnosis.device
-        @diagnosis.decision      = @equipment.decision unless @diagnosis.decision
-        @diagnosis.diagnosis_tag = @equipment.tag      unless @diagnosis.diagnosis_tag
         @diagnosis.save!
 
         send_notification @equipment.notification
@@ -90,6 +87,7 @@ class DiagnosesController < ApplicationController
         @errors.add(:response, 'fail')
         @errors.add(:data, @equipment.errors)
         @error_type = :on_create
+        raise ActiveRecord::Rollback
       rescue NotificationError
         @error_type = :on_notification
       end
